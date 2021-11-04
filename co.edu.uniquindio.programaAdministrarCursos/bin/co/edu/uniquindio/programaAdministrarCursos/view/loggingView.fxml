@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -10,8 +15,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/16">
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.programaAdministrarCursos.controller.LoggingController">
    <top>
       <AnchorPane prefHeight="200.0" prefWidth="424.0" BorderPane.alignment="CENTER">
          <children>
@@ -39,7 +43,7 @@
             <Label layoutX="29.0" layoutY="145.0" text="Clave" />
             <TextField fx:id="txtClaveLogin" layoutX="72.0" layoutY="141.0" prefHeight="25.0" prefWidth="274.0" />
             <TextField fx:id="txtCorreoLogin" layoutX="72.0" layoutY="88.0" prefHeight="25.0" prefWidth="272.0" />
-            <Button fx:id="btnAccederLogin" layoutX="171.0" layoutY="191.0" mnemonicParsing="false" text="Acceder" />
+            <Button fx:id="btnAccederLogin" layoutX="171.0" layoutY="191.0" mnemonicParsing="false" onAction="#accederAction" text="Acceder" />
          </children>
       </AnchorPane>
    </center>

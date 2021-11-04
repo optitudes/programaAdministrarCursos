@@ -1,8 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1">
-	<!-- TODO Add Nodes -->
+<BorderPane prefHeight="517.0" prefWidth="528.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.programaAdministrarCursos.controller.InstructorController">
+   <top>
+      <HBox alignment="TOP_CENTER" prefHeight="115.0" prefWidth="445.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox alignment="CENTER" prefHeight="135.0" prefWidth="217.0">
+               <children>
+                  <ImageView fitHeight="63.0" fitWidth="338.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../resources/pngs/logoUQ2.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="labelUsuario" prefHeight="17.0" prefWidth="138.0" text="Usuario :" />
+                  <Button fx:id="btnCerrarSesion" mnemonicParsing="false" onAction="#cerrarSesionAction" text="Cerrar sesion" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" prefHeight="135.0" prefWidth="229.0">
+               <children>
+                  <Label fx:id="lblDia" prefHeight="17.0" prefWidth="99.0" text="Dia" />
+                  <Label fx:id="lblHora" prefHeight="17.0" prefWidth="97.0" text="Hora" />
+               </children>
+            </VBox>
+            <ImageView fitHeight="104.0" fitWidth="109.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../resources/pngs/instructor1.png" />
+               </image>
+            </ImageView>
+         </children>
+      </HBox>
+   </top>
+   <center>
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab text="Horario ">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="201.0" prefWidth="447.0" />
+            </content>
+          </Tab>
+          <Tab text="Registro de asistencias">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </Tab>
+            <Tab text="Chats">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="201.0" prefWidth="447.0" />
+               </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </center>
 </BorderPane>
-

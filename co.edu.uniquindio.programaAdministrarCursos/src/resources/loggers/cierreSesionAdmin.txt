@@ -1,0 +1,4 @@
+nov 04, 2021 3:05:12 PM co.edu.uniquindio.programaAdministrarCursos.controller.AdminController cerrarSesionLog
+INFORMACIÓN: cierre de sesion user :admin
+nov 04, 2021 3:23:59 PM co.edu.uniquindio.programaAdministrarCursos.controller.AdminController cerrarSesionLog
+INFORMACIÓN: cierre de sesion user :admin
