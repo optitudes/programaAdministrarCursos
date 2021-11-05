@@ -18,8 +18,37 @@ public class Estudiante extends User{
 
 	@Override
 	public String toString() {
-		return "Estudiante []";
+		return "Estudiante [getName()=" + getName() + ", getiD()=" + getiD() + ", getEmail()=" + getEmail()
+				+ ", getPasword()=" + getPasword() + ", toString()=" + super.toString() + ", getClass()=" + getClass()
+				+ ", hashCode()=" + hashCode() + "]";
 	}
+
+	public boolean verificarID(String iD) {
+		
+		if(getiD().equalsIgnoreCase(iD))
+			return true;
+		return false;
+	}
+
+	public boolean verificarCorreo(String correo) {
+
+		if(getEmail().equalsIgnoreCase(correo))
+			return true;
+		
+		return false;
+	}
+
+	public boolean actualizar(Estudiante estudianteAux) {
+		
+		setName   (estudianteAux.getName());
+		setiD     (estudianteAux.getiD());
+		setEmail  (estudianteAux.getEmail());
+		setPasword(estudianteAux.getPasword());
+		
+		return true;
+	}
+
+	
 
 	
 	

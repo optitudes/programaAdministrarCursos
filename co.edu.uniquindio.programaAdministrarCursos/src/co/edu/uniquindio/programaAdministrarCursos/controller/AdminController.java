@@ -2,6 +2,7 @@ package co.edu.uniquindio.programaAdministrarCursos.controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
@@ -9,6 +10,9 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 import co.edu.uniquindio.programaAdministrarCursos.Main;
+import co.edu.uniquindio.programaAdministrarCursos.exception.DatosInvalidosException;
+import co.edu.uniquindio.programaAdministrarCursos.exception.EstudianteNoCreadoException;
+import co.edu.uniquindio.programaAdministrarCursos.exception.InstructorNoCreadoException;
 import co.edu.uniquindio.programaAdministrarCursos.model.Credito;
 import co.edu.uniquindio.programaAdministrarCursos.model.EDia;
 import co.edu.uniquindio.programaAdministrarCursos.model.EHorario;
@@ -17,9 +21,14 @@ import co.edu.uniquindio.programaAdministrarCursos.model.Instructor;
 import javafx.fxml.Initializable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
@@ -33,7 +42,15 @@ public class AdminController implements Initializable{
 	Main main;
 	private static final Logger LOGGER = Logger.getLogger(AdminController.class.getName());
 
-	ObservableList<Estudiante> listaEstudiantesData = FXCollections.observableArrayList();	
+	ObservableList<Estudiante> listaEstudiantesData = FXCollections.observableArrayList();
+	ObservableList<Instructor> listaInstructoresData = FXCollections.observableArrayList();	
+
+	
+	Estudiante estudianteSeleccionado;
+	Instructor instructorSeleccionado;
+	
+	FilteredList<Estudiante> filteredData;
+	FilteredList<Instructor> filteredDataInstructor;
 	
 	@FXML
     private ResourceBundle resources;
@@ -142,6 +159,9 @@ public class AdminController implements Initializable{
 
     @FXML
     private Button btnBorrarCurso;
+    
+    @FXML
+    private Button btnNuevoInstructor;
 
     @FXML
     private TextArea textAreaCulturalesInfo;
@@ -202,34 +222,49 @@ public class AdminController implements Initializable{
     void nuevoEstudianteAction(ActionEvent event) {
     	nuevoEstudiante();
     }
+	
+	@FXML
+    void nuevoInstructorAction(ActionEvent event) {
+    	nuevoInstructor();
+	}
+
+	
+
+	@FXML
+    void borrarEstudianteAction(ActionEvent event) {
+		borrarEstudiante();
+    }
 
    
+
 	@FXML
-    void borrarEstudiante(ActionEvent event) {
-
+    void actualizarEstudianteAction(ActionEvent event) {
+		actualizarEstudiante();
     }
 
-    @FXML
-    void actualizarEstudiante(ActionEvent event) {
-
-    }
-
-    @FXML
+  
+	@FXML
     void crearInstructor(ActionEvent event) {
+		crearInstructor();
 
     }
 
-    @FXML
+   
+
+	@FXML
     void borrarInstructor(ActionEvent event) {
-
+		borrarInstructor();
     }
 
-    @FXML
+   
+
+	@FXML
     void actualizarInstructor(ActionEvent event) {
-
+		actualizarInstructor();
     }
 
-    @FXML
+    
+	@FXML
     void crearCurso(ActionEvent event) {
 
     }
@@ -268,37 +303,435 @@ public class AdminController implements Initializable{
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		this.columnNombreEstudiante.setCellValueFactory(new PropertyValueFactory<>("name"));
-    	this.columnIdEstudiante.setCellValueFactory(new PropertyValueFactory<>("iD"));
+		this.columnIdEstudiante.setCellValueFactory(new PropertyValueFactory<>("iD"));
+		
+		this.columnNombreIntructor.setCellValueFactory(new PropertyValueFactory<>("name"));
+		this.columnIdIntructor.setCellValueFactory(new PropertyValueFactory<>("iD"));
+		
+		
+		tableEstudiantes.getSelectionModel().selectedItemProperty().addListener((obs,oldSelection,newSelection) -> {
+
+			estudianteSeleccionado = newSelection;
+
+			mostrarInformacionEstudiante(estudianteSeleccionado);
+
+		});
+		
+		tableInstructor.getSelectionModel().selectedItemProperty().addListener((obs,oldSelection,newSelection) -> {
+
+			instructorSeleccionado = newSelection;
+
+			mostrarInformacionInstructor(instructorSeleccionado);
+
+		});
+		
+		// 1. Wrap the ObservableList in a FilteredList (initially display all data).
+    	filteredData = new FilteredList<>(listaEstudiantesData, p -> true);
+
+
+    	// 2. Set the filter Predicate whenever the filter changes.
+    	txtBuscarEstudiante.textProperty().addListener((observable, oldValue, newValue) -> {
+			filteredData.setPredicate(estudiante-> {
+				// If filter text is empty, display all persons.
+				if (newValue == null || newValue.isEmpty()) {
+					return true;
+				}
+
+				// Compare first name and last name of every person with filter text.
+				String lowerCaseFilter = newValue.toLowerCase();
+
+				if (estudiante.getName().toLowerCase().contains(lowerCaseFilter)) {
+					return true; // Filter matches first name.
+				} else if (estudiante.getiD().toLowerCase().contains(lowerCaseFilter)) {
+					return true; // Filter matches last name.
+				} 
+				return false; // Does not match.
+			});
+		});
+    	
+    	// 1. Wrap the ObservableList in a FilteredList (initially display all data).
+    	filteredDataInstructor = new FilteredList<>(listaInstructoresData, p -> true);
+
+
+    	// 2. Set the filter Predicate whenever the filter changes.
+    	txtBuscarInstructor.textProperty().addListener((observable, oldValue, newValue) -> {
+			filteredDataInstructor.setPredicate(instructor-> {
+				// If filter text is empty, display all persons.
+				if (newValue == null || newValue.isEmpty()) {
+					return true;
+				}
+
+				// Compare first name and last name of every person with filter text.
+				String lowerCaseFilter = newValue.toLowerCase();
+
+				if (instructor.getName().toLowerCase().contains(lowerCaseFilter)) {
+					return true; // Filter matches first name.
+				} else if (instructor.getiD().toLowerCase().contains(lowerCaseFilter)) {
+					return true; // Filter matches last name.
+				} 
+				return false; // Does not match.
+			});
+		});
 	}
+
+	
+	private void mostrarInformacionEstudiante(Estudiante estudianteSeleccionado) {
+
+		if(estudianteSeleccionado != null){
+			txtNombreEstudiante.setText(estudianteSeleccionado.getName());
+			txtIdEstudiante.setText(estudianteSeleccionado.getiD());
+			txtCorreoEstudiante.setText(estudianteSeleccionado.getEmail());
+			txtContraseniaEstudiante.setText(estudianteSeleccionado.getPasword());
+		}
+	}
+	
+	private void mostrarInformacionInstructor(Instructor instructorSeleccionado) {
+		if(instructorSeleccionado != null){
+			txtNombreInstructor.setText(instructorSeleccionado.getName());
+			txtIdInstructor.setText(instructorSeleccionado.getiD());
+			txtCorreoInstructor.setText(instructorSeleccionado.getEmail());
+			txtContraseniaInstructor.setText(instructorSeleccionado.getPasword());
+		}
+	}
+
 
 	public void setAplicacion(Main mainAux) {
 		this.main=mainAux;
 		main.quemarDatos();
-    	tableEstudiantes.getItems().clear();
-    	tableEstudiantes.setItems(getListaEstudiantesData());
+		tableEstudiantes.getItems().clear();
+		tableInstructor.getItems().clear();
+
+		tableEstudiantes.setItems(getListaEstudiantesData());
+		tableInstructor.setItems(getListaInstructoresData());
+
+		
+		// 3. Wrap the FilteredList in a SortedList.
+    	SortedList<Estudiante> sortedData = new SortedList<>(filteredData);
+
+    	// 4. Bind the SortedList comparator to the TableView comparator.
+    	sortedData.comparatorProperty().bind(tableEstudiantes.comparatorProperty());
+
+    	// 5. Add sorted (and filtered) data to the table.
+    	tableEstudiantes.setItems(sortedData);
+    	
+    	// 3. Wrap the FilteredList in a SortedList.
+    	SortedList<Instructor> sortedDataInstructor = new SortedList<>(filteredDataInstructor);
+
+    	// 4. Bind the SortedList comparator to the TableView comparator.
+    	sortedDataInstructor.comparatorProperty().bind(tableInstructor.comparatorProperty());
+
+    	// 5. Add sorted (and filtered) data to the table.
+    	tableInstructor.setItems(sortedDataInstructor);
 
 
 	}
- private void nuevoEstudiante() {
-	 
-	 txtNombreEstudiante.setText     ("Ingrese el nombre del nuevo estudiante");
-	 txtIdEstudiante.setText         ("Ingrese el id del nuevo estudiante");
-	 txtCorreoEstudiante.setText     ("Ingrese el correo del nuevo estudiante");
-	 txtContraseniaEstudiante.setText("Ingrese la contraseña del nuevo estudiante");
-		
- } 
- private void crearEstudiante() {
-	String nombre=txtNombreEstudiante.getText();
-	String iD=txtIdEstudiante.getText();
-	String correo=txtCorreoEstudiante.getText();
-	String contrasenia=txtContraseniaEstudiante.getText();
+
 	
 
- }
- private ObservableList<Estudiante> getListaEstudiantesData() {
+	public void mostrarMensaje(String titulo, String header, String contenido, AlertType alertType) {
+
+		Alert alert = new Alert(alertType);
+		alert.setTitle      (titulo);
+		alert.setHeaderText (header);
+		alert.setContentText(contenido);
+		alert.showAndWait   ();
+	}
+	
+	private boolean mostrarMensajeConfirmacion(String mensaje) {
+		Alert alert  = new Alert (Alert.AlertType.CONFIRMATION);
+		alert.setTitle(null);
+		alert.setHeaderText("Confirmacion");
+		alert.setContentText(mensaje);
+		Optional<ButtonType> action = alert.showAndWait();
+
+		if(action.get() == ButtonType.OK){
+			return true;
+
+		}else{
+			return false;
+		}
+	}
+	private void limpiarCamposEstudiante() {
+
+		txtNombreEstudiante.setText     ("");
+		txtIdEstudiante.setText         ("");
+		txtCorreoEstudiante.setText     ("");
+		txtContraseniaEstudiante.setText("");
+	
+	}
+	private void limpiarCamposInstructor() {
+		txtNombreInstructor.setText     ("");
+		txtIdInstructor.setText         ("");
+		txtCorreoInstructor.setText     ("");
+		txtContraseniaInstructor.setText("");
+		
+	}
+	private void nuevoEstudiante() {
+
+		txtNombreEstudiante.setText     ("Ingrese el nombre del nuevo estudiante");
+		txtIdEstudiante.setText         ("Ingrese el id del nuevo estudiante");
+		txtCorreoEstudiante.setText     ("Ingrese el correo del nuevo estudiante");
+		txtContraseniaEstudiante.setText("Ingrese la contraseña del nuevo estudiante");
+
+	}
+
+	private void nuevoInstructor() {
+		
+
+		txtNombreInstructor.setText     ("Ingrese el nombre del nuevo Instructor");
+		txtIdInstructor.setText         ("Ingrese el id del nuevo Instructor");
+		txtCorreoInstructor.setText     ("Ingrese el correo del nuevo Instructor");
+		txtContraseniaInstructor.setText("Ingrese la contraseña del nuevo Instructor");
+
+	}
+	private void crearEstudiante() {
+
+		String nombre=txtNombreEstudiante.getText();
+		String iD=txtIdEstudiante.getText();
+		String correo=txtCorreoEstudiante.getText();
+		String contrasenia=txtContraseniaEstudiante.getText();
+		try {
+			if(validarDatosEstudiante(nombre,iD,correo,contrasenia)){
+
+				Estudiante estudianteAux=null;
+
+				estudianteAux= main.crearEstudiante(nombre, iD, correo, contrasenia);
+				if(estudianteAux==null)
+					throw new EstudianteNoCreadoException("ocurrió un error al crear el estudiante");
+				listaEstudiantesData.add(estudianteAux);
+				tableEstudiantes.refresh();
+				mostrarMensaje("Notificacion Estudiante","Estudiante registrado","El estudiante se registró con éxito",AlertType.INFORMATION);
+			}
+		} catch (DatosInvalidosException | EstudianteNoCreadoException e) {
+			mostrarMensaje("Notificación Estudiante", "Estudiante no registrado",e.getMessage(), AlertType.ERROR);		}
+	}
+	
+	
+	private void crearInstructor() {
+		String nombre=txtNombreInstructor.getText();
+		String iD=txtIdInstructor.getText();
+		String correo=txtCorreoInstructor.getText();
+		String contrasenia=txtContraseniaInstructor.getText();
+		try {
+			if(validarDatosInstructor(nombre,iD,correo,contrasenia)){
+
+				Instructor instructorAux=null;
+
+				instructorAux= main.crearInstructor(nombre, iD, correo, contrasenia);
+				if(instructorAux==null)
+					throw new InstructorNoCreadoException("ocurrió un error al crear el instructor");
+				listaInstructoresData.add(instructorAux);
+				tableInstructor.refresh();
+				limpiarCamposInstructor();
+				mostrarMensaje("Notificacion Instructor","Instructor registrado","El instructor se registró con éxito",AlertType.INFORMATION);
+			}
+		} catch (DatosInvalidosException |  InstructorNoCreadoException e) {
+			mostrarMensaje("Notificación instructor", "Instructor no registrado",e.getMessage(), AlertType.ERROR);		}
+	}
+
+
+
+private void actualizarEstudiante() {
+		  if(estudianteSeleccionado!=null){
+			  
+			String nombre=txtNombreEstudiante.getText();
+			String iD=txtIdEstudiante.getText();
+			String correo=txtCorreoEstudiante.getText();
+			String contrasenia=txtContraseniaEstudiante.getText();
+			
+			try {
+				if(validarDatosEstudiante(nombre,iD,correo,contrasenia)){
+
+					Estudiante estudianteAux=new Estudiante(nombre, iD, correo, contrasenia);
+
+					if(main.actualizarEstudiante(estudianteAux,estudianteSeleccionado)){
+						tableEstudiantes.refresh();
+						mostrarMensaje("Notificacion Estudiante","Estudiante actualizado","El estudiante se actualizó con éxito",AlertType.INFORMATION);
+					}else
+					{
+						mostrarMensaje("Notificación Estudiante", "Estudiante no actualizado","el estudiante no se actualizó", AlertType.WARNING);
+
+					}
+				}
+				}catch (DatosInvalidosException e) {
+					mostrarMensaje("Notificación Estudiante", "Estudiante no actualizado",e.getMessage(), AlertType.ERROR);
+					}
+			}else{
+			mostrarMensaje("Notificación Estudiante", "Estudiante no seleccionado","Seleccione un estudiante", AlertType.WARNING);
+		}
+}
+private void actualizarInstructor() {
+	  if(instructorSeleccionado!=null){
+		  
+			String nombre=txtNombreInstructor.getText();
+			String iD=txtIdInstructor.getText();
+			String correo=txtCorreoInstructor.getText();
+			String contrasenia=txtContraseniaInstructor.getText();
+			
+			try {
+				if(validarDatosInstructor(nombre,iD,correo,contrasenia)){
+
+					Instructor instructorAux=new Instructor(nombre, iD, correo, contrasenia);
+
+					if(main.actualizarInstructor(instructorAux,instructorSeleccionado)){
+						tableInstructor.refresh();
+						limpiarCamposInstructor();
+						mostrarMensaje("Notificacion Instructor","Instructor actualizado","El Instructor se actualizó con éxito",AlertType.INFORMATION);
+					}else
+					{
+						mostrarMensaje("Notificación Instructor", "Instructor no actualizado","el Instructor no se actualizó", AlertType.WARNING);
+
+					}
+				}
+				}catch (DatosInvalidosException e) {
+					mostrarMensaje("Notificación Instructor", "Instructor no actualizado",e.getMessage(), AlertType.ERROR);
+					}
+			}else{
+			mostrarMensaje("Notificación Instructor", "Instructor no seleccionado","Seleccione un Instructor", AlertType.WARNING);
+		}
+}
+
+	 private void borrarEstudiante() {
+		 
+		 if(estudianteSeleccionado!=null)
+		 {
+			 if(mostrarMensajeConfirmacion("¿Estas seguro de eliminar al estudiante?") == true)
+			 {
+				 if(main.borrarEstudiante(estudianteSeleccionado)){
+
+					 listaEstudiantesData.remove(estudianteSeleccionado);
+					 estudianteSeleccionado=null;
+					 tableEstudiantes.getSelectionModel().clearSelection();
+					 limpiarCamposEstudiante();
+					 tableEstudiantes.refresh();
+					 
+					 mostrarMensaje("Notificacion Estudiante","Estudiante borrado","El estudiante se borró con éxito",AlertType.INFORMATION);
+				 }else{
+						mostrarMensaje("Notificación Estudiante", "Estudiante no borrado","El estudiante no se borró con éxito", AlertType.ERROR);
+				 }
+			 }
+			 
+			 
+		 }else{
+				mostrarMensaje("Notificación Estudiante", "Estudiante no seleccionado","Seleccione un estudiante", AlertType.WARNING);
+
+		 }
+		 
+		}
+	
+	 private void borrarInstructor() {
+		 if(instructorSeleccionado!=null)
+		 {
+			 if(mostrarMensajeConfirmacion("¿Estas seguro de eliminar al instructor?") == true)
+			 {
+				 if(main.borrarInstructor(instructorSeleccionado)){
+
+					 listaInstructoresData.remove(instructorSeleccionado);
+					 instructorSeleccionado=null;
+					 tableInstructor.getSelectionModel().clearSelection();
+					 limpiarCamposInstructor();
+					 tableInstructor.refresh();
+					 
+					 mostrarMensaje("Notificacion Instructor","Instructor borrado","El Instructor se borró con éxito",AlertType.INFORMATION);
+				 }else{
+						mostrarMensaje("Notificación Instructor", "Instructor no borrado","El Instructor no se borró con éxito", AlertType.ERROR);
+				 }
+			 }
+			 
+			 
+		 }else{
+				mostrarMensaje("Notificación Instructor", "Instructor no seleccionado","Seleccione un Instructor", AlertType.WARNING);
+
+		 }
+		 
+		}
+	
+
+	private boolean validarDatosEstudiante(String nombre, String iD, String correo, String contrasenia) throws DatosInvalidosException {
+
+		String mensaje="";
+
+		if(nombre == null || nombre.equals(""))
+			mensaje += "El codigo del retiro es invalido \n";
+	 
+	 if(iD == null || iD.equals("")){
+			mensaje += "El codigo del retiro es invalido \n";
+	 }else{
+		 if(main.verificarIDEstudiante(iD))
+		 {
+			 mensaje+="El ID ya está registrado";
+		 }
+	 }
+	 
+	 if(correo == null || correo.equals("")){
+			mensaje += "El correo es invalido \n";
+	 }else{
+		 if(main.verificarCorreoEstudiante(correo))
+		 {
+			 mensaje+="El correo ya está registrado";
+		 }
+	 }
+	 
+	 if(contrasenia == null || contrasenia.equals(""))
+			mensaje += "La contraseña es invalida \n";
+	 
+	 
+	 if(mensaje.isEmpty())
+	 {
+		 return true;
+	 }else
+	 {
+		 throw new DatosInvalidosException(mensaje);
+	 }
+}
+	
+	private boolean validarDatosInstructor(String nombre, String iD, String correo, String contrasenia) throws DatosInvalidosException {
+		String mensaje="";
+
+		if(nombre == null || nombre.equals(""))
+			mensaje += "El codigo del instructor es invalido \n";
+
+		if(iD == null || iD.equals("")){
+			mensaje += "El codigo del instructor es invalido \n";
+		}else{
+			if(main.verificarIDInstructor(iD))
+			{
+				mensaje+="El ID ya está registrado";
+			}
+		}
+
+		if(correo == null || correo.equals("")){
+			mensaje += "El correo es invalido \n";
+		}else{
+			if(main.verificarCorreoInstructor(correo))
+			{
+				mensaje+="El correo ya está registrado";
+			}
+		}
+
+		if(contrasenia == null || contrasenia.equals(""))
+			mensaje += "La contraseña es invalida \n";
+
+
+		if(mensaje.isEmpty())
+		{
+			return true;
+		}else
+		{
+			throw new DatosInvalidosException(mensaje);
+		}
+	}
+
+private ObservableList<Estudiante> getListaEstudiantesData() {
 
 	 listaEstudiantesData.addAll(main.obtenerEstudiantes());
 
 	 return listaEstudiantesData;
  }
+
+private ObservableList<Instructor> getListaInstructoresData() {
+
+	listaInstructoresData.addAll(main.obtenerInstructores());
+	return listaInstructoresData;
+}
 }

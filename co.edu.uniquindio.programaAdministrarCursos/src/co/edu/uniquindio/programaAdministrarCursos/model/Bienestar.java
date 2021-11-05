@@ -8,6 +8,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
+import co.edu.uniquindio.programaAdministrarCursos.exception.EstudianteNoCreadoException;
+
 public class Bienestar {
 
 	private static final Logger LOGGER = Logger.getLogger(Bienestar.class.getName());
@@ -18,6 +20,7 @@ public class Bienestar {
 	private ArrayList<Estudiante> listaEstudiantes=  new ArrayList<Estudiante>();
 	private ArrayList<Admin>      listaAdmins=       new ArrayList<Admin>();
 	private ArrayList<Instructor> listaInstructores= new ArrayList<Instructor>();
+	
 	private ArrayList<Credito> listaCreditos= new ArrayList<Credito>();
 	
 	public Bienestar() {
@@ -127,6 +130,9 @@ public class Bienestar {
 public ArrayList<Estudiante> getEstudiantes() {
 	return listaEstudiantes;
 }
+public ArrayList<Instructor> getInstructores() {
+	return listaInstructores;
+}
 public void quemarDatos() {
 
 	Estudiante estudiante=new Estudiante("juan","1193370914","juan@uqvirtual.co","1111");
@@ -138,6 +144,84 @@ public void quemarDatos() {
 	listaInstructores.add(instructor);
 	
 }
+
+public boolean verificarIDEstudiante(String iD) {
+	
+	for (Estudiante estudiante : listaEstudiantes) {
+		
+		if(estudiante.verificarID(iD))
+			return true;
+		
+	}
+	return false;
+}
+public boolean verificarIDInstructor(String iD) {
+for (Instructor instructor : listaInstructores) {
+		
+		if(instructor.verificarID(iD))
+			return true;
+		
+	}
+	return false;
+}
+public boolean verificarCorreoEstudiante(String correo) {
+	
+	for (Estudiante estudiante : listaEstudiantes) {
+
+		if(estudiante.verificarCorreo(correo))
+			return true;
+
+	}
+	return false;
+}
+public boolean verificarCorreoInstructor(String correo) {
+	for (Instructor instructor : listaInstructores) {
+
+		if(instructor.verificarCorreo(correo))
+			return true;
+
+	}
+	return false;
+}
+public Estudiante crearEstudiante(String nombre, String iD, String correo, String contrasenia) {
+
+	Estudiante estudianteAux= new Estudiante(nombre, iD, correo, contrasenia);
+	listaEstudiantes.add(estudianteAux);
+	return estudianteAux;
+}
+
+public Instructor crearInstructor(String nombre, String iD, String correo, String contrasenia) {
+	Instructor instructorAux= new Instructor(nombre, iD, correo, contrasenia);
+	listaInstructores.add(instructorAux);
+	return instructorAux;
+}
+public boolean borrarEstudiante(Estudiante estudianteSeleccionado) {
+	if(listaEstudiantes.remove(estudianteSeleccionado))	
+		return true;
+	return false;
+}
+public boolean borrarInstructor(Instructor instructorSeleccionado) {
+	if(listaInstructores.remove(instructorSeleccionado))
+		return true;
+	return false;
+}
+
+public boolean actualizarEstudiante(Estudiante estudianteAux, Estudiante estudianteSeleccionado) {
+	int index=listaEstudiantes.indexOf(estudianteSeleccionado);
+	if(listaEstudiantes.get(index).actualizar(estudianteAux))
+		return true;
+	return false;
+}
+public boolean actualizarInstructor(Instructor instructorAux, Instructor instructorSeleccionado) {
+	int index=listaInstructores.indexOf(instructorSeleccionado);
+	if(listaInstructores.get(index).actualizar(instructorAux))
+		return true;
+	return false;
+}
+
+
+
+
 
 }
 

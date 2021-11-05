@@ -9,6 +9,7 @@ import co.edu.uniquindio.programaAdministrarCursos.controller.InstructorControll
 import co.edu.uniquindio.programaAdministrarCursos.controller.LoggingController;
 import co.edu.uniquindio.programaAdministrarCursos.model.Bienestar;
 import co.edu.uniquindio.programaAdministrarCursos.model.Estudiante;
+import co.edu.uniquindio.programaAdministrarCursos.model.Instructor;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
@@ -126,10 +127,68 @@ public void mostrarVentanaLogging() {
 		return listaEstudiantes;
 	}
 
+	public ArrayList<Instructor> obtenerInstructores() {
+		ArrayList<Instructor> listaInstructores=new ArrayList<>();
+		listaInstructores=bienestar.getInstructores();
+		return listaInstructores;
+
+	}
 	public void quemarDatos() {
 		bienestar.quemarDatos();
 		
 	}
+
+	public boolean verificarIDEstudiante(String iD) {
+		return bienestar.verificarIDEstudiante(iD);
+		
+	}
+	public boolean verificarIDInstructor(String iD) {
+		return bienestar.verificarIDInstructor(iD);
+	}
+
+	public boolean verificarCorreoEstudiante(String correo) {
+		return bienestar.verificarCorreoEstudiante(correo);
+	}
+	
+	public boolean verificarCorreoInstructor(String correo) {
+		return bienestar.verificarCorreoInstructor(correo);
+	}
+
+	public Estudiante crearEstudiante(String nombre, String iD, String correo, String contrasenia) {
+		return bienestar.crearEstudiante(nombre, iD, correo, contrasenia);
+	}
+	
+	public Instructor crearInstructor(String nombre, String iD, String correo, String contrasenia) {
+		return bienestar.crearInstructor(nombre, iD, correo, contrasenia);
+	}
+
+
+	public boolean borrarEstudiante(Estudiante estudianteSeleccionado) {
+		return bienestar.borrarEstudiante(estudianteSeleccionado);
+	}
+	
+	public boolean borrarInstructor(Instructor instructorSeleccionado) {
+		return bienestar.borrarInstructor(instructorSeleccionado);
+	}
+
+
+	public boolean actualizarEstudiante(Estudiante estudianteAux, Estudiante estudianteSeleccionado) {
+		return bienestar.actualizarEstudiante(estudianteAux,estudianteSeleccionado);
+		
+	}
+	public boolean actualizarInstructor(Instructor instructorAux, Instructor instructorSeleccionado) {
+		return bienestar.actualizarInstructor(instructorAux, instructorSeleccionado);
+	}
+
+
+
+	
+	
+
+	
+	
+
+	
 
 	
 

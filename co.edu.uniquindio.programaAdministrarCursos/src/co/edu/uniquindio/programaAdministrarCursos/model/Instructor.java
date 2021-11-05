@@ -28,4 +28,28 @@ public class Instructor extends User{
 				+ ", hashCode()=" + hashCode() + "]";
 	}
 
+	public boolean verificarID(String iD) {
+		
+		if(getiD().equalsIgnoreCase(iD))
+			return true;
+		return false;
+	}
+
+	public boolean verificarCorreo(String correo) {
+		
+		if(getEmail().equalsIgnoreCase(correo))
+			return true;
+		
+		return false;
+	}
+
+	public boolean actualizar(Instructor instructorAux) {
+		setName   (instructorAux.getName());
+		setiD     (instructorAux.getiD());
+		setEmail  (instructorAux.getEmail());
+		setPasword(instructorAux.getPasword());
+		
+		return true;
+	}
+
 }
