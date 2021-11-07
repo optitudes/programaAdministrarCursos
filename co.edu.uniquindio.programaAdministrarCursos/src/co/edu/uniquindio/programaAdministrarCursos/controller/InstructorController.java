@@ -2,8 +2,11 @@ package co.edu.uniquindio.programaAdministrarCursos.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 
 import co.edu.uniquindio.programaAdministrarCursos.Main;
+import co.edu.uniquindio.programaAdministrarCursos.model.Instructor;
+import co.edu.uniquindio.programaAdministrarCursos.model.Log;
 import javafx.fxml.Initializable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,6 +15,8 @@ import javafx.scene.control.Label;
 
 public class InstructorController implements Initializable{
 	Main main;
+	Instructor instructorLoggeado=new Instructor("Diego", "103","dig@instru.com", "1234");
+	Log loggerInstructor;
     @FXML
     private Label lblDia;
 
@@ -26,6 +31,7 @@ public class InstructorController implements Initializable{
 
     @FXML
     void cerrarSesionAction(ActionEvent event) {
+    	registrarAccion("cierre sesion instructor "+instructorLoggeado.getName(), Level.INFO);
     	main.mostrarVentanaLogging();
     }
 	@Override
@@ -37,5 +43,9 @@ public class InstructorController implements Initializable{
 		main=main2;
 		
 	}
+public void registrarAccion(String mensaje, Level tipo){
+	loggerInstructor= new Log(mensaje,tipo);
+	loggerInstructor.hilo.start();
 
+}
 }

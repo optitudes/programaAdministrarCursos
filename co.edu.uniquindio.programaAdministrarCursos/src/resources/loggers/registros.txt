@@ -1,0 +1,12 @@
+nov 07, 2021 6:09:01 PM co.edu.uniquindio.programaAdministrarCursos.model.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 07, 2021 6:09:06 PM co.edu.uniquindio.programaAdministrarCursos.model.Log run
+INFORMACIÓN: cierre de sesion adminaizen
+nov 07, 2021 6:09:12 PM co.edu.uniquindio.programaAdministrarCursos.model.Log run
+INFORMACIÓN: Inicio de sesion estudiante
+nov 07, 2021 6:09:14 PM co.edu.uniquindio.programaAdministrarCursos.model.Log run
+INFORMACIÓN: cierre de sesion estudiante :sebas
+nov 07, 2021 6:09:20 PM co.edu.uniquindio.programaAdministrarCursos.model.Log run
+INFORMACIÓN: Inicio de sesion instructor
+nov 07, 2021 6:09:23 PM co.edu.uniquindio.programaAdministrarCursos.model.Log run
+INFORMACIÓN: cierre sesion instructor Diego

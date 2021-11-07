@@ -1,23 +1,21 @@
 package co.edu.uniquindio.programaAdministrarCursos.controller;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.FileHandler;
 import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 
 import co.edu.uniquindio.programaAdministrarCursos.Main;
 import co.edu.uniquindio.programaAdministrarCursos.exception.DatosInvalidosException;
 import co.edu.uniquindio.programaAdministrarCursos.exception.EstudianteNoCreadoException;
 import co.edu.uniquindio.programaAdministrarCursos.exception.InstructorNoCreadoException;
+import co.edu.uniquindio.programaAdministrarCursos.model.Admin;
 import co.edu.uniquindio.programaAdministrarCursos.model.Credito;
 import co.edu.uniquindio.programaAdministrarCursos.model.EDia;
 import co.edu.uniquindio.programaAdministrarCursos.model.EHorario;
 import co.edu.uniquindio.programaAdministrarCursos.model.Estudiante;
 import co.edu.uniquindio.programaAdministrarCursos.model.Instructor;
+import co.edu.uniquindio.programaAdministrarCursos.model.Log;
 import javafx.fxml.Initializable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -39,8 +37,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 public class AdminController implements Initializable{
 
+	Admin admin= new Admin("aizen","1991" , "aizen@lord.com", "1001");
+	Log  loggerAdmin;
+	
+	
 	Main main;
-	private static final Logger LOGGER = Logger.getLogger(AdminController.class.getName());
 
 	ObservableList<Estudiante> listaEstudiantesData = FXCollections.observableArrayList();
 	ObservableList<Instructor> listaInstructoresData = FXCollections.observableArrayList();	
@@ -281,25 +282,10 @@ public class AdminController implements Initializable{
 
     @FXML
     void cerrarSesionActrion(ActionEvent event) {
-    	cerrarSesionLog();
+    	registrarAccion("cierre de sesion admin"+admin.getName(),Level.INFO );
     	main.mostrarVentanaLogging();
 
     }
-	private void cerrarSesionLog() {
-		FileHandler archivo;
-
-		try {
-			archivo= new FileHandler("src/resources/loggers/cierreSesionAdmin.txt",true);//si es true no sobreescribe
-			archivo.setFormatter(new SimpleFormatter());
-			LOGGER.addHandler(archivo);
-
-			LOGGER.log(Level.INFO, "cierre de sesion user :admin");
-
-		} catch (SecurityException | IOException e) {
-			e.printStackTrace();
-		}
-	}	
-
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		this.columnNombreEstudiante.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -501,6 +487,7 @@ public class AdminController implements Initializable{
 				listaEstudiantesData.add(estudianteAux);
 				tableEstudiantes.refresh();
 				mostrarMensaje("Notificacion Estudiante","Estudiante registrado","El estudiante se registró con éxito",AlertType.INFORMATION);
+				registrarAccion("Estudiante con ID : "+estudianteAux.getiD()+"creado por el admin:"+admin.getName(),Level.INFO );
 			}
 		} catch (DatosInvalidosException | EstudianteNoCreadoException e) {
 			mostrarMensaje("Notificación Estudiante", "Estudiante no registrado",e.getMessage(), AlertType.ERROR);		}
@@ -524,6 +511,7 @@ public class AdminController implements Initializable{
 				tableInstructor.refresh();
 				limpiarCamposInstructor();
 				mostrarMensaje("Notificacion Instructor","Instructor registrado","El instructor se registró con éxito",AlertType.INFORMATION);
+				registrarAccion("Instructor con ID : "+instructorAux.getiD()+"creado por el admin: "+admin.getName(),Level.INFO );
 			}
 		} catch (DatosInvalidosException |  InstructorNoCreadoException e) {
 			mostrarMensaje("Notificación instructor", "Instructor no registrado",e.getMessage(), AlertType.ERROR);		}
@@ -547,6 +535,8 @@ private void actualizarEstudiante() {
 					if(main.actualizarEstudiante(estudianteAux,estudianteSeleccionado)){
 						tableEstudiantes.refresh();
 						mostrarMensaje("Notificacion Estudiante","Estudiante actualizado","El estudiante se actualizó con éxito",AlertType.INFORMATION);
+						registrarAccion("Estudiante con ID : "+estudianteSeleccionado.getiD()+"actualizado por el admin: "+admin.getName(),Level.WARNING );
+
 					}else
 					{
 						mostrarMensaje("Notificación Estudiante", "Estudiante no actualizado","el estudiante no se actualizó", AlertType.WARNING);
@@ -577,6 +567,7 @@ private void actualizarInstructor() {
 						tableInstructor.refresh();
 						limpiarCamposInstructor();
 						mostrarMensaje("Notificacion Instructor","Instructor actualizado","El Instructor se actualizó con éxito",AlertType.INFORMATION);
+						registrarAccion("Instructor con ID : "+instructorAux.getiD()+"actualizado por el admin: "+admin.getName(),Level.INFO );
 					}else
 					{
 						mostrarMensaje("Notificación Instructor", "Instructor no actualizado","el Instructor no se actualizó", AlertType.WARNING);
@@ -599,6 +590,7 @@ private void actualizarInstructor() {
 			 {
 				 if(main.borrarEstudiante(estudianteSeleccionado)){
 
+					 String iDEstudiante=estudianteSeleccionado.getName();
 					 listaEstudiantesData.remove(estudianteSeleccionado);
 					 estudianteSeleccionado=null;
 					 tableEstudiantes.getSelectionModel().clearSelection();
@@ -606,6 +598,8 @@ private void actualizarInstructor() {
 					 tableEstudiantes.refresh();
 					 
 					 mostrarMensaje("Notificacion Estudiante","Estudiante borrado","El estudiante se borró con éxito",AlertType.INFORMATION);
+					 registrarAccion("Estudiante con ID : "+iDEstudiante+" borrado por el admin: "+admin.getName(),Level.WARNING );
+
 				 }else{
 						mostrarMensaje("Notificación Estudiante", "Estudiante no borrado","El estudiante no se borró con éxito", AlertType.ERROR);
 				 }
@@ -626,6 +620,7 @@ private void actualizarInstructor() {
 			 {
 				 if(main.borrarInstructor(instructorSeleccionado)){
 
+					 String iDInstructor=instructorSeleccionado.getiD();
 					 listaInstructoresData.remove(instructorSeleccionado);
 					 instructorSeleccionado=null;
 					 tableInstructor.getSelectionModel().clearSelection();
@@ -633,6 +628,8 @@ private void actualizarInstructor() {
 					 tableInstructor.refresh();
 					 
 					 mostrarMensaje("Notificacion Instructor","Instructor borrado","El Instructor se borró con éxito",AlertType.INFORMATION);
+					 registrarAccion("Instructor con ID : "+iDInstructor+" borrado por el admin: "+admin.getName(),Level.WARNING );
+
 				 }else{
 						mostrarMensaje("Notificación Instructor", "Instructor no borrado","El Instructor no se borró con éxito", AlertType.ERROR);
 				 }
@@ -734,4 +731,10 @@ private ObservableList<Instructor> getListaInstructoresData() {
 	listaInstructoresData.addAll(main.obtenerInstructores());
 	return listaInstructoresData;
 }
-}
+
+public void registrarAccion(String mensaje, Level tipo){
+	loggerAdmin= new Log(mensaje,tipo);
+	loggerAdmin.hilo.start();
+
+}}
+

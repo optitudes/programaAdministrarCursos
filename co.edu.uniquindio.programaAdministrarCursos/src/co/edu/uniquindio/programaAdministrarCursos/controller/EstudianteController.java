@@ -2,8 +2,11 @@ package co.edu.uniquindio.programaAdministrarCursos.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 
 import co.edu.uniquindio.programaAdministrarCursos.Main;
+import co.edu.uniquindio.programaAdministrarCursos.model.Estudiante;
+import co.edu.uniquindio.programaAdministrarCursos.model.Log;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -18,6 +21,8 @@ import javafx.fxml.Initializable;
 public class EstudianteController implements Initializable{
 
 	Main main;
+	Estudiante estudianteLoggeado=new Estudiante("sebas", "1002", "sebas@bienestar.con", "1234");
+	Log loggerEstudiante;
     @FXML
     private ResourceBundle resources;
 
@@ -38,6 +43,7 @@ public class EstudianteController implements Initializable{
 
     @FXML
     void cerrarSesionAction(ActionEvent event) {
+    	registrarAccion("cierre de sesion estudiante :"+estudianteLoggeado.getName(),Level.INFO );
     	main.mostrarVentanaLogging();
 
     }
@@ -50,5 +56,9 @@ public class EstudianteController implements Initializable{
 		main=mainAux;
 		
 	}
+public void registrarAccion(String mensaje, Level tipo){
+	loggerEstudiante= new Log(mensaje,tipo);
+	loggerEstudiante.hilo.start();
 
+}
 }

@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 import co.edu.uniquindio.programaAdministrarCursos.Main;
+import co.edu.uniquindio.programaAdministrarCursos.model.Log;
 import javafx.fxml.Initializable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,7 +20,8 @@ import javafx.scene.control.TextField;
 
 public class LoggingController implements Initializable{
 	Main main;
-	private static final Logger LOGGER = Logger.getLogger(LoggingController.class.getName());
+	Log  logger;
+
 	String correoadmin="admin";
 	String correoEstudiante="estudiante";
 	String correoInstructor="instructor";
@@ -60,29 +62,17 @@ public class LoggingController implements Initializable{
 	@FXML
 	void accederAction(ActionEvent event) {
 		if(correoadmin.equalsIgnoreCase(txtCorreoLogin.getText()) && clave.equalsIgnoreCase(txtClaveLogin.getText())){
-			registrarLoggin();
+			registrarAccion("Inicio de sesion admin", Level.INFO);
 			main.cargarVistaAdmin();}
 		if(correoEstudiante.equalsIgnoreCase(txtCorreoLogin.getText()) && clave.equalsIgnoreCase(txtClaveLogin.getText())){
-			registrarLoggin();
+			registrarAccion("Inicio de sesion estudiante",Level.INFO );
 			main.cargarVistaEstudiante();}
 		if(correoInstructor.equalsIgnoreCase(txtCorreoLogin.getText()) && clave.equalsIgnoreCase(txtClaveLogin.getText())){
-			registrarLoggin();
+			registrarAccion("Inicio de sesion instructor",Level.INFO);
 			main.cargarVistaInstructor();}
 	}
+	public void registrarAccion(String mensaje, Level tipo){
+		logger= new Log(mensaje,tipo);
+		logger.hilo.start();
 
-	private void registrarLoggin() {
-		FileHandler archivo;
-
-		try {
-			archivo= new FileHandler("src/resources/loggers/inicioSesion.txt",true);//si es true no sobreescribe
-			archivo.setFormatter(new SimpleFormatter());
-			LOGGER.addHandler(archivo);
-
-			LOGGER.log(Level.INFO, "inicio de sesion user :"+txtCorreoLogin.getText());
-
-		} catch (SecurityException | IOException e) {
-			e.printStackTrace();
-		}
-	}
-	}
-
+	}}
