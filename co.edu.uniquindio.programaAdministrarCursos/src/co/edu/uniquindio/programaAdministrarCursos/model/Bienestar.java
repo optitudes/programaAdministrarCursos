@@ -183,6 +183,39 @@ public boolean verificarCorreoInstructor(String correo) {
 	}
 	return false;
 }
+public boolean verificarNombreAcademico(String nombre) {
+
+	for (Credito credito : listaCreditos) {
+		if(credito instanceof Academico){
+			if(credito.verificarNombre(nombre))
+				return true;
+		}
+		
+	}
+	return false;
+}
+public boolean verificarNombreCultural(String nombre2) {
+
+	for (Credito credito : listaCreditos) {
+		if(credito instanceof Cultural){
+			if(credito.verificarNombre(nombre))
+				return true;
+		}
+		
+	}
+	return false;
+}
+public boolean verificarNombreDeportivo(String nombre2) {
+	
+	for (Credito credito : listaCreditos) {
+		if(credito instanceof Deportivo){
+			if(credito.verificarNombre(nombre))
+				return true;
+		}
+		
+	}
+	return false;
+}
 public Estudiante crearEstudiante(String nombre, String iD, String correo, String contrasenia) {
 
 	Estudiante estudianteAux= new Estudiante(nombre, iD, correo, contrasenia);
@@ -218,6 +251,16 @@ public boolean actualizarInstructor(Instructor instructorAux, Instructor instruc
 		return true;
 	return false;
 }
+public Deportivo crearDeportivo(String nombre, int cuposDisponibles, double costo, Horario horario,
+		Lugar lugar, EAsistenciaMinima asistenciaMinAux) {
+	
+	Deportivo deportivoAux=new Deportivo(costo, cuposDisponibles, horario, lugar, asistenciaMinAux);
+	listaCreditos.add(deportivoAux);
+	
+	return deportivoAux;
+}
+
+
 
 
 

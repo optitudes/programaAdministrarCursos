@@ -63,6 +63,11 @@ public abstract class Credito implements Serializable{
 		return "Credito [cuposDisponibles=" + cuposDisponibles + ", cuposRegistrados=" + cuposRegistrados + ", costo="
 				+ costo + ", horario=" + horario + ", lugar=" + lugar + "]";
 	}
+	public boolean verificarNombre(String nombreAux) {
+		if(nombreAux.equals(nombreAux))
+			return true;
+		return false;
+	}
 	
 	
 	

@@ -1,6 +1,7 @@
 package co.edu.uniquindio.programaAdministrarCursos.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Horario implements Serializable{
@@ -9,35 +10,27 @@ public class Horario implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	EDia[] listaDias=new EDia[2];
-	EHorario[] listaHorario= new EHorario[2];
+	ArrayList<EDia> listaDias=new ArrayList<EDia>();
+	ArrayList<EHorario> listaHorarios= new ArrayList<EHorario>();
 	public Horario() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Horario(EDia[] listaDias, EHorario[] listaHorario) {
+	public Horario(ArrayList<EDia> listaDias, ArrayList<EHorario> listaHorarios) {
 		super();
 		this.listaDias = listaDias;
-		this.listaHorario = listaHorario;
+		this.listaHorarios = listaHorarios;
 	}
-	public EDia[] getListaDias() {
+	public ArrayList<EDia> getListaDias() {
 		return listaDias;
 	}
-	public void setListaDias(EDia[] listaDias) {
+	public void setListaDias(ArrayList<EDia> listaDias) {
 		this.listaDias = listaDias;
 	}
-	public EHorario[] getListaHorario() {
-		return listaHorario;
+	public ArrayList<EHorario> getListaHorarios() {
+		return listaHorarios;
 	}
-	public void setListaHorario(EHorario[] listaHorario) {
-		this.listaHorario = listaHorario;
+	public void setListaHorarios(ArrayList<EHorario> listaHorarios) {
+		this.listaHorarios = listaHorarios;
 	}
-	@Override
-	public String toString() {
-		return "Horario [listaDias=" + Arrays.toString(listaDias) + ", listaHorario=" + Arrays.toString(listaHorario)
-				+ "]";
-	}
-	
-	
-
 }

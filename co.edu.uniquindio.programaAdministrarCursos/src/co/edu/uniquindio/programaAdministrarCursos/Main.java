@@ -8,8 +8,12 @@ import co.edu.uniquindio.programaAdministrarCursos.controller.EstudianteControll
 import co.edu.uniquindio.programaAdministrarCursos.controller.InstructorController;
 import co.edu.uniquindio.programaAdministrarCursos.controller.LoggingController;
 import co.edu.uniquindio.programaAdministrarCursos.model.Bienestar;
+import co.edu.uniquindio.programaAdministrarCursos.model.Deportivo;
+import co.edu.uniquindio.programaAdministrarCursos.model.EAsistenciaMinima;
 import co.edu.uniquindio.programaAdministrarCursos.model.Estudiante;
+import co.edu.uniquindio.programaAdministrarCursos.model.Horario;
 import co.edu.uniquindio.programaAdministrarCursos.model.Instructor;
+import co.edu.uniquindio.programaAdministrarCursos.model.Lugar;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
@@ -153,7 +157,15 @@ public void mostrarVentanaLogging() {
 	public boolean verificarCorreoInstructor(String correo) {
 		return bienestar.verificarCorreoInstructor(correo);
 	}
-
+	public boolean validarNombreAcademico(String nombre) {
+		return bienestar.verificarNombreAcademico(nombre);
+	}
+	public boolean validarNombreCultural(String nombre) {
+		return bienestar.verificarNombreCultural(nombre);
+	}
+	public boolean validarNombreDeportivo(String nombre) {
+		return bienestar.verificarNombreDeportivo(nombre);
+	}
 	public Estudiante crearEstudiante(String nombre, String iD, String correo, String contrasenia) {
 		return bienestar.crearEstudiante(nombre, iD, correo, contrasenia);
 	}
@@ -161,7 +173,10 @@ public void mostrarVentanaLogging() {
 	public Instructor crearInstructor(String nombre, String iD, String correo, String contrasenia) {
 		return bienestar.crearInstructor(nombre, iD, correo, contrasenia);
 	}
-
+	public Deportivo crearDeportivo(String nombre, int cuposDisponibles, double costoDouble, Horario horarioAux,
+			Lugar lugarAux, EAsistenciaMinima asistenciaMinAux) {
+		return bienestar.crearDeportivo(nombre, cuposDisponibles, costoDouble,horarioAux,lugarAux,asistenciaMinAux);
+	}
 
 	public boolean borrarEstudiante(Estudiante estudianteSeleccionado) {
 		return bienestar.borrarEstudiante(estudianteSeleccionado);
@@ -179,6 +194,14 @@ public void mostrarVentanaLogging() {
 	public boolean actualizarInstructor(Instructor instructorAux, Instructor instructorSeleccionado) {
 		return bienestar.actualizarInstructor(instructorAux, instructorSeleccionado);
 	}
+
+	
+
+	
+
+	
+
+	
 
 
 

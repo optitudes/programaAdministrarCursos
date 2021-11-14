@@ -1,7 +1,10 @@
 package co.edu.uniquindio.programaAdministrarCursos.controller;
 
+import java.beans.FeatureDescriptor;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Optional;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 
@@ -11,11 +14,16 @@ import co.edu.uniquindio.programaAdministrarCursos.exception.EstudianteNoCreadoE
 import co.edu.uniquindio.programaAdministrarCursos.exception.InstructorNoCreadoException;
 import co.edu.uniquindio.programaAdministrarCursos.model.Admin;
 import co.edu.uniquindio.programaAdministrarCursos.model.Credito;
+import co.edu.uniquindio.programaAdministrarCursos.model.Deportivo;
+import co.edu.uniquindio.programaAdministrarCursos.model.EArea;
+import co.edu.uniquindio.programaAdministrarCursos.model.EAsistenciaMinima;
 import co.edu.uniquindio.programaAdministrarCursos.model.EDia;
 import co.edu.uniquindio.programaAdministrarCursos.model.EHorario;
 import co.edu.uniquindio.programaAdministrarCursos.model.Estudiante;
+import co.edu.uniquindio.programaAdministrarCursos.model.Horario;
 import co.edu.uniquindio.programaAdministrarCursos.model.Instructor;
 import co.edu.uniquindio.programaAdministrarCursos.model.Log;
+import co.edu.uniquindio.programaAdministrarCursos.model.Lugar;
 import javafx.fxml.Initializable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -39,20 +47,21 @@ public class AdminController implements Initializable{
 
 	Admin admin= new Admin("aizen","1991" , "aizen@lord.com", "1001");
 	Log  loggerAdmin;
-	
-	
+
+
 	Main main;
 
 	ObservableList<Estudiante> listaEstudiantesData = FXCollections.observableArrayList();
-	ObservableList<Instructor> listaInstructoresData = FXCollections.observableArrayList();	
+	ObservableList<Instructor> listaInstructoresData = FXCollections.observableArrayList();
+	ObservableList<Credito> listaCreditosData = FXCollections.observableArrayList();
 
-	
+
 	Estudiante estudianteSeleccionado;
 	Instructor instructorSeleccionado;
-	
+
 	FilteredList<Estudiante> filteredData;
 	FilteredList<Instructor> filteredDataInstructor;
-	
+
 	@FXML
     private ResourceBundle resources;
 
@@ -120,7 +129,7 @@ public class AdminController implements Initializable{
     private ComboBox<EHorario> comboBoxHorario2;
 
     @FXML
-    private ComboBox<EHorario> comboBoxDia2;
+    private ComboBox<EDia> comboBoxDia2;
 
     @FXML
     private TableColumn<Instructor, String> columnNombreIntructor;
@@ -160,7 +169,7 @@ public class AdminController implements Initializable{
 
     @FXML
     private Button btnBorrarCurso;
-    
+
     @FXML
     private Button btnNuevoInstructor;
 
@@ -212,65 +221,74 @@ public class AdminController implements Initializable{
 
     @FXML
     private TextField txtCostoCurso;
+    
+    @FXML
+    private Label lblAux2;
+    
+    @FXML
+    private ComboBox<EArea> comboBoxAuxCredito2;
 
     @FXML
     void crearEstudianteAction(ActionEvent event) {
     	crearEstudiante();
 
     }
-   
+
 	@FXML
     void nuevoEstudianteAction(ActionEvent event) {
     	nuevoEstudiante();
     }
-	
+
 	@FXML
     void nuevoInstructorAction(ActionEvent event) {
     	nuevoInstructor();
 	}
 
-	
+
 
 	@FXML
     void borrarEstudianteAction(ActionEvent event) {
 		borrarEstudiante();
     }
 
-   
+
 
 	@FXML
     void actualizarEstudianteAction(ActionEvent event) {
 		actualizarEstudiante();
     }
 
-  
+
 	@FXML
     void crearInstructor(ActionEvent event) {
 		crearInstructor();
 
     }
 
-   
+
 
 	@FXML
     void borrarInstructor(ActionEvent event) {
 		borrarInstructor();
     }
 
-   
+
 
 	@FXML
     void actualizarInstructor(ActionEvent event) {
 		actualizarInstructor();
     }
 
-    
+
 	@FXML
     void crearCurso(ActionEvent event) {
+		crearCurso();
 
     }
 
-    @FXML
+  
+
+	@FXML
     void borrarCurso(ActionEvent event) {
 
     }
@@ -281,6 +299,35 @@ public class AdminController implements Initializable{
     }
 
     @FXML
+    void BtnElegirDeportivo(ActionEvent event) {
+    	limpiarCreditos();
+    	rBtnDeportivo.setSelected(true);
+    	rBtnAcademico.setSelected(false);
+    	rBtnCultural.setSelected(false);
+    	nuevoCredito();
+    	nuevoCreditoDeportivo();
+    }
+
+	@FXML
+    void BtnElegirAcademico(ActionEvent event) {
+		limpiarCreditos();
+		rBtnAcademico.setSelected(true);
+    	rBtnDeportivo.setSelected(false);
+    	rBtnCultural.setSelected(false);
+    	nuevoCredito();
+    	nuevoCreditoAcademico();
+    }
+
+	@FXML
+    void BtnElegirCultural(ActionEvent event) {
+		limpiarCreditos();
+		rBtnCultural.setSelected(true);
+		rBtnAcademico.setSelected(false);
+    	rBtnDeportivo.setSelected(false);
+    	nuevoCredito();
+    }
+
+    @FXML
     void cerrarSesionActrion(ActionEvent event) {
     	registrarAccion("cierre de sesion admin"+admin.getName(),Level.INFO );
     	main.mostrarVentanaLogging();
@@ -288,13 +335,37 @@ public class AdminController implements Initializable{
     }
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		this.columnNombreEstudiante.setCellValueFactory(new PropertyValueFactory<>("name"));
-		this.columnIdEstudiante.setCellValueFactory(new PropertyValueFactory<>("iD"));
+
+		ObservableList<EDia> listaDiasData = FXCollections.observableArrayList();
+		listaDiasData.addAll(EDia.values());
+
+		ObservableList<EHorario> listaHorarioData = FXCollections.observableArrayList();
+		listaHorarioData.addAll(EHorario.values());
 		
+		ObservableList<EArea> listaAreaData = FXCollections.observableArrayList();
+		listaAreaData.addAll(EArea.values());
+		
+		lblUserAdmin.setText(lblUserAdmin.getText()+admin.getName());
+
+		this.columnNombreEstudiante.setCellValueFactory(new PropertyValueFactory<>("name"));
+		this.columnIdEstudiante.setCellValueFactory    (new PropertyValueFactory<>("iD"));
+
 		this.columnNombreIntructor.setCellValueFactory(new PropertyValueFactory<>("name"));
 		this.columnIdIntructor.setCellValueFactory(new PropertyValueFactory<>("iD"));
 		
+		this.columnNombreCurso.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+		this.column}.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+
+		comboBoxDia1.getItems().addAll(listaDiasData);
+		comboBoxDia2.getItems().addAll(listaDiasData);
 		
+		comboBoxHorario1.getItems().addAll(listaHorarioData);
+		comboBoxHorario2.getItems().addAll(listaHorarioData);
+		
+		limpiarCreditos();
+
+
+
 		tableEstudiantes.getSelectionModel().selectedItemProperty().addListener((obs,oldSelection,newSelection) -> {
 
 			estudianteSeleccionado = newSelection;
@@ -302,7 +373,7 @@ public class AdminController implements Initializable{
 			mostrarInformacionEstudiante(estudianteSeleccionado);
 
 		});
-		
+
 		tableInstructor.getSelectionModel().selectedItemProperty().addListener((obs,oldSelection,newSelection) -> {
 
 			instructorSeleccionado = newSelection;
@@ -310,7 +381,7 @@ public class AdminController implements Initializable{
 			mostrarInformacionInstructor(instructorSeleccionado);
 
 		});
-		
+
 		// 1. Wrap the ObservableList in a FilteredList (initially display all data).
     	filteredData = new FilteredList<>(listaEstudiantesData, p -> true);
 
@@ -330,11 +401,11 @@ public class AdminController implements Initializable{
 					return true; // Filter matches first name.
 				} else if (estudiante.getiD().toLowerCase().contains(lowerCaseFilter)) {
 					return true; // Filter matches last name.
-				} 
+				}
 				return false; // Does not match.
 			});
 		});
-    	
+
     	// 1. Wrap the ObservableList in a FilteredList (initially display all data).
     	filteredDataInstructor = new FilteredList<>(listaInstructoresData, p -> true);
 
@@ -354,13 +425,13 @@ public class AdminController implements Initializable{
 					return true; // Filter matches first name.
 				} else if (instructor.getiD().toLowerCase().contains(lowerCaseFilter)) {
 					return true; // Filter matches last name.
-				} 
+				}
 				return false; // Does not match.
 			});
 		});
 	}
 
-	
+
 	private void mostrarInformacionEstudiante(Estudiante estudianteSeleccionado) {
 
 		if(estudianteSeleccionado != null){
@@ -370,7 +441,7 @@ public class AdminController implements Initializable{
 			txtContraseniaEstudiante.setText(estudianteSeleccionado.getPasword());
 		}
 	}
-	
+
 	private void mostrarInformacionInstructor(Instructor instructorSeleccionado) {
 		if(instructorSeleccionado != null){
 			txtNombreInstructor.setText(instructorSeleccionado.getName());
@@ -384,13 +455,14 @@ public class AdminController implements Initializable{
 	public void setAplicacion(Main mainAux) {
 		this.main=mainAux;
 		main.quemarDatos();
+
 		tableEstudiantes.getItems().clear();
 		tableInstructor.getItems().clear();
 
 		tableEstudiantes.setItems(getListaEstudiantesData());
 		tableInstructor.setItems(getListaInstructoresData());
 
-		
+
 		// 3. Wrap the FilteredList in a SortedList.
     	SortedList<Estudiante> sortedData = new SortedList<>(filteredData);
 
@@ -399,7 +471,7 @@ public class AdminController implements Initializable{
 
     	// 5. Add sorted (and filtered) data to the table.
     	tableEstudiantes.setItems(sortedData);
-    	
+
     	// 3. Wrap the FilteredList in a SortedList.
     	SortedList<Instructor> sortedDataInstructor = new SortedList<>(filteredDataInstructor);
 
@@ -408,11 +480,7 @@ public class AdminController implements Initializable{
 
     	// 5. Add sorted (and filtered) data to the table.
     	tableInstructor.setItems(sortedDataInstructor);
-
-
 	}
-
-	
 
 	public void mostrarMensaje(String titulo, String header, String contenido, AlertType alertType) {
 
@@ -422,7 +490,7 @@ public class AdminController implements Initializable{
 		alert.setContentText(contenido);
 		alert.showAndWait   ();
 	}
-	
+
 	private boolean mostrarMensajeConfirmacion(String mensaje) {
 		Alert alert  = new Alert (Alert.AlertType.CONFIRMATION);
 		alert.setTitle(null);
@@ -437,21 +505,42 @@ public class AdminController implements Initializable{
 			return false;
 		}
 	}
+
 	private void limpiarCamposEstudiante() {
 
 		txtNombreEstudiante.setText     ("");
 		txtIdEstudiante.setText         ("");
 		txtCorreoEstudiante.setText     ("");
 		txtContraseniaEstudiante.setText("");
-	
 	}
+
 	private void limpiarCamposInstructor() {
 		txtNombreInstructor.setText     ("");
 		txtIdInstructor.setText         ("");
 		txtCorreoInstructor.setText     ("");
 		txtContraseniaInstructor.setText("");
-		
 	}
+
+	private void limpiarCreditos() {
+
+		txtNombreCredito.setText("");
+		txtCuposDisponiblesCredito.setText("");
+		txtBloqueCurso.setText("");
+		txtPisoCredito.setText("");
+		txtNumSalonCurso.setText("");
+		txtCostoCurso.setText("");
+
+		comboBoxHorario1.setValue(null);
+		comboBoxHorario2.setValue(null);
+		comboBoxDia1.setValue(null);
+		comboBoxDia2.setValue(null);
+
+		comboBoxAuxCurso.setVisible(false);
+		comboBoxAuxCredito2.setVisible(false);
+		labelAuxCurso.setVisible(false);
+		lblAux2.setVisible(false);
+	}
+
 	private void nuevoEstudiante() {
 
 		txtNombreEstudiante.setText     ("Ingrese el nombre del nuevo estudiante");
@@ -462,7 +551,6 @@ public class AdminController implements Initializable{
 	}
 
 	private void nuevoInstructor() {
-		
 
 		txtNombreInstructor.setText     ("Ingrese el nombre del nuevo Instructor");
 		txtIdInstructor.setText         ("Ingrese el id del nuevo Instructor");
@@ -470,6 +558,55 @@ public class AdminController implements Initializable{
 		txtContraseniaInstructor.setText("Ingrese la contraseña del nuevo Instructor");
 
 	}
+
+	private void nuevoCredito() {
+
+		 txtNombreCredito.setText("Ingrese el nombre del credito");
+		 txtCuposDisponiblesCredito.setText("Ingrese la cantidad de cupos disponibles");
+		 txtBloqueCurso.setText("Ingrese el bloque del curso");
+		 txtPisoCredito.setText("Ingrese el piso del credito");
+		 txtNumSalonCurso.setText("Ingrese el numero del salon");
+		 txtCostoCurso.setText("Ingrese el costo del curso");
+
+		 comboBoxHorario1.setValue(null);
+		 comboBoxHorario2.setValue(null);
+		 comboBoxDia1.setValue(null);
+		 comboBoxDia2.setValue(null);
+
+		 comboBoxAuxCurso.setVisible(false);
+		 labelAuxCurso.setVisible(false);
+		 lblAux2.setVisible(false);
+		 comboBoxAuxCredito2.setVisible(false);
+	}
+
+	private void nuevoCreditoDeportivo() {
+		 comboBoxAuxCurso.setVisible(true);
+		 labelAuxCurso.setVisible(true);
+
+		 labelAuxCurso.setText("Asistencia Min");
+		 comboBoxAuxCurso.getItems().clear();
+		 comboBoxAuxCurso.getItems().addAll("SETENTA_PORCIENTO","SETENTA_Y_CINCO_PORCIENTO","OCHENTA_PORCIENTO");
+	}
+
+	private void nuevoCreditoAcademico() {
+		comboBoxAuxCurso.setVisible(true);
+		comboBoxAuxCredito2.setVisible(true);
+		labelAuxCurso.setVisible(true);
+		lblAux2.setVisible(true);
+
+		lblAux2.setText("Area");
+		labelAuxCurso.setText("Homologación");
+
+		ObservableList<EArea> listaAreasData = FXCollections.observableArrayList();
+		listaAreasData.addAll(EArea.values());
+
+		comboBoxAuxCredito2.getItems().clear();
+		comboBoxAuxCredito2.getItems().addAll(listaAreasData);
+		
+		comboBoxAuxCurso.getItems().clear();
+		comboBoxAuxCurso.getItems().addAll("3.0","3.5","4.0");
+	}
+
 	private void crearEstudiante() {
 
 		String nombre=txtNombreEstudiante.getText();
@@ -492,8 +629,7 @@ public class AdminController implements Initializable{
 		} catch (DatosInvalidosException | EstudianteNoCreadoException e) {
 			mostrarMensaje("Notificación Estudiante", "Estudiante no registrado",e.getMessage(), AlertType.ERROR);		}
 	}
-	
-	
+
 	private void crearInstructor() {
 		String nombre=txtNombreInstructor.getText();
 		String iD=txtIdInstructor.getText();
@@ -516,17 +652,104 @@ public class AdminController implements Initializable{
 		} catch (DatosInvalidosException |  InstructorNoCreadoException e) {
 			mostrarMensaje("Notificación instructor", "Instructor no registrado",e.getMessage(), AlertType.ERROR);		}
 	}
+  private void crearCurso() {
+		 String nombre=txtNombreCredito.getText();
+		 String cuposDisponibles=txtCuposDisponiblesCredito.getText();
+		 String bloque=txtBloqueCurso.getText();
+		 String piso=txtPisoCredito.getText();
+		 String numSalon=txtNumSalonCurso.getText();
+		 String costo=txtCostoCurso.getText();
+		 String iD="id";
+		 EHorario horario1=comboBoxHorario1.getValue();
+		 EHorario horario2=comboBoxHorario2.getValue();
+		 EDia     dia1=comboBoxDia1.getValue();
+		 EDia     dia2=comboBoxDia2.getValue();
+		 try {
+			if(rBtnAcademico.isSelected())
+			 crearCreditoAcademico(nombre, cuposDisponibles, bloque, piso, numSalon, costo, iD,
+					 			   horario1, horario2, dia1, dia2);
+		 if(rBtnCultural.isSelected())
+			 crearCreditoCultural(nombre, cuposDisponibles, bloque, piso, numSalon, costo,iD,
+					 horario1, horario2, dia1, dia2);
+		 if(rBtnDeportivo.isSelected())
+			 crearCreditoDeportivo(nombre, cuposDisponibles, bloque, piso, numSalon, costo, iD,
+					 horario1, horario2, dia1, dia2);
 
 
+		} catch (NumberFormatException | DatosInvalidosException e) {
+			
+		}
+		 
+	}
+	private void crearCreditoDeportivo(String nombre, String cuposDisponibles, String bloque, String piso, String numSalon,
+		String costo, String iD, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) throws DatosInvalidosException,NumberFormatException {
 
-private void actualizarEstudiante() {
-		  if(estudianteSeleccionado!=null){
-			  
+		String asistenciaMin=comboBoxAuxCurso.getValue();
+		
+		if(validarDatosCredito(nombre, cuposDisponibles, bloque, piso, numSalon, costo, iD,
+					 horario1, horario2, dia1, dia2)==true && asistenciaMin!=null && !asistenciaMin.equalsIgnoreCase("")){
+			
+			int pisoInt=Integer.parseInt(piso);
+			int salonInt=Integer.parseInt(numSalon);
+			int cuposDisponiblesInt=Integer.parseInt(cuposDisponibles);
+			EAsistenciaMinima asistenciaMinAux=obtenerAsistencia(asistenciaMin);
+			double costoDouble=Double.parseDouble(costo);
+			
+			Horario horarioAux=crearHorario(horario1,horario2,dia1,dia2);
+			Lugar   lugarAux= new Lugar(bloque, pisoInt, salonInt);
+			Deportivo deportivo=main.crearDeportivo(nombre, cuposDisponiblesInt, costoDouble,horarioAux,lugarAux,asistenciaMinAux);
+			listaCursosData.add(estudianteAux);
+			tableEstudiantes.refresh();
+			mostrarMensaje("Notificacion Estudiante","Estudiante registrado","El estudiante se registró con éxito",AlertType.INFORMATION);
+			registrarAccion("Estudiante con ID : "+estudianteAux.getiD()+"creado por el admin:"+admin.getName(),Level.INFO );
+
+
+			
+		}else{
+				mostrarMensaje("Notificación Credito", "Credito no creado","asistencia no valida", AlertType.ERROR);
+		}
+}
+
+	
+
+
+	
+
+	private Horario crearHorario(EHorario horario1, EHorario horario2, EDia dia1, EDia dia2)  {
+		Horario horarioAux;
+		ArrayList<EHorario> listaHorariosAux= new ArrayList<EHorario>();
+		ArrayList<EDia> listaDiasAux= new ArrayList<EDia>();
+
+		if(horario1!=null){listaHorariosAux.add(horario1);}
+		if(horario2!=null){listaHorariosAux.add(horario2);}
+		if(dia1!=null){listaDiasAux.add(dia1);}
+		if(dia2!=null){listaDiasAux.add(dia2);}
+		
+		horarioAux=new Horario(listaDiasAux,listaHorariosAux);
+		
+		return horarioAux;
+	}
+
+	private void crearCreditoCultural(String nombre, String cuposDisponibles, String bloque, String piso, String numSalon,
+		String costo, String iD, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) {
+	// TODO Auto-generated method stub
+	
+}
+
+	private void crearCreditoAcademico(String nombre, String cuposDisponibles, String bloque, String piso, String numSalon,
+		String costo, String iD, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) {
+	// TODO Auto-generated method stub
+	
+}
+
+	private void actualizarEstudiante() {
+		if(estudianteSeleccionado!=null){
+
 			String nombre=txtNombreEstudiante.getText();
 			String iD=txtIdEstudiante.getText();
 			String correo=txtCorreoEstudiante.getText();
 			String contrasenia=txtContraseniaEstudiante.getText();
-			
+
 			try {
 				if(validarDatosEstudiante(nombre,iD,correo,contrasenia)){
 
@@ -543,21 +766,22 @@ private void actualizarEstudiante() {
 
 					}
 				}
-				}catch (DatosInvalidosException e) {
-					mostrarMensaje("Notificación Estudiante", "Estudiante no actualizado",e.getMessage(), AlertType.ERROR);
-					}
-			}else{
+			}catch (DatosInvalidosException e) {
+				mostrarMensaje("Notificación Estudiante", "Estudiante no actualizado",e.getMessage(), AlertType.ERROR);
+			}
+		}else{
 			mostrarMensaje("Notificación Estudiante", "Estudiante no seleccionado","Seleccione un estudiante", AlertType.WARNING);
 		}
-}
-private void actualizarInstructor() {
-	  if(instructorSeleccionado!=null){
-		  
+	}
+
+	private void actualizarInstructor() {
+		if(instructorSeleccionado!=null){
+
 			String nombre=txtNombreInstructor.getText();
 			String iD=txtIdInstructor.getText();
 			String correo=txtCorreoInstructor.getText();
 			String contrasenia=txtContraseniaInstructor.getText();
-			
+
 			try {
 				if(validarDatosInstructor(nombre,iD,correo,contrasenia)){
 
@@ -574,122 +798,113 @@ private void actualizarInstructor() {
 
 					}
 				}
-				}catch (DatosInvalidosException e) {
-					mostrarMensaje("Notificación Instructor", "Instructor no actualizado",e.getMessage(), AlertType.ERROR);
-					}
-			}else{
+			}catch (DatosInvalidosException e) {
+				mostrarMensaje("Notificación Instructor", "Instructor no actualizado",e.getMessage(), AlertType.ERROR);
+			}
+		}else{
 			mostrarMensaje("Notificación Instructor", "Instructor no seleccionado","Seleccione un Instructor", AlertType.WARNING);
 		}
-}
+	}
 
-	 private void borrarEstudiante() {
-		 
-		 if(estudianteSeleccionado!=null)
-		 {
-			 if(mostrarMensajeConfirmacion("¿Estas seguro de eliminar al estudiante?") == true)
-			 {
-				 if(main.borrarEstudiante(estudianteSeleccionado)){
+	private void borrarEstudiante() {
 
-					 String iDEstudiante=estudianteSeleccionado.getName();
-					 listaEstudiantesData.remove(estudianteSeleccionado);
-					 estudianteSeleccionado=null;
-					 tableEstudiantes.getSelectionModel().clearSelection();
-					 limpiarCamposEstudiante();
-					 tableEstudiantes.refresh();
-					 
-					 mostrarMensaje("Notificacion Estudiante","Estudiante borrado","El estudiante se borró con éxito",AlertType.INFORMATION);
-					 registrarAccion("Estudiante con ID : "+iDEstudiante+" borrado por el admin: "+admin.getName(),Level.WARNING );
+		if(estudianteSeleccionado!=null)
+		{
+			if(mostrarMensajeConfirmacion("¿Estas seguro de eliminar al estudiante?") == true)
+			{
+				if(main.borrarEstudiante(estudianteSeleccionado)){
 
-				 }else{
-						mostrarMensaje("Notificación Estudiante", "Estudiante no borrado","El estudiante no se borró con éxito", AlertType.ERROR);
-				 }
-			 }
-			 
-			 
-		 }else{
-				mostrarMensaje("Notificación Estudiante", "Estudiante no seleccionado","Seleccione un estudiante", AlertType.WARNING);
+					String iDEstudiante=estudianteSeleccionado.getName();
+					listaEstudiantesData.remove(estudianteSeleccionado);
+					estudianteSeleccionado=null;
+					tableEstudiantes.getSelectionModel().clearSelection();
+					limpiarCamposEstudiante();
+					tableEstudiantes.refresh();
 
-		 }
-		 
+					mostrarMensaje("Notificacion Estudiante","Estudiante borrado","El estudiante se borró con éxito",AlertType.INFORMATION);
+					registrarAccion("Estudiante con ID : "+iDEstudiante+" borrado por el admin: "+admin.getName(),Level.WARNING );
+
+				}else{
+					mostrarMensaje("Notificación Estudiante", "Estudiante no borrado","El estudiante no se borró con éxito", AlertType.ERROR);
+				}
+			}
+		}else{
+			mostrarMensaje("Notificación Estudiante", "Estudiante no seleccionado","Seleccione un estudiante", AlertType.WARNING);
 		}
-	
-	 private void borrarInstructor() {
-		 if(instructorSeleccionado!=null)
-		 {
-			 if(mostrarMensajeConfirmacion("¿Estas seguro de eliminar al instructor?") == true)
-			 {
-				 if(main.borrarInstructor(instructorSeleccionado)){
+	}
 
-					 String iDInstructor=instructorSeleccionado.getiD();
-					 listaInstructoresData.remove(instructorSeleccionado);
-					 instructorSeleccionado=null;
-					 tableInstructor.getSelectionModel().clearSelection();
-					 limpiarCamposInstructor();
-					 tableInstructor.refresh();
-					 
-					 mostrarMensaje("Notificacion Instructor","Instructor borrado","El Instructor se borró con éxito",AlertType.INFORMATION);
-					 registrarAccion("Instructor con ID : "+iDInstructor+" borrado por el admin: "+admin.getName(),Level.WARNING );
+	private void borrarInstructor() {
+		if(instructorSeleccionado!=null)
+		{
+			if(mostrarMensajeConfirmacion("¿Estas seguro de eliminar al instructor?") == true)
+			{
+				if(main.borrarInstructor(instructorSeleccionado)){
 
-				 }else{
-						mostrarMensaje("Notificación Instructor", "Instructor no borrado","El Instructor no se borró con éxito", AlertType.ERROR);
-				 }
-			 }
-			 
-			 
-		 }else{
-				mostrarMensaje("Notificación Instructor", "Instructor no seleccionado","Seleccione un Instructor", AlertType.WARNING);
+					String iDInstructor=instructorSeleccionado.getiD();
+					listaInstructoresData.remove(instructorSeleccionado);
+					instructorSeleccionado=null;
+					tableInstructor.getSelectionModel().clearSelection();
+					limpiarCamposInstructor();
+					tableInstructor.refresh();
 
-		 }
-		 
+					mostrarMensaje("Notificacion Instructor","Instructor borrado","El Instructor se borró con éxito",AlertType.INFORMATION);
+					registrarAccion("Instructor con ID : "+iDInstructor+" borrado por el admin: "+admin.getName(),Level.WARNING );
+
+				}else{
+					mostrarMensaje("Notificación Instructor", "Instructor no borrado","El Instructor no se borró con éxito", AlertType.ERROR);
+				}
+			}
+		}else{
+			mostrarMensaje("Notificación Instructor", "Instructor no seleccionado","Seleccione un Instructor", AlertType.WARNING);
 		}
-	
+	}
 
 	private boolean validarDatosEstudiante(String nombre, String iD, String correo, String contrasenia) throws DatosInvalidosException {
 
 		String mensaje="";
 
 		if(nombre == null || nombre.equals(""))
-			mensaje += "El codigo del retiro es invalido \n";
-	 
-	 if(iD == null || iD.equals("")){
-			mensaje += "El codigo del retiro es invalido \n";
-	 }else{
-		 if(main.verificarIDEstudiante(iD))
-		 {
-			 mensaje+="El ID ya está registrado";
-		 }
-	 }
-	 
-	 if(correo == null || correo.equals("")){
+			mensaje += "El nombre del estudiante es invalido \n";
+
+		if(iD == null || iD.equals("")){
+			mensaje += "El ID del retiro es invalido \n";
+		}else{
+			if(main.verificarIDEstudiante(iD))
+			{
+				mensaje+="El ID ya está registrado";
+			}
+		}
+
+		if(correo == null || correo.equals("")){
 			mensaje += "El correo es invalido \n";
-	 }else{
-		 if(main.verificarCorreoEstudiante(correo))
-		 {
-			 mensaje+="El correo ya está registrado";
-		 }
-	 }
-	 
-	 if(contrasenia == null || contrasenia.equals(""))
+		}else{
+			if(main.verificarCorreoEstudiante(correo))
+			{
+				mensaje+="El correo ya está registrado";
+			}
+		}
+
+		if(contrasenia == null || contrasenia.equals(""))
 			mensaje += "La contraseña es invalida \n";
-	 
-	 
-	 if(mensaje.isEmpty())
-	 {
-		 return true;
-	 }else
-	 {
-		 throw new DatosInvalidosException(mensaje);
-	 }
-}
-	
+
+
+		if(mensaje.isEmpty())
+		{
+			return true;
+		}else
+		{
+			throw new DatosInvalidosException(mensaje);
+		}
+	}
+
 	private boolean validarDatosInstructor(String nombre, String iD, String correo, String contrasenia) throws DatosInvalidosException {
 		String mensaje="";
 
 		if(nombre == null || nombre.equals(""))
-			mensaje += "El codigo del instructor es invalido \n";
+			mensaje += "El nombre del instructor es invalido \n";
 
 		if(iD == null || iD.equals("")){
-			mensaje += "El codigo del instructor es invalido \n";
+			mensaje += "El ID del instructor es invalido \n";
 		}else{
 			if(main.verificarIDInstructor(iD))
 			{
@@ -718,23 +933,109 @@ private void actualizarInstructor() {
 			throw new DatosInvalidosException(mensaje);
 		}
 	}
+private boolean validarDatosCredito(String nombre, String cuposDisponibles, String bloque, String piso, String numSalon,
+			String costo, String iD, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) throws DatosInvalidosException {
+		String mensaje="";
 
-private ObservableList<Estudiante> getListaEstudiantesData() {
+		if(nombre == null || nombre.equals("")){
+			mensaje += "El nombre del credito del instructor es invalido \n";
+		}else{
+			if(rBtnAcademico.isSelected()){
+				if(main.validarNombreAcademico(nombre))
+					mensaje += "Ya existe un credito academico con ese nombre \n";
+			}else{
+				if(rBtnCultural.isSelected())
+				{
+					if(main.validarNombreCultural(nombre))
+						mensaje += "Ya existe un credito cultural con ese nombre \n";
+				}else{
+						if(main.validarNombreDeportivo(nombre))
+						mensaje += "Ya existe un credito deportivo con ese nombre \n";
+				}
+			}
+		}
 
-	 listaEstudiantesData.addAll(main.obtenerEstudiantes());
+		if(cuposDisponibles == null || cuposDisponibles.equals("")){
+			mensaje += "Los cupos disponibles del curso son invalidos \n";
+		}
 
-	 return listaEstudiantesData;
- }
+		if(bloque == null || bloque.equals("")){
+			mensaje += "El bloque es invalido \n";
+		}
 
-private ObservableList<Instructor> getListaInstructoresData() {
+		if(piso == null || piso.equals(""))
+			mensaje += "El piso es invalido \n";
 
-	listaInstructoresData.addAll(main.obtenerInstructores());
-	return listaInstructoresData;
+		if(numSalon == null || numSalon.equals(""))
+			mensaje += "El número de piso es invalido \n";
+
+
+		if(costo == null || costo.equals(""))
+			mensaje += "El costo es invalido \n";
+
+		if(iD == null || iD.equals(""))
+			mensaje += "El iD es invalido \n";
+
+
+		if(horario1 == null && horario2==null){
+			mensaje += "Debe ingresar almenos un horario \n";
+		}else{
+			if(horario1!=null && horario2!=null)
+			{
+				if(horario1==horario2)
+					mensaje+="Los dos horarios no pueden ser iguales\n";
+			}
+		}
+
+
+		if(dia1 == null && dia2==null){
+			mensaje += "Debe ingresar almenos un dia \n";
+		}else{
+			if(dia1!=null && dia2!=null)
+			{
+				if(dia1==dia2)
+					mensaje+="Los dos dias no pueden ser iguales\n";
+			}
+		}
+
+		if(mensaje.isEmpty())
+		{
+			return true;
+		}else
+		{
+			throw new DatosInvalidosException(mensaje);
+		}
+	}
+	private ObservableList<Estudiante> getListaEstudiantesData() {
+
+		listaEstudiantesData.addAll(main.obtenerEstudiantes());
+
+		return listaEstudiantesData;
+	}
+
+	private ObservableList<Instructor> getListaInstructoresData() {
+
+		listaInstructoresData.addAll(main.obtenerInstructores());
+		return listaInstructoresData;
+	}
+
+	public void registrarAccion(String mensaje, Level tipo){
+		loggerAdmin= new Log(mensaje,tipo);
+		loggerAdmin.hilo.start();
+
+	}
+	private EAsistenciaMinima obtenerAsistencia(String asistenciaMin) {
+		
+		if(asistenciaMin.equals(EAsistenciaMinima.SETENTA_PORCIENTO)){
+			return EAsistenciaMinima.SETENTA_PORCIENTO;
+		}else{
+			if(asistenciaMin.equals(EAsistenciaMinima.SETENTA_Y_CINCO_PORCIENTO)){
+				return EAsistenciaMinima.SETENTA_Y_CINCO_PORCIENTO;
+			}else{
+				return EAsistenciaMinima.OCHENTA_PORCIENTO;
+			}
+		}
+
+	}
 }
-
-public void registrarAccion(String mensaje, Level tipo){
-	loggerAdmin= new Log(mensaje,tipo);
-	loggerAdmin.hilo.start();
-
-}}
 

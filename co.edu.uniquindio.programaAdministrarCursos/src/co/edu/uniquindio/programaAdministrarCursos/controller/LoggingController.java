@@ -59,20 +59,71 @@ public class LoggingController implements Initializable{
 		main= mainAux;
 
 	}
+
+	@FXML
+	void BtnElegirAdmin(ActionEvent event) {
+		limpiarLogging();
+		rBtnAdmin.setSelected(true);
+		rBtnEstudiante.setSelected(false);
+		rBtnInstructor.setSelected(false);
+	}
+
+	@FXML
+	void BtnElegirInstructor(ActionEvent event) {
+		limpiarLogging();
+		rBtnInstructor.setSelected(true);
+		rBtnAdmin.setSelected(false);
+		rBtnEstudiante.setSelected(false);
+	}
+
+	@FXML
+	void BtnElegirEstudiante(ActionEvent event) {
+		limpiarLogging();
+		rBtnEstudiante.setSelected(true);
+		rBtnAdmin.setSelected(false);
+		rBtnInstructor.setSelected(false);
+	}
+
 	@FXML
 	void accederAction(ActionEvent event) {
-		if(correoadmin.equalsIgnoreCase(txtCorreoLogin.getText()) && clave.equalsIgnoreCase(txtClaveLogin.getText())){
-			registrarAccion("Inicio de sesion admin", Level.INFO);
-			main.cargarVistaAdmin();}
-		if(correoEstudiante.equalsIgnoreCase(txtCorreoLogin.getText()) && clave.equalsIgnoreCase(txtClaveLogin.getText())){
-			registrarAccion("Inicio de sesion estudiante",Level.INFO );
-			main.cargarVistaEstudiante();}
-		if(correoInstructor.equalsIgnoreCase(txtCorreoLogin.getText()) && clave.equalsIgnoreCase(txtClaveLogin.getText())){
+		if(rBtnAdmin.isSelected())
+			logearAdmin();
+		if(rBtnEstudiante.isSelected())
+			logearEstudiante();
+		if(rBtnInstructor.isSelected())
+			logearInstructor();
+	}
+
+	private void logearInstructor() {
+	if(correoInstructor.equalsIgnoreCase(txtCorreoLogin.getText()) && clave.equalsIgnoreCase(txtClaveLogin.getText())){
 			registrarAccion("Inicio de sesion instructor",Level.INFO);
 			main.cargarVistaInstructor();}
+		
 	}
+
+	private void logearEstudiante() {
+	if(correoEstudiante.equalsIgnoreCase(txtCorreoLogin.getText()) && clave.equalsIgnoreCase(txtClaveLogin.getText())){
+			registrarAccion("Inicio de sesion estudiante",Level.INFO );
+			main.cargarVistaEstudiante();}
+		
+	}
+
+	private void logearAdmin() {
+	if(correoadmin.equalsIgnoreCase(txtCorreoLogin.getText()) && clave.equalsIgnoreCase(txtClaveLogin.getText())){
+			registrarAccion("Inicio de sesion admin", Level.INFO);
+			main.cargarVistaAdmin();}
+		
+	}
+
+	private void limpiarLogging() {
+		txtCorreoLogin.setText("");
+		txtClaveLogin.setText("");
+
+	}
+
 	public void registrarAccion(String mensaje, Level tipo){
 		logger= new Log(mensaje,tipo);
 		logger.hilo.start();
 
-	}}
+	}
+}
