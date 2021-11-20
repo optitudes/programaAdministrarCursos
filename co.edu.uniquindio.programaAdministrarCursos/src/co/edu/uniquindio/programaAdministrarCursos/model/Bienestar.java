@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
+
 import co.edu.uniquindio.programaAdministrarCursos.exception.EstudianteNoCreadoException;
 
 public class Bienestar {
@@ -146,11 +147,18 @@ public void quemarDatos() {
 	listaHorarios.add(EHorario.NUEVE_A_ONCE_AM);
 	
 	Deportivo  deportivo= new Deportivo(2,2,new Horario(listaDias, listaHorarios),new Lugar("bloque 1",3, 2),EAsistenciaMinima.OCHENTA_PORCIENTO,"Deportivo","salud fisica");
+	Cultural  cultural = new Cultural(2,2,new Horario(listaDias, listaHorarios), new Lugar("dos", 2, 2),"Cultural","lectura general");
+	Academico academico= new Academico(2, 3, new Horario(listaDias, listaHorarios), new Lugar("Ingenieria", 2, 1), 4.0, EArea.MATEMATICAS, "Academica", "Calculo");
+	
 	
 	listaEstudiantes.add(estudiante);
 	listaAdmins.add(admin);
 	listaInstructores.add(instructor);
 	listaCreditos.add(deportivo);
+	listaCreditos.add(academico);
+	listaCreditos.add(cultural);
+
+
 	
 }
 
@@ -245,6 +253,22 @@ public Deportivo crearDeportivo(String nombre, int cuposDisponibles, double cost
 	
 	return deportivoAux;
 }
+
+public Cultural crearCultural(String nombre, int cuposDisponiblesInt, double costoDouble, Horario horarioAux,
+		Lugar lugarAux, String tipoCredito) {
+	
+	Cultural culturalAux= new Cultural(costoDouble, cuposDisponiblesInt, horarioAux, lugarAux, tipoCredito, nombre);
+	listaCreditos.add(culturalAux);
+	return culturalAux;
+}
+public Academico crearAcademico(String nombre, int cuposDisponiblesInt, double costoDouble, Horario horarioAux,
+		Lugar lugarAux, String tipoCredito, double notaDouble, EArea area) {
+	
+	Academico academicoAux= new Academico(costoDouble, cuposDisponiblesInt, horarioAux, lugarAux, notaDouble, area, tipoCredito, nombre);
+	listaCreditos.add(academicoAux);
+	return academicoAux;
+}
+
 public ArrayList<Estudiante> getListaEstudiantes() {
 	return listaEstudiantes;
 }
@@ -269,6 +293,8 @@ public ArrayList<Credito> getListaCreditos() {
 public void setListaCreditos(ArrayList<Credito> listaCreditos) {
 	this.listaCreditos = listaCreditos;
 }
+
+
 
 
 

@@ -11,9 +11,9 @@ public class Academico extends Credito{
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Academico(double costo, int cuposDisponibles, int cuposRegistrados, Horario horario,
+	public Academico(double costo, int cuposDisponibles, Horario horario,
 					 Lugar lugar,double notaMinima,EArea area, String tipo,String nombre) {
-		super(costo, cuposDisponibles, cuposRegistrados, horario, lugar,tipo, nombre);
+		super(costo, cuposDisponibles, 0, horario, lugar,tipo, nombre);
 		this.notaMinima=notaMinima;
 		this.area=area;
 	}

@@ -12,9 +12,11 @@ import co.edu.uniquindio.programaAdministrarCursos.Main;
 import co.edu.uniquindio.programaAdministrarCursos.exception.DatosInvalidosException;
 import co.edu.uniquindio.programaAdministrarCursos.exception.EstudianteNoCreadoException;
 import co.edu.uniquindio.programaAdministrarCursos.exception.InstructorNoCreadoException;
+import co.edu.uniquindio.programaAdministrarCursos.model.Academico;
 import co.edu.uniquindio.programaAdministrarCursos.model.Admin;
 import co.edu.uniquindio.programaAdministrarCursos.model.AdminHilos;
 import co.edu.uniquindio.programaAdministrarCursos.model.Credito;
+import co.edu.uniquindio.programaAdministrarCursos.model.Cultural;
 import co.edu.uniquindio.programaAdministrarCursos.model.Deportivo;
 import co.edu.uniquindio.programaAdministrarCursos.model.EArea;
 import co.edu.uniquindio.programaAdministrarCursos.model.EAsistenciaMinima;
@@ -872,8 +874,12 @@ public class AdminController implements Initializable{
 		String tipoCredito="Deportivo";
 		
 		if(validarDatosCredito(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
-					 horario1, horario2, dia1, dia2)==true && asistenciaMin!=null && !asistenciaMin.equalsIgnoreCase("")){
+					 horario1, horario2, dia1, dia2)==true ){
 			
+			
+			if(asistenciaMin==null || asistenciaMin.equalsIgnoreCase(""))
+				throw new DatosInvalidosException("Asistencia invalida");
+				
 			int pisoInt=Integer.parseInt(piso);
 			int salonInt=Integer.parseInt(numSalon);
 			int cuposDisponiblesInt=Integer.parseInt(cuposDisponibles);
@@ -884,14 +890,12 @@ public class AdminController implements Initializable{
 			Lugar   lugarAux= new Lugar(bloque, pisoInt, salonInt);
 			Deportivo deportivo=main.crearDeportivo(nombre, cuposDisponiblesInt, costoDouble,horarioAux,lugarAux,asistenciaMinAux,tipoCredito);
 			listaCreditosData.add(deportivo);
-			tableEstudiantes.refresh();
+			tableCreditos.refresh();
 			mostrarMensaje("Notificacion Credito Deportivo","Credito Deportivo registrado","El Credito Deportivo se registró con éxito",AlertType.INFORMATION);
 			registrarAccion("Credito Deportivo con nombre : "+deportivo.getNombre()+"creado por el admin:"+admin.getName(),Level.INFO );
 
 
 			
-		}else{
-				mostrarMensaje("Notificación Credito Deportivo", "Credito Deportivo no creado","asistencia no valida", AlertType.ERROR);
 		}
 }
 
@@ -916,15 +920,69 @@ public class AdminController implements Initializable{
 	}
 
 	private void crearCreditoCultural(String nombre, String cuposDisponibles, String bloque, String piso, String numSalon,
-		String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) {
-	// TODO Auto-generated method stub
+		String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) throws NumberFormatException, DatosInvalidosException {
+		
+		String tipoCredito="Cultural";
+		
+		if(validarDatosCredito(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
+				 horario1, horario2, dia1, dia2)==true){
+		
+		int pisoInt=Integer.parseInt(piso);
+		int salonInt=Integer.parseInt(numSalon);
+		int cuposDisponiblesInt=Integer.parseInt(cuposDisponibles);
+		double costoDouble=Double.parseDouble(costo);
+		if(costoDouble<50000 || costoDouble>100000)
+			throw new DatosInvalidosException("El costo debe estar entre 50.000 y 100.000");
+		
+		Horario horarioAux=crearHorario(horario1,horario2,dia1,dia2);
+		Lugar   lugarAux= new Lugar(bloque, pisoInt, salonInt);
+		Cultural cultural=main.crearCultural(nombre, cuposDisponiblesInt, costoDouble,horarioAux,lugarAux,tipoCredito);
+		listaCreditosData.add(cultural);
+		tableCreditos.refresh();
+		mostrarMensaje("Notificacion Credito Cultural","Credito Cultural registrado","El Credito Cultural se registró con éxito",AlertType.INFORMATION);
+		registrarAccion("Credito Cultural con nombre : "+cultural.getNombre()+"creado por el admin:"+admin.getName(),Level.INFO );
+
+
+		
+	}
+	
+		
 	
 }
 
 	private void crearCreditoAcademico(String nombre, String cuposDisponibles, String bloque, String piso, String numSalon,
-		String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) {
-	// TODO Auto-generated method stub
+		String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) throws NumberFormatException, DatosInvalidosException {
 	
+	
+		EArea area= comboBoxAuxCredito2.getValue();
+		String notaMinima=comboBoxAuxCurso.getValue();
+		
+		String tipoCredito="Academico";
+		
+		if(validarDatosCredito(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
+					 horario1, horario2, dia1, dia2)==true ){
+			
+			
+			if(area==null || notaMinima==null || notaMinima.equals(""))
+				throw new DatosInvalidosException("La nota o el area son invalidas");
+				
+			double notaDouble=Double.parseDouble(notaMinima);
+			int pisoInt=Integer.parseInt(piso);
+			int salonInt=Integer.parseInt(numSalon);
+			int cuposDisponiblesInt=Integer.parseInt(cuposDisponibles);
+			double costoDouble=Double.parseDouble(costo);
+			
+			Horario horarioAux=crearHorario(horario1,horario2,dia1,dia2);
+			Lugar   lugarAux= new Lugar(bloque, pisoInt, salonInt);
+			
+			Academico academico=main.crearAcademico(nombre, cuposDisponiblesInt, costoDouble, horarioAux, lugarAux, tipoCredito, notaDouble, area);
+			listaCreditosData.add(academico);
+			tableCreditos.refresh();
+			mostrarMensaje("Notificacion Credito Academico","Credito Academico registrado","El Credito Academico se registró con éxito",AlertType.INFORMATION);
+			registrarAccion("Credito Academico con nombre : "+academico.getNombre()+"creado por el admin:"+admin.getName(),Level.INFO );
+
+
+		}
 }
 
 	private void actualizarEstudiante() {
@@ -1122,6 +1180,10 @@ private boolean validarDatosCredito(String nombre, String cuposDisponibles, Stri
 			String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) throws DatosInvalidosException {
 		String mensaje="";
 
+		
+		
+		
+		
 		if(nombre == null || nombre.equals("")){
 			mensaje += "El nombre del credito del instructor es invalido \n";
 		}else{

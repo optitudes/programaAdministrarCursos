@@ -7,9 +7,12 @@ import co.edu.uniquindio.programaAdministrarCursos.controller.AdminController;
 import co.edu.uniquindio.programaAdministrarCursos.controller.EstudianteController;
 import co.edu.uniquindio.programaAdministrarCursos.controller.InstructorController;
 import co.edu.uniquindio.programaAdministrarCursos.controller.LoggingController;
+import co.edu.uniquindio.programaAdministrarCursos.model.Academico;
 import co.edu.uniquindio.programaAdministrarCursos.model.Bienestar;
 import co.edu.uniquindio.programaAdministrarCursos.model.Credito;
+import co.edu.uniquindio.programaAdministrarCursos.model.Cultural;
 import co.edu.uniquindio.programaAdministrarCursos.model.Deportivo;
+import co.edu.uniquindio.programaAdministrarCursos.model.EArea;
 import co.edu.uniquindio.programaAdministrarCursos.model.EAsistenciaMinima;
 import co.edu.uniquindio.programaAdministrarCursos.model.Estudiante;
 import co.edu.uniquindio.programaAdministrarCursos.model.Horario;
@@ -181,7 +184,17 @@ public void mostrarVentanaLogging() {
 			Lugar lugarAux, EAsistenciaMinima asistenciaMinAux, String tipo) {
 		return bienestar.crearDeportivo(nombre, cuposDisponibles, costoDouble,horarioAux,lugarAux,asistenciaMinAux, tipo);
 	}
+	public Cultural crearCultural(String nombre, int cuposDisponiblesInt, double costoDouble, Horario horarioAux,
+			Lugar lugarAux, String tipoCredito) {
+		return bienestar.crearCultural(nombre, cuposDisponiblesInt, costoDouble,horarioAux,lugarAux, tipoCredito);
 
+	}
+
+	public Academico crearAcademico(String nombre, int cuposDisponiblesInt, double costoDouble, Horario horarioAux,
+			Lugar lugarAux, String tipoCredito, double notaDouble, EArea area) {
+		return bienestar.crearAcademico(nombre, cuposDisponiblesInt, costoDouble, horarioAux, lugarAux, tipoCredito, notaDouble, area);
+	}
+	
 	public boolean borrarEstudiante(Estudiante estudianteSeleccionado) {
 		return bienestar.borrarEstudiante(estudianteSeleccionado);
 	}
@@ -198,6 +211,10 @@ public void mostrarVentanaLogging() {
 	public boolean actualizarInstructor(Instructor instructorAux, Instructor instructorSeleccionado) {
 		return bienestar.actualizarInstructor(instructorAux, instructorSeleccionado);
 	}
+
+
+
+	
 
 
 

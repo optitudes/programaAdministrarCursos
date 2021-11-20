@@ -12,9 +12,9 @@ public class Cultural extends Credito {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Cultural(double costo, int cuposDisponibles, int cuposRegistrados, Horario horario, Lugar lugar,  String tipo
+	public Cultural(double costo, int cuposDisponibles, Horario horario, Lugar lugar,  String tipo
 					,String nombre) {
-		super(costo, cuposDisponibles, cuposRegistrados, horario, lugar,  tipo,  nombre);
+		super(costo, cuposDisponibles, 0, horario, lugar,  tipo,  nombre);
 		// TODO Auto-generated constructor stub
 	}
 
