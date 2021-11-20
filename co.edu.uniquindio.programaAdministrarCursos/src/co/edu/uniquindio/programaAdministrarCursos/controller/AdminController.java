@@ -13,6 +13,7 @@ import co.edu.uniquindio.programaAdministrarCursos.exception.DatosInvalidosExcep
 import co.edu.uniquindio.programaAdministrarCursos.exception.EstudianteNoCreadoException;
 import co.edu.uniquindio.programaAdministrarCursos.exception.InstructorNoCreadoException;
 import co.edu.uniquindio.programaAdministrarCursos.model.Admin;
+import co.edu.uniquindio.programaAdministrarCursos.model.AdminHilos;
 import co.edu.uniquindio.programaAdministrarCursos.model.Credito;
 import co.edu.uniquindio.programaAdministrarCursos.model.Deportivo;
 import co.edu.uniquindio.programaAdministrarCursos.model.EArea;
@@ -47,7 +48,7 @@ public class AdminController implements Initializable{
 
 	Admin admin= new Admin("aizen","1991" , "aizen@lord.com", "1001");
 	Log  loggerAdmin;
-
+	AdminHilos administradorHilos=new AdminHilos(); 
 
 	Main main;
 
@@ -62,171 +63,348 @@ public class AdminController implements Initializable{
 	FilteredList<Estudiante> filteredData;
 	FilteredList<Instructor> filteredDataInstructor;
 
-	@FXML
+	
+
+    @FXML
     private ResourceBundle resources;
 
     @FXML
     private URL location;
 
     @FXML
-    private TableView<Estudiante> tableEstudiantes;
-
-    @FXML
-    private Button btnCrearInstructor;
-
-    @FXML
-    private Button btnActualizarInstructor;
-
-    @FXML
-    private TextField txtIdInstructor;
-
-    @FXML
-    private Button btnBorrarEstudiante;
-
-    @FXML
-    private TextField txtCorreoInstructor;
-
-    @FXML
-    private TextField txtContraseniaEstudiante;
-
-    @FXML
-    private TextArea textAreaAcademicosInfo;
-
-    @FXML
-    private TextField txtBuscarEstudiante;
-
-    @FXML
-    private TextField txtCuposDisponiblesCredito;
-
-    @FXML
-    private ComboBox<String> comboBoxAuxCurso;
-
-    @FXML
-    private RadioButton rBtnAcademico;
-
-    @FXML
-    private Button btnBorrarInstructor;
-
-    @FXML
-    private TableColumn<Credito, String> columnCuposRegistradosCurso1;
-
-    @FXML
-    private TableColumn<Credito, String> columnNombreCurso;
-
-    @FXML
-    private TableColumn<Estudiante, String> columnNombreEstudiante;
-
-    @FXML
-    private TextField txtBuscarInstructor;
-
-    @FXML
-    private Label labelAuxCurso;
-
-    @FXML
-    private TableColumn<Estudiante, String> columnIdEstudiante;
-
-    @FXML
-    private ComboBox<EHorario> comboBoxHorario2;
-
-    @FXML
-    private ComboBox<EDia> comboBoxDia2;
-
-    @FXML
-    private TableColumn<Instructor, String> columnNombreIntructor;
-
-    @FXML
-    private ComboBox<EHorario> comboBoxHorario1;
-
-    @FXML
-    private ComboBox<EDia> comboBoxDia1;
-
-    @FXML
-    private TextField txtNombreCredito;
+    private Label lblUserAdmin;
 
     @FXML
     private Button btnCerrarSesion;
 
     @FXML
-    private TableView<Instructor> tableInstructor;
-
-    @FXML
-    private Button btnActualizarEstudiante;
-
-    @FXML
-    private RadioButton rBtnDeportivo;
-
-    @FXML
-    private Button btnCrearEstudiante;
-
-    @FXML
-    private Label lblUserAdmin;
-
-    @FXML
-    private TextField txtBloqueCurso;
-
-    @FXML
-    private TableColumn<Instructor,String> columnIdIntructor;
-
-    @FXML
-    private Button btnBorrarCurso;
-
-    @FXML
-    private Button btnNuevoInstructor;
-
-    @FXML
-    private TextArea textAreaCulturalesInfo;
-
-    @FXML
-    private TextField txtPisoCredito;
-
-    @FXML
-    private TextField txtNombreInstructor;
-
-    @FXML
-    private RadioButton rBtnCultural;
-
-    @FXML
-    private Button btnActualizarCurso;
-    @FXML
-    private Button btnNuevoEstudiante;
-    @FXML
-    private TextArea textAreaDeportivosInfo;
-
-    @FXML
-    private TextField txtNumSalonCurso;
-
-    @FXML
-    private Button btnCrearCurso;
-
-    @FXML
-    private TableColumn<Credito, String> columnCupoDisponiblesCurso;
-
-    @FXML
-    private TextField txtBuscarCurso;
-
-    @FXML
-    private TextField txtCorreoEstudiante;
+    private TextField txtNombreEstudiante;
 
     @FXML
     private TextField txtIdEstudiante;
 
     @FXML
+    private TextField txtCorreoEstudiante;
+
+    @FXML
+    private TextField txtContraseniaEstudiante;
+
+    @FXML
+    private Button btnCrearEstudiante;
+
+    @FXML
+    private Button btnBorrarEstudiante;
+
+    @FXML
+    private Button btnActualizarEstudiante;
+
+    @FXML
+    private TableView<Estudiante> tableEstudiantes;
+
+    @FXML
+    private TableColumn<Estudiante, String> columnNombreEstudiante;
+
+    @FXML
+    private TableColumn<Estudiante, String> columnIdEstudiante;
+
+    @FXML
+    private TextField txtBuscarEstudiante;
+
+    @FXML
+    private Button btnNuevoEstudiante;
+
+    @FXML
+    private TextField txtNombreInstructor;
+
+    @FXML
+    private TextField txtIdInstructor;
+
+    @FXML
+    private TextField txtCorreoInstructor;
+
+    @FXML
     private TextField txtContraseniaInstructor;
 
     @FXML
-    private TextField txtNombreEstudiante;
+    private Button btnCrearInstructor;
+
+    @FXML
+    private Button btnBorrarInstructor;
+
+    @FXML
+    private Button btnActualizarInstructor;
+
+    @FXML
+    private TableView<Instructor> tableInstructor;
+
+    @FXML
+    private TableColumn<Instructor, String> columnNombreIntructor;
+
+    @FXML
+    private TableColumn<Instructor, String> columnIdIntructor;
+
+    @FXML
+    private TextField txtBuscarInstructor;
+
+    @FXML
+    private Button btnNuevoInstructor;
+
+    @FXML
+    private TextField txtCuposDisponiblesCredito;
+
+    @FXML
+    private TextField txtBloqueCurso;
+
+    @FXML
+    private TextField txtCostoCurso;
+
+    @FXML
+    private Button btnCrearCurso;
+
+    @FXML
+    private Button btnBorrarCurso;
+
+    @FXML
+    private Button btnActualizarCurso;
+
+    @FXML
+    private TableView<Credito> tableCreditos;
+
+    @FXML
+    private TableColumn<Credito, String> columnNombreCurso;
+
+    @FXML
+    private TableColumn<Credito, String> columnCupoDisponiblesCurso;
 
     @FXML
     private TableColumn<Credito, String> columnCuposRegistradosCurso;
 
     @FXML
-    private TextField txtCostoCurso;
-    
+    private TableColumn<Credito, String> columnTipoCredito;
+
     @FXML
-    private Label lblAux2;
-    
+    private TextField txtBuscarCurso;
+
+    @FXML
+    private ComboBox<EHorario> comboBoxHorario1;
+
+    @FXML
+    private ComboBox<EHorario> comboBoxHorario2;
+
+    @FXML
+    private ComboBox<EDia> comboBoxDia1;
+
+    @FXML
+    private ComboBox<EDia> comboBoxDia2;
+
+    @FXML
+    private RadioButton rBtnDeportivo;
+
+    @FXML
+    private RadioButton rBtnAcademico;
+
+    @FXML
+    private RadioButton rBtnCultural;
+
+    @FXML
+    private TextField txtPisoCredito;
+
+    @FXML
+    private TextField txtNumSalonCurso;
+
+    @FXML
+    private TextField txtNombreCredito;
+
+    @FXML
+    private Label labelAuxCurso;
+
+    @FXML
+    private ComboBox<String> comboBoxAuxCurso;
+
     @FXML
     private ComboBox<EArea> comboBoxAuxCredito2;
+
+    @FXML
+    private Label lblAux2;
+
+    @FXML
+    private TextArea textAreaAcademicosInfo;
+
+    @FXML
+    private TextArea textAreaCulturalesInfo;
+
+    @FXML
+    private TextArea textAreaDeportivosInfo;
+	
+//	@FXML
+//    private ResourceBundle resources;
+//
+//    @FXML
+//    private URL location;
+//
+//    @FXML
+//    private TableView<Estudiante> tableEstudiantes;
+//    
+//    @FXML
+//    private TableView<Credito> tableCreditos;
+//    
+//
+//    @FXML
+//    private Button btnCrearInstructor;
+//
+//    @FXML
+//    private Button btnActualizarInstructor;
+//
+//    @FXML
+//    private TextField txtIdInstructor;
+//
+//    @FXML
+//    private Button btnBorrarEstudiante;
+//
+//    @FXML
+//    private TextField txtCorreoInstructor;
+//
+//    @FXML
+//    private TextField txtContraseniaEstudiante;
+//
+//    @FXML
+//    private TextArea textAreaAcademicosInfo;
+//
+//    @FXML
+//    private TextField txtBuscarEstudiante;
+//
+//    @FXML
+//    private TextField txtCuposDisponiblesCredito;
+//
+//    @FXML
+//    private ComboBox<String> comboBoxAuxCurso;
+//
+//    @FXML
+//    private RadioButton rBtnAcademico;
+//
+//    @FXML
+//    private Button btnBorrarInstructor;
+//
+//    @FXML
+//    private TableColumn<Credito, String> columnTipoCredito;
+//
+//    @FXML
+//    private TableColumn<Credito, String> columnNombreCurso;
+//
+//    @FXML
+//    private TableColumn<Estudiante, String> columnNombreEstudiante;
+//
+//    @FXML
+//    private TextField txtBuscarInstructor;
+//
+//    @FXML
+//    private Label labelAuxCurso;
+//
+//    @FXML
+//    private TableColumn<Estudiante, String> columnIdEstudiante;
+//
+//    @FXML
+//    private ComboBox<EHorario> comboBoxHorario2;
+//
+//    @FXML
+//    private ComboBox<EDia> comboBoxDia2;
+//
+//    @FXML
+//    private TableColumn<Instructor, String> columnNombreIntructor;
+//
+//    @FXML
+//    private ComboBox<EHorario> comboBoxHorario1;
+//
+//    @FXML
+//    private ComboBox<EDia> comboBoxDia1;
+//
+//    @FXML
+//    private TextField txtNombreCredito;
+//
+//    @FXML
+//    private Button btnCerrarSesion;
+//
+//    @FXML
+//    private TableView<Instructor> tableInstructor;
+//
+//    @FXML
+//    private Button btnActualizarEstudiante;
+//
+//    @FXML
+//    private RadioButton rBtnDeportivo;
+//
+//    @FXML
+//    private Button btnCrearEstudiante;
+//
+//    @FXML
+//    private Label lblUserAdmin;
+//
+//    @FXML
+//    private TextField txtBloqueCurso;
+//
+//    @FXML
+//    private TableColumn<Instructor,String> columnIdIntructor;
+//
+//    @FXML
+//    private Button btnBorrarCurso;
+//
+//    @FXML
+//    private Button btnNuevoInstructor;
+//
+//    @FXML
+//    private TextArea textAreaCulturalesInfo;
+//
+//    @FXML
+//    private TextField txtPisoCredito;
+//
+//    @FXML
+//    private TextField txtNombreInstructor;
+//
+//    @FXML
+//    private RadioButton rBtnCultural;
+//
+//    @FXML
+//    private Button btnActualizarCurso;
+//    @FXML
+//    private Button btnNuevoEstudiante;
+//    @FXML
+//    private TextArea textAreaDeportivosInfo;
+//
+//    @FXML
+//    private TextField txtNumSalonCurso;
+//
+//    @FXML
+//    private Button btnCrearCurso;
+//
+//    @FXML
+//    private TableColumn<Credito, String> columnCupoDisponiblesCurso;
+//
+//    @FXML
+//    private TextField txtBuscarCurso;
+//
+//    @FXML
+//    private TextField txtCorreoEstudiante;
+//
+//    @FXML
+//    private TextField txtIdEstudiante;
+//
+//    @FXML
+//    private TextField txtContraseniaInstructor;
+//
+//    @FXML
+//    private TextField txtNombreEstudiante;
+//
+//    @FXML
+//    private TableColumn<Credito, String> columnCuposRegistradosCurso;
+//
+//    @FXML
+//    private TextField txtCostoCurso;
+//    
+//    @FXML
+//    private Label lblAux2;
+//    
+//    @FXML
+//    private ComboBox<EArea> comboBoxAuxCredito2;
 
     @FXML
     void crearEstudianteAction(ActionEvent event) {
@@ -354,7 +532,9 @@ public class AdminController implements Initializable{
 		this.columnIdIntructor.setCellValueFactory(new PropertyValueFactory<>("iD"));
 		
 		this.columnNombreCurso.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-		this.column}.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+		this.columnCupoDisponiblesCurso.setCellValueFactory(new PropertyValueFactory<>("cuposDisponibles"));
+		this.columnCuposRegistradosCurso.setCellValueFactory(new PropertyValueFactory<>("cuposRegistrados"));
+		this.columnTipoCredito.setCellValueFactory(new PropertyValueFactory<>("tipo"));
 
 		comboBoxDia1.getItems().addAll(listaDiasData);
 		comboBoxDia2.getItems().addAll(listaDiasData);
@@ -458,7 +638,9 @@ public class AdminController implements Initializable{
 
 		tableEstudiantes.getItems().clear();
 		tableInstructor.getItems().clear();
-
+		tableCreditos.getItems().clear();
+		
+		tableCreditos.setItems(getListaCreditosData());
 		tableEstudiantes.setItems(getListaEstudiantesData());
 		tableInstructor.setItems(getListaInstructoresData());
 
@@ -482,6 +664,7 @@ public class AdminController implements Initializable{
     	tableInstructor.setItems(sortedDataInstructor);
 	}
 
+	
 	public void mostrarMensaje(String titulo, String header, String contenido, AlertType alertType) {
 
 		Alert alert = new Alert(alertType);
@@ -622,6 +805,7 @@ public class AdminController implements Initializable{
 				if(estudianteAux==null)
 					throw new EstudianteNoCreadoException("ocurrió un error al crear el estudiante");
 				listaEstudiantesData.add(estudianteAux);
+				
 				tableEstudiantes.refresh();
 				mostrarMensaje("Notificacion Estudiante","Estudiante registrado","El estudiante se registró con éxito",AlertType.INFORMATION);
 				registrarAccion("Estudiante con ID : "+estudianteAux.getiD()+"creado por el admin:"+admin.getName(),Level.INFO );
@@ -659,34 +843,35 @@ public class AdminController implements Initializable{
 		 String piso=txtPisoCredito.getText();
 		 String numSalon=txtNumSalonCurso.getText();
 		 String costo=txtCostoCurso.getText();
-		 String iD="id";
 		 EHorario horario1=comboBoxHorario1.getValue();
 		 EHorario horario2=comboBoxHorario2.getValue();
 		 EDia     dia1=comboBoxDia1.getValue();
 		 EDia     dia2=comboBoxDia2.getValue();
 		 try {
 			if(rBtnAcademico.isSelected())
-			 crearCreditoAcademico(nombre, cuposDisponibles, bloque, piso, numSalon, costo, iD,
+			 crearCreditoAcademico(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
 					 			   horario1, horario2, dia1, dia2);
 		 if(rBtnCultural.isSelected())
-			 crearCreditoCultural(nombre, cuposDisponibles, bloque, piso, numSalon, costo,iD,
+			 crearCreditoCultural(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
 					 horario1, horario2, dia1, dia2);
 		 if(rBtnDeportivo.isSelected())
-			 crearCreditoDeportivo(nombre, cuposDisponibles, bloque, piso, numSalon, costo, iD,
+			 crearCreditoDeportivo(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
 					 horario1, horario2, dia1, dia2);
 
 
 		} catch (NumberFormatException | DatosInvalidosException e) {
+			mostrarMensaje("Notificación credito", "Credito no creado", e.getMessage(), AlertType.ERROR);
 			
 		}
 		 
 	}
 	private void crearCreditoDeportivo(String nombre, String cuposDisponibles, String bloque, String piso, String numSalon,
-		String costo, String iD, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) throws DatosInvalidosException,NumberFormatException {
+		String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) throws DatosInvalidosException,NumberFormatException {
 
 		String asistenciaMin=comboBoxAuxCurso.getValue();
+		String tipoCredito="Deportivo";
 		
-		if(validarDatosCredito(nombre, cuposDisponibles, bloque, piso, numSalon, costo, iD,
+		if(validarDatosCredito(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
 					 horario1, horario2, dia1, dia2)==true && asistenciaMin!=null && !asistenciaMin.equalsIgnoreCase("")){
 			
 			int pisoInt=Integer.parseInt(piso);
@@ -697,16 +882,16 @@ public class AdminController implements Initializable{
 			
 			Horario horarioAux=crearHorario(horario1,horario2,dia1,dia2);
 			Lugar   lugarAux= new Lugar(bloque, pisoInt, salonInt);
-			Deportivo deportivo=main.crearDeportivo(nombre, cuposDisponiblesInt, costoDouble,horarioAux,lugarAux,asistenciaMinAux);
-			listaCursosData.add(estudianteAux);
+			Deportivo deportivo=main.crearDeportivo(nombre, cuposDisponiblesInt, costoDouble,horarioAux,lugarAux,asistenciaMinAux,tipoCredito);
+			listaCreditosData.add(deportivo);
 			tableEstudiantes.refresh();
-			mostrarMensaje("Notificacion Estudiante","Estudiante registrado","El estudiante se registró con éxito",AlertType.INFORMATION);
-			registrarAccion("Estudiante con ID : "+estudianteAux.getiD()+"creado por el admin:"+admin.getName(),Level.INFO );
+			mostrarMensaje("Notificacion Credito Deportivo","Credito Deportivo registrado","El Credito Deportivo se registró con éxito",AlertType.INFORMATION);
+			registrarAccion("Credito Deportivo con nombre : "+deportivo.getNombre()+"creado por el admin:"+admin.getName(),Level.INFO );
 
 
 			
 		}else{
-				mostrarMensaje("Notificación Credito", "Credito no creado","asistencia no valida", AlertType.ERROR);
+				mostrarMensaje("Notificación Credito Deportivo", "Credito Deportivo no creado","asistencia no valida", AlertType.ERROR);
 		}
 }
 
@@ -731,13 +916,13 @@ public class AdminController implements Initializable{
 	}
 
 	private void crearCreditoCultural(String nombre, String cuposDisponibles, String bloque, String piso, String numSalon,
-		String costo, String iD, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) {
+		String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) {
 	// TODO Auto-generated method stub
 	
 }
 
 	private void crearCreditoAcademico(String nombre, String cuposDisponibles, String bloque, String piso, String numSalon,
-		String costo, String iD, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) {
+		String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) {
 	// TODO Auto-generated method stub
 	
 }
@@ -934,26 +1119,16 @@ public class AdminController implements Initializable{
 		}
 	}
 private boolean validarDatosCredito(String nombre, String cuposDisponibles, String bloque, String piso, String numSalon,
-			String costo, String iD, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) throws DatosInvalidosException {
+			String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) throws DatosInvalidosException {
 		String mensaje="";
 
 		if(nombre == null || nombre.equals("")){
 			mensaje += "El nombre del credito del instructor es invalido \n";
 		}else{
-			if(rBtnAcademico.isSelected()){
-				if(main.validarNombreAcademico(nombre))
+				if(main.validarNombreCredito(nombre))
 					mensaje += "Ya existe un credito academico con ese nombre \n";
-			}else{
-				if(rBtnCultural.isSelected())
-				{
-					if(main.validarNombreCultural(nombre))
-						mensaje += "Ya existe un credito cultural con ese nombre \n";
-				}else{
-						if(main.validarNombreDeportivo(nombre))
-						mensaje += "Ya existe un credito deportivo con ese nombre \n";
-				}
-			}
 		}
+		
 
 		if(cuposDisponibles == null || cuposDisponibles.equals("")){
 			mensaje += "Los cupos disponibles del curso son invalidos \n";
@@ -972,10 +1147,6 @@ private boolean validarDatosCredito(String nombre, String cuposDisponibles, Stri
 
 		if(costo == null || costo.equals(""))
 			mensaje += "El costo es invalido \n";
-
-		if(iD == null || iD.equals(""))
-			mensaje += "El iD es invalido \n";
-
 
 		if(horario1 == null && horario2==null){
 			mensaje += "Debe ingresar almenos un horario \n";
@@ -1005,13 +1176,19 @@ private boolean validarDatosCredito(String nombre, String cuposDisponibles, Stri
 		{
 			throw new DatosInvalidosException(mensaje);
 		}
-	}
-	private ObservableList<Estudiante> getListaEstudiantesData() {
+}
+private ObservableList<Credito> getListaCreditosData() {
+	listaCreditosData.addAll(main.obtenerCreditos());
 
-		listaEstudiantesData.addAll(main.obtenerEstudiantes());
+	return listaCreditosData;
+}
 
-		return listaEstudiantesData;
-	}
+private ObservableList<Estudiante> getListaEstudiantesData() {
+
+	listaEstudiantesData.addAll(main.obtenerEstudiantes());
+
+	return listaEstudiantesData;
+}
 
 	private ObservableList<Instructor> getListaInstructoresData() {
 
@@ -1020,8 +1197,8 @@ private boolean validarDatosCredito(String nombre, String cuposDisponibles, Stri
 	}
 
 	public void registrarAccion(String mensaje, Level tipo){
-		loggerAdmin= new Log(mensaje,tipo);
-		loggerAdmin.hilo.start();
+		
+		//administradorHilos.startHiloLogger(mensaje, tipo);
 
 	}
 	private EAsistenciaMinima obtenerAsistencia(String asistenciaMin) {

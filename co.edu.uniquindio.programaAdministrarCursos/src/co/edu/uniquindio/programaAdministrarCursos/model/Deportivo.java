@@ -15,8 +15,9 @@ public class Deportivo extends Credito{
 		// TODO Auto-generated constructor stub
 	}
 
-	public Deportivo(double costo, int cuposDisponibles, Horario horario, Lugar lugar,EAsistenciaMinima asistenciaMinima) {
-		super(costo, cuposDisponibles, 0, horario, lugar);
+	public Deportivo(double costo, int cuposDisponibles, Horario horario, Lugar lugar,EAsistenciaMinima asistenciaMinima,  String tipo,
+					String nombre) {
+		super(costo, cuposDisponibles, 0, horario, lugar,  tipo, nombre);
 		this.asistenciaMinima=asistenciaMinima;
 	}
 

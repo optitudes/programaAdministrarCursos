@@ -114,12 +114,12 @@
                               <Button fx:id="btnCrearCurso" layoutX="494.0" layoutY="292.0" mnemonicParsing="false" onAction="#crearCurso" prefHeight="25.0" prefWidth="66.0" text="Crear" />
                               <Button fx:id="btnBorrarCurso" layoutX="331.0" layoutY="626.0" mnemonicParsing="false" onAction="#borrarCurso" text="Borrar" />
                               <Button fx:id="btnActualizarCurso" layoutX="577.0" layoutY="292.0" mnemonicParsing="false" onAction="#actualizarCurso" text="Actualizar" />
-                              <TableView layoutX="6.0" layoutY="376.0" prefHeight="242.0" prefWidth="690.0">
+                              <TableView fx:id="tableCreditos" layoutX="6.0" layoutY="376.0" prefHeight="242.0" prefWidth="690.0">
                                  <columns>
                                     <TableColumn fx:id="columnNombreCurso" prefWidth="192.0" text="Nombre" />
                                     <TableColumn fx:id="columnCupoDisponiblesCurso" prefWidth="128.0" text="Cupos Disponibles" />
                                     <TableColumn fx:id="columnCuposRegistradosCurso" prefWidth="153.0" text="Cupos registrados" />
-                                    <TableColumn fx:id="columnCuposRegistradosCurso1" prefWidth="216.0" text="Tipo de Credito" />
+                                    <TableColumn fx:id="columnTipoCredito" prefWidth="216.0" text="Tipo de Credito" />
                                  </columns>
                               </TableView>
                               <Label layoutX="380.0" layoutY="348.0" text="Buscar :" />

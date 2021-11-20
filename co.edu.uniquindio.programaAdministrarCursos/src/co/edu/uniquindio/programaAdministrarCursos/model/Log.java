@@ -19,6 +19,7 @@ public  class Log implements Runnable{
 		hilo= new Thread(this);
 	    this.mensaje=mensaje;
 	    this.tipo=tipo;
+	    hilo.start();
 	}
 	
 	@Override

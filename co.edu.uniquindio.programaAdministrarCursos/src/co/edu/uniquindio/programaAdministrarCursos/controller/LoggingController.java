@@ -110,7 +110,7 @@ public class LoggingController implements Initializable{
 
 	private void logearAdmin() {
 	if(correoadmin.equalsIgnoreCase(txtCorreoLogin.getText()) && clave.equalsIgnoreCase(txtClaveLogin.getText())){
-			registrarAccion("Inicio de sesion admin", Level.INFO);
+			//registrarAccion("Inicio de sesion admin", Level.INFO);
 			main.cargarVistaAdmin();}
 		
 	}

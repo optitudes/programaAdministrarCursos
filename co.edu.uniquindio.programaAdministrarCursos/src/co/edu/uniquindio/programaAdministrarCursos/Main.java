@@ -8,6 +8,7 @@ import co.edu.uniquindio.programaAdministrarCursos.controller.EstudianteControll
 import co.edu.uniquindio.programaAdministrarCursos.controller.InstructorController;
 import co.edu.uniquindio.programaAdministrarCursos.controller.LoggingController;
 import co.edu.uniquindio.programaAdministrarCursos.model.Bienestar;
+import co.edu.uniquindio.programaAdministrarCursos.model.Credito;
 import co.edu.uniquindio.programaAdministrarCursos.model.Deportivo;
 import co.edu.uniquindio.programaAdministrarCursos.model.EAsistenciaMinima;
 import co.edu.uniquindio.programaAdministrarCursos.model.Estudiante;
@@ -137,6 +138,15 @@ public void mostrarVentanaLogging() {
 		return listaInstructores;
 
 	}
+	public ArrayList<Credito> obtenerCreditos() {
+		ArrayList<Credito> listaCreditos=new ArrayList<>();
+		listaCreditos=bienestar.getListaCreditos();
+		return listaCreditos;
+
+	}
+
+	
+
 	public void quemarDatos() {
 		bienestar.quemarDatos();
 		
@@ -157,14 +167,8 @@ public void mostrarVentanaLogging() {
 	public boolean verificarCorreoInstructor(String correo) {
 		return bienestar.verificarCorreoInstructor(correo);
 	}
-	public boolean validarNombreAcademico(String nombre) {
-		return bienestar.verificarNombreAcademico(nombre);
-	}
-	public boolean validarNombreCultural(String nombre) {
-		return bienestar.verificarNombreCultural(nombre);
-	}
-	public boolean validarNombreDeportivo(String nombre) {
-		return bienestar.verificarNombreDeportivo(nombre);
+	public boolean validarNombreCredito(String nombre) {
+		return bienestar.verificarNombreCredito(nombre);
 	}
 	public Estudiante crearEstudiante(String nombre, String iD, String correo, String contrasenia) {
 		return bienestar.crearEstudiante(nombre, iD, correo, contrasenia);
@@ -174,8 +178,8 @@ public void mostrarVentanaLogging() {
 		return bienestar.crearInstructor(nombre, iD, correo, contrasenia);
 	}
 	public Deportivo crearDeportivo(String nombre, int cuposDisponibles, double costoDouble, Horario horarioAux,
-			Lugar lugarAux, EAsistenciaMinima asistenciaMinAux) {
-		return bienestar.crearDeportivo(nombre, cuposDisponibles, costoDouble,horarioAux,lugarAux,asistenciaMinAux);
+			Lugar lugarAux, EAsistenciaMinima asistenciaMinAux, String tipo) {
+		return bienestar.crearDeportivo(nombre, cuposDisponibles, costoDouble,horarioAux,lugarAux,asistenciaMinAux, tipo);
 	}
 
 	public boolean borrarEstudiante(Estudiante estudianteSeleccionado) {
@@ -195,8 +199,9 @@ public void mostrarVentanaLogging() {
 		return bienestar.actualizarInstructor(instructorAux, instructorSeleccionado);
 	}
 
-	
 
+
+	
 	
 
 	

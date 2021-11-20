@@ -134,14 +134,23 @@ public ArrayList<Instructor> getInstructores() {
 	return listaInstructores;
 }
 public void quemarDatos() {
-
+	ArrayList<EDia> listaDias=new ArrayList<EDia>();
+	ArrayList<EHorario> listaHorarios= new ArrayList<EHorario>();
+	
 	Estudiante estudiante=new Estudiante("juan","1193370914","juan@uqvirtual.co","1111");
 	Admin       admin= new Admin("zeus","1002","admin@gmail.com","1234");
 	Instructor instructor= new Instructor("Orfeo","1002","orfeo@gmail.com","2222");
+	listaDias.add(EDia.LUNES);
+	listaDias.add(EDia.JUEVES);
+	listaHorarios.add(EHorario.SIETE_A_NUEVE_AM);
+	listaHorarios.add(EHorario.NUEVE_A_ONCE_AM);
+	
+	Deportivo  deportivo= new Deportivo(2,2,new Horario(listaDias, listaHorarios),new Lugar("bloque 1",3, 2),EAsistenciaMinima.OCHENTA_PORCIENTO,"Deportivo","salud fisica");
 	
 	listaEstudiantes.add(estudiante);
 	listaAdmins.add(admin);
 	listaInstructores.add(instructor);
+	listaCreditos.add(deportivo);
 	
 }
 
@@ -183,37 +192,14 @@ public boolean verificarCorreoInstructor(String correo) {
 	}
 	return false;
 }
-public boolean verificarNombreAcademico(String nombre) {
 
-	for (Credito credito : listaCreditos) {
-		if(credito instanceof Academico){
-			if(credito.verificarNombre(nombre))
-				return true;
-		}
-		
-	}
-	return false;
-}
-public boolean verificarNombreCultural(String nombre2) {
-
-	for (Credito credito : listaCreditos) {
-		if(credito instanceof Cultural){
-			if(credito.verificarNombre(nombre))
-				return true;
-		}
-		
-	}
-	return false;
-}
-public boolean verificarNombreDeportivo(String nombre2) {
+public boolean verificarNombreCredito(String nombre) {
 	
 	for (Credito credito : listaCreditos) {
-		if(credito instanceof Deportivo){
 			if(credito.verificarNombre(nombre))
 				return true;
 		}
 		
-	}
 	return false;
 }
 public Estudiante crearEstudiante(String nombre, String iD, String correo, String contrasenia) {
@@ -252,12 +238,36 @@ public boolean actualizarInstructor(Instructor instructorAux, Instructor instruc
 	return false;
 }
 public Deportivo crearDeportivo(String nombre, int cuposDisponibles, double costo, Horario horario,
-		Lugar lugar, EAsistenciaMinima asistenciaMinAux) {
+		Lugar lugar, EAsistenciaMinima asistenciaMinAux, String tipo) {
 	
-	Deportivo deportivoAux=new Deportivo(costo, cuposDisponibles, horario, lugar, asistenciaMinAux);
+	Deportivo deportivoAux=new Deportivo(costo, cuposDisponibles, horario, lugar, asistenciaMinAux,tipo, nombre);
 	listaCreditos.add(deportivoAux);
 	
 	return deportivoAux;
+}
+public ArrayList<Estudiante> getListaEstudiantes() {
+	return listaEstudiantes;
+}
+public void setListaEstudiantes(ArrayList<Estudiante> listaEstudiantes) {
+	this.listaEstudiantes = listaEstudiantes;
+}
+public ArrayList<Admin> getListaAdmins() {
+	return listaAdmins;
+}
+public void setListaAdmins(ArrayList<Admin> listaAdmins) {
+	this.listaAdmins = listaAdmins;
+}
+public ArrayList<Instructor> getListaInstructores() {
+	return listaInstructores;
+}
+public void setListaInstructores(ArrayList<Instructor> listaInstructores) {
+	this.listaInstructores = listaInstructores;
+}
+public ArrayList<Credito> getListaCreditos() {
+	return listaCreditos;
+}
+public void setListaCreditos(ArrayList<Credito> listaCreditos) {
+	this.listaCreditos = listaCreditos;
 }
 
 

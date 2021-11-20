@@ -12,17 +12,21 @@ public abstract class Credito implements Serializable{
 	private double costo;
 	private Horario horario;
 	private Lugar   lugar;
+	private String  tipo;
+	private String  nombre;
 	public Credito() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Credito(double costo,int cuposDisponibles, int cuposRegistrados,Horario horario,Lugar lugar) {
+	public Credito(double costo,int cuposDisponibles, int cuposRegistrados,Horario horario,Lugar lugar, String tipo, String nombre) {
 		super();
 		this.costo= costo;
 		this.cuposDisponibles = cuposDisponibles;
 		this.cuposRegistrados = cuposRegistrados;
 		this.horario= horario;
 		this.lugar= lugar;
+		this.tipo=tipo;
+		this.nombre=nombre;
 	}
 	
 	public double getCosto() {
@@ -58,13 +62,28 @@ public abstract class Credito implements Serializable{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+	
+	
+	
+	public String getTipo() {
+		return tipo;
+	}
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+	public String getNombre() {
+		return nombre;
+	}
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
 	@Override
 	public String toString() {
 		return "Credito [cuposDisponibles=" + cuposDisponibles + ", cuposRegistrados=" + cuposRegistrados + ", costo="
 				+ costo + ", horario=" + horario + ", lugar=" + lugar + "]";
 	}
 	public boolean verificarNombre(String nombreAux) {
-		if(nombreAux.equals(nombreAux))
+		if(this.nombre.equals(nombreAux))
 			return true;
 		return false;
 	}
