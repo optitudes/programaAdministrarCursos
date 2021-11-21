@@ -142,6 +142,20 @@ public class AdminController implements Initializable{
     @FXML
     private Button btnCrearInstructor;
 
+
+    @FXML
+    private Button btnCargarDatosEstudiante;
+    @FXML
+    private Button btnGuardarDatosEstudiante;
+    @FXML
+    private Button btnCargarDatosInstructor;
+    @FXML
+    private Button btnGuardarDatosInstructor;
+    @FXML
+    private Button btnCargarDatosCredito;
+    @FXML
+    private Button btnGuardarDatosCredito;
+
     @FXML
     private Button btnBorrarInstructor;
 
@@ -256,6 +270,43 @@ public class AdminController implements Initializable{
 
     }
 
+    @FXML
+    void cargarDatosEstudianteAction(ActionEvent event) {
+    	cargarDatosEstudiante();
+
+    }
+    @FXML
+    void guardarDatosEstudianteAction(ActionEvent event) {
+    	guardarDatosEstudiante();
+
+    }
+    @FXML
+    void cargarDatosInstructorAction(ActionEvent event) {
+    	cargarDatosInstructor();
+
+    }
+    @FXML
+    void guardarDatosInstructorAction(ActionEvent event) {
+    	guardarDatosInstructor();
+
+    }
+    @FXML
+    void cargarDatosCreditoAction(ActionEvent event) {
+    	cargarDatosCredito();
+
+    }
+    @FXML
+    void guardarDatosCreditoAction(ActionEvent event) {
+    	 guardarDatosCredito();
+
+    }
+
+
+
+
+
+
+
 	@FXML
     void nuevoEstudianteAction(ActionEvent event) {
     	nuevoEstudiante();
@@ -316,7 +367,7 @@ public class AdminController implements Initializable{
 
     }
 
-    
+
 
 	@FXML
     void actualizarCurso(ActionEvent event) {
@@ -788,6 +839,7 @@ public class AdminController implements Initializable{
 				registrarAccion("Estudiante con ID : "+estudianteAux.getiD()+"creado por el admin:"+admin.getName(),Level.INFO );
 			}
 		} catch (DatosInvalidosException | EstudianteNoCreadoException e) {
+	    	registrarAccion("Error al crear estudiante "+admin.getName()+"DatosInvalidosException ó EstudianteNoCreadoException",Level.SEVERE );
 			mostrarMensaje("Notificación Estudiante", "Estudiante no registrado",e.getMessage(), AlertType.ERROR);		}
 	}
 
@@ -811,6 +863,7 @@ public class AdminController implements Initializable{
 				registrarAccion("Instructor con ID : "+instructorAux.getiD()+"creado por el admin: "+admin.getName(),Level.INFO );
 			}
 		} catch (DatosInvalidosException |  InstructorNoCreadoException e) {
+			registrarAccion("Error al crear el instructor\n"+admin.getName()+"\n"+"DatosInvalidosException ó  InstructorNoCreadoException",Level.SEVERE );
 			mostrarMensaje("Notificación instructor", "Instructor no registrado",e.getMessage(), AlertType.ERROR);		}
 	}
   private void crearCurso() {
@@ -837,6 +890,7 @@ public class AdminController implements Initializable{
 
 
 		} catch (NumberFormatException | DatosInvalidosException e) {
+			registrarAccion("Error al crear el curso\n"+admin.getName()+"\n"+" NumberFormatException ó DatosInvalidosException",Level.SEVERE );
 			mostrarMensaje("Notificación credito", "Credito no creado", e.getMessage(), AlertType.ERROR);
 
 		}
@@ -985,6 +1039,7 @@ public class AdminController implements Initializable{
 					}
 				}
 			}catch (DatosInvalidosException e) {
+				registrarAccion("Error al actualizar el estudiante admin="+admin.getName()+"\n"+" DatosInvalidosException",Level.SEVERE );
 				mostrarMensaje("Notificación Estudiante", "Estudiante no actualizado",e.getMessage(), AlertType.ERROR);
 			}
 		}else{
@@ -1017,6 +1072,7 @@ public class AdminController implements Initializable{
 					}
 				}
 			}catch (DatosInvalidosException e) {
+				registrarAccion("Error al actualizar el instructor admin="+admin.getName()+"\n"+" DatosInvalidosException",Level.SEVERE );
 				mostrarMensaje("Notificación Instructor", "Instructor no actualizado",e.getMessage(), AlertType.ERROR);
 			}
 		}else{
@@ -1050,7 +1106,8 @@ public class AdminController implements Initializable{
 
 
 				} catch (NumberFormatException | DatosInvalidosException e) {
-					mostrarMensaje("Notificación credito", "Credito no creado", e.getMessage(), AlertType.ERROR);
+					registrarAccion("Error al actualizar el credito admin="+admin.getName()+"\n"+" NumberFormatException ó DatosInvalidosException",Level.SEVERE );
+					mostrarMensaje("Notificación credito", "Credito no actualizado", e.getMessage(), AlertType.ERROR);
 
 				}
 
@@ -1062,7 +1119,7 @@ public class AdminController implements Initializable{
 		}
 	private void ActualizarCreditoDeportivo(String nombre, String cuposDisponibles, String bloque, String piso,
 			String numSalon, String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) throws NumberFormatException, DatosInvalidosException {
-		
+
 		String asistenciaMin=comboBoxAuxCurso.getValue();
 		String tipoCredito="Deportivo";
 
@@ -1080,7 +1137,7 @@ public class AdminController implements Initializable{
 			double costoDouble=Double.parseDouble(costo);
 
 			Horario horarioAux=crearHorario(horario1,horario2,dia1,dia2);
-			Lugar   lugarAux= new Lugar(bloque, pisoInt, salonInt);	
+			Lugar   lugarAux= new Lugar(bloque, pisoInt, salonInt);
 
 			Deportivo deportivoAux= new Deportivo(costoDouble,cuposDisponiblesInt,horarioAux,lugarAux,asistenciaMinAux,tipoCredito,nombre);
 
@@ -1090,12 +1147,12 @@ public class AdminController implements Initializable{
 				registrarAccion("Credito Deportivo con nombre : "+deportivoAux.getNombre()+" actualizado por el admin: "+admin.getName(),Level.INFO );
 			}
 		}
-		
+
 	}
 
 	private void actualizarCreditoCultural(String nombre, String cuposDisponibles, String bloque, String piso,
 			String numSalon, String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) throws NumberFormatException, DatosInvalidosException {
-	
+
 		String tipoCredito="Cultural";
 
 		if(validarDatosCredito(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
@@ -1238,7 +1295,7 @@ public class AdminController implements Initializable{
 		}else{
 			mostrarMensaje("Notificación Credito", "Credito no seleccionado","Credito un Instructor", AlertType.WARNING);
 		}
-		
+
 	}
 	private boolean validarDatosEstudiante(String nombre, String iD, String correo, String contrasenia) throws DatosInvalidosException {
 

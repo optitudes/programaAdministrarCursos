@@ -60,7 +60,7 @@
                               <TextField fx:id="txtCorreoEstudiante" layoutX="92.0" layoutY="168.0" prefHeight="25.0" prefWidth="182.0" />
                               <TextField fx:id="txtContraseniaEstudiante" layoutX="92.0" layoutY="237.0" prefHeight="25.0" prefWidth="182.0" />
                               <Button fx:id="btnCrearEstudiante" layoutX="263.0" layoutY="292.0" mnemonicParsing="false" onAction="#crearEstudianteAction" prefHeight="25.0" prefWidth="68.0" text="Crear" />
-                              <Button fx:id="btnBorrarEstudiante" layoutX="331.0" layoutY="626.0" mnemonicParsing="false" onAction="#borrarEstudianteAction" text="Borrar" />
+                              <Button fx:id="btnBorrarEstudiante" layoutX="587.0" layoutY="344.0" mnemonicParsing="false" onAction="#borrarEstudianteAction" text="Borrar" />
                               <Button fx:id="btnActualizarEstudiante" layoutX="367.0" layoutY="292.0" mnemonicParsing="false" onAction="#actualizarEstudianteAction" text="Actualizar" />
                               <TableView fx:id="tableEstudiantes" layoutX="110.0" layoutY="376.0" prefHeight="242.0" prefWidth="526.0">
                                  <columns>
@@ -72,6 +72,8 @@
                               <TextField fx:id="txtBuscarEstudiante" layoutX="428.0" layoutY="344.0" />
                               <Separator layoutX="7.0" layoutY="331.0" prefHeight="1.0" prefWidth="695.0" />
                               <Button fx:id="btnNuevoEstudiante" layoutX="457.0" layoutY="292.0" mnemonicParsing="false" onAction="#nuevoEstudianteAction" prefHeight="25.0" prefWidth="68.0" text="Nuevo" />
+                              <Button fx:id="btnCargarDatosEstudiante" layoutX="110.0" layoutY="344.0" mnemonicParsing="false" onAction="#cargarDatosEstudianteAction" text="Cargar Datos" />
+                              <Button fx:id="btnGuardarDatosEstudiante" layoutX="217.0" layoutY="344.0" mnemonicParsing="false" onAction="#guardarDatosEstudianteAction" text="Guardar Datos" />
                            </children>
                         </AnchorPane>
                      </content>
@@ -89,7 +91,7 @@
                               <TextField fx:id="txtCorreoInstructor" layoutX="92.0" layoutY="168.0" prefHeight="25.0" prefWidth="164.0" />
                               <TextField fx:id="txtContraseniaInstructor" layoutX="92.0" layoutY="237.0" prefHeight="25.0" prefWidth="163.0" />
                               <Button fx:id="btnCrearInstructor" layoutX="253.0" layoutY="292.0" mnemonicParsing="false" onAction="#crearInstructor" prefHeight="25.0" prefWidth="58.0" text="Crear" />
-                              <Button fx:id="btnBorrarInstructor" layoutX="331.0" layoutY="626.0" mnemonicParsing="false" onAction="#borrarInstructor" text="Borrar" />
+                              <Button fx:id="btnBorrarInstructor" layoutX="587.0" layoutY="344.0" mnemonicParsing="false" onAction="#borrarInstructor" text="Borrar" />
                               <Button fx:id="btnActualizarInstructor" layoutX="367.0" layoutY="292.0" mnemonicParsing="false" onAction="#actualizarInstructor" text="Actualizar" />
                               <TableView fx:id="tableInstructor" layoutX="110.0" layoutY="376.0" prefHeight="242.0" prefWidth="526.0">
                                 <columns>
@@ -101,6 +103,8 @@
                               <TextField fx:id="txtBuscarInstructor" layoutX="428.0" layoutY="344.0" />
                               <Separator layoutX="7.0" layoutY="331.0" prefHeight="1.0" prefWidth="695.0" />
                               <Button fx:id="btnNuevoInstructor" layoutX="505.0" layoutY="292.0" mnemonicParsing="false" onAction="#nuevoInstructorAction" prefHeight="25.0" prefWidth="58.0" text="Nuevo" />
+                              <Button fx:id="btnCargarDatosInstructor" layoutX="110.0" layoutY="344.0" mnemonicParsing="false" onAction="#cargarDatosInstructorAction" text="Cargar Datos" />
+                              <Button fx:id="btnGuardarDatosInstructor" layoutX="214.0" layoutY="344.0" mnemonicParsing="false" onAction="#guardarDatosInstructorAction" text="Guardar Datos" />
                            </children>
                         </AnchorPane>
                      </content>
@@ -116,7 +120,7 @@
                               <TextField fx:id="txtBloqueCurso" layoutX="99.0" layoutY="131.0" />
                               <TextField fx:id="txtCostoCurso" layoutX="100.0" layoutY="237.0" />
                               <Button fx:id="btnCrearCurso" layoutX="494.0" layoutY="292.0" mnemonicParsing="false" onAction="#crearCurso" prefHeight="25.0" prefWidth="66.0" text="Crear" />
-                              <Button fx:id="btnBorrarCurso" layoutX="331.0" layoutY="626.0" mnemonicParsing="false" onAction="#borrarCurso" text="Borrar" />
+                              <Button fx:id="btnBorrarCurso" layoutX="580.0" layoutY="344.0" mnemonicParsing="false" onAction="#borrarCurso" text="Borrar" />
                               <Button fx:id="btnActualizarCurso" layoutX="577.0" layoutY="292.0" mnemonicParsing="false" onAction="#actualizarCurso" text="Actualizar" />
                               <TableView fx:id="tableCreditos" layoutX="6.0" layoutY="376.0" prefHeight="242.0" prefWidth="690.0">
                                  <columns>
@@ -149,6 +153,8 @@
                               <ComboBox fx:id="comboBoxAuxCurso" layoutX="129.0" layoutY="271.0" prefWidth="150.0" />
                               <ComboBox fx:id="comboBoxAuxCredito2" layoutX="129.0" layoutY="305.0" prefWidth="150.0" />
                               <Label fx:id="lblAux2" layoutX="24.0" layoutY="309.0" text="..." />
+                              <Button fx:id="btnCargarDatosCredito" layoutX="35.0" layoutY="344.0" mnemonicParsing="false" onAction="#cargarDatosCreditoAction" text="Cargar Datos" />
+                              <Button fx:id="btnGuardarDatosCredito" layoutX="140.0" layoutY="344.0" mnemonicParsing="false" onAction="#guardarDatosCreditoAction" text="Guardar Datos" />
                            </children>
                         </AnchorPane>
                      </content>

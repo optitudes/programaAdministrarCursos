@@ -40,7 +40,6 @@ public class AdminHilos implements Runnable {
 		Thread hiloEjecucion= Thread.currentThread();
 		if( obtenerDirectorioRaiz==hiloEjecucion)
 		{
-
 			main.setDirectorioRaiz();
 			main.crearDirectorios();
 		}
@@ -50,7 +49,7 @@ public class AdminHilos implements Runnable {
 		hiloLog=new Log(mensaje, tipo);
 		hiloLog.setRuta(main.getRutaLog());
 		hiloLog.start();
-		
+
 	}
 //	public void startHiloMostrarCredito(Credito creditoSeleccionado){
 //		creditoAux=creditoSeleccionado;

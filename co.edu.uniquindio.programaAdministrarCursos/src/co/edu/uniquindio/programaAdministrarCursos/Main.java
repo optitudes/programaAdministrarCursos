@@ -82,8 +82,8 @@ public void mostrarVentanaLogging() {
 								+" desplegar sus ficheros. En caso de windows se recomienda"
 								+ " la dirección (C:/td/persistencia/) en caso de linux (home/td/persistencia) ", AlertType.ERROR);
 				loggingController.obtenerRutaPersistencia();
-				
-				
+
+
 			}
 
 
@@ -97,12 +97,13 @@ public void mostrarVentanaLogging() {
 }
 
 	public void setDirectorioRaiz() {
+		int seleccion=JFileChooser.APPROVE_OPTION;
 		boolean procesoExitoso=false;
-		while(!procesoExitoso){
+		while(!procesoExitoso ){
 			JFileChooser fileChooser = new JFileChooser();
 			fileChooser.setFileSelectionMode(2);
 			//Abrimos la ventana, guardamos la opcion seleccionada por el usuario
-			int seleccion=fileChooser.showOpenDialog(new Component() {
+			seleccion=fileChooser.showOpenDialog(new Component() {
 			});
 
 			//Si el usuario, pincha en aceptar
@@ -119,9 +120,8 @@ public void mostrarVentanaLogging() {
 						System.out.println(rutaRaiz);
 					}
 				}
-
-
 			}
+
 		}
 	}
 
@@ -184,7 +184,7 @@ public void mostrarVentanaLogging() {
 
 	}
 
-	
+
 	public Stage getPrimaryStage() {
 		return primaryStage;
 	}
@@ -332,7 +332,7 @@ public void mostrarVentanaLogging() {
 		return bienestar.actualizarCredito(creditoAux, creditoSeleccionado);
 	}
 
-	
+
 
 	public void mostrarMensaje(String titulo, String header, String contenido, AlertType alertType) {
 
@@ -358,11 +358,11 @@ public void mostrarVentanaLogging() {
 			mostrarMensaje("ERROR1", "No hay ruta de directorio","Por favor ingrese una ruta", AlertType.ERROR);
 			setDirectorioRaiz();
 		}
-		
-		
+
+
 	}
 
-	
+
 
 
 

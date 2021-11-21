@@ -60,7 +60,7 @@ public class LoggingController implements Initializable{
 
 	}
 
-	
+
 	public void setAplicacion(Main mainAux) {
 		main= mainAux;
 		adminHilos=new AdminHilos(main);
@@ -93,8 +93,7 @@ public class LoggingController implements Initializable{
 
 	@FXML
 	void accederAction(ActionEvent event) {
-		Thread hilo=Thread.currentThread();
-		if(!(hilo==adminHilos.getObtenerDirectorioRaiz()))
+		if(!main.getRutaRaiz().isEmpty())
 		{
 			if(rBtnAdmin.isSelected())
 				logearAdmin();
@@ -141,9 +140,9 @@ public class LoggingController implements Initializable{
 
 	public void obtenerRutaPersistencia() {
 		adminHilos.startHiloObtenerRutaPersistencia();
-	
-		
+
+
 	}
-	
+
 
 }
