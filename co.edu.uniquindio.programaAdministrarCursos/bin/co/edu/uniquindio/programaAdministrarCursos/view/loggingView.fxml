@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
 <?import java.lang.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
@@ -41,9 +42,9 @@
             <Label layoutX="161.0" layoutY="14.0" text="Entrar como :" />
             <Label layoutX="22.0" layoutY="92.0" prefHeight="17.0" prefWidth="48.0" text="Correo" />
             <Label layoutX="29.0" layoutY="145.0" text="Clave" />
-            <TextField fx:id="txtClaveLogin" layoutX="72.0" layoutY="141.0" prefHeight="25.0" prefWidth="274.0" />
             <TextField fx:id="txtCorreoLogin" layoutX="72.0" layoutY="88.0" prefHeight="25.0" prefWidth="272.0" />
             <Button fx:id="btnAccederLogin" layoutX="171.0" layoutY="191.0" mnemonicParsing="false" onAction="#accederAction" text="Acceder" />
+            <PasswordField fx:id="txtClaveLogin" layoutX="72.0" layoutY="141.0" prefHeight="25.0" prefWidth="271.0" />
          </children>
       </AnchorPane>
    </center>

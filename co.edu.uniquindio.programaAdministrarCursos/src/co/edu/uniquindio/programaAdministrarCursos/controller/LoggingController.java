@@ -15,6 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 
@@ -38,7 +39,7 @@ public class LoggingController implements Initializable{
 	private RadioButton rBtnAdmin;
 
 	@FXML
-	private TextField txtClaveLogin;
+    private PasswordField txtClaveLogin;
 
 	@FXML
 	private Button btnAccederLogin;

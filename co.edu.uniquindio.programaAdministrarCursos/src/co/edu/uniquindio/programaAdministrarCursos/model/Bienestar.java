@@ -232,6 +232,11 @@ public boolean borrarInstructor(Instructor instructorSeleccionado) {
 		return true;
 	return false;
 }
+public boolean borrarCredito(Credito creditoSeleccionado) {
+	if(listaCreditos.remove(creditoSeleccionado))
+		return true;
+	return false;
+}
 
 public boolean actualizarEstudiante(Estudiante estudianteAux, Estudiante estudianteSeleccionado) {
 	int index=listaEstudiantes.indexOf(estudianteSeleccionado);
@@ -245,9 +250,9 @@ public boolean actualizarInstructor(Instructor instructorAux, Instructor instruc
 		return true;
 	return false;
 }
-public boolean actualizarAcademico(Academico academicoAux, Credito creditoSeleccionado) {
+public boolean actualizarCredito(Credito creditoAux, Credito creditoSeleccionado) {
 	int index=listaCreditos.indexOf(creditoSeleccionado);
-	if(listaCreditos.get(index).actualizar(academicoAux))
+	if(listaCreditos.get(index).actualizar(creditoAux))
 		return true;
 	return false;
 }

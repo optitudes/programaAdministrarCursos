@@ -312,10 +312,13 @@ public class AdminController implements Initializable{
 
 	@FXML
     void borrarCurso(ActionEvent event) {
+		borrarCreditoAction();
 
     }
 
-    @FXML
+    
+
+	@FXML
     void actualizarCurso(ActionEvent event) {
     	actualizarCreditoAction();
 
@@ -1039,10 +1042,10 @@ public class AdminController implements Initializable{
 					 actualizarCreditoAcademico(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
 							 			   horario1, horario2, dia1, dia2,creditoSeleccionado);
 				 if(rBtnCultural.isSelected())
-					 crearCreditoCultural(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
+					 actualizarCreditoCultural(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
 							 horario1, horario2, dia1, dia2);
 				 if(rBtnDeportivo.isSelected())
-					 crearCreditoDeportivo(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
+					 ActualizarCreditoDeportivo(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
 							 horario1, horario2, dia1, dia2);
 
 
@@ -1057,6 +1060,70 @@ public class AdminController implements Initializable{
 			}
 
 		}
+	private void ActualizarCreditoDeportivo(String nombre, String cuposDisponibles, String bloque, String piso,
+			String numSalon, String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) throws NumberFormatException, DatosInvalidosException {
+		
+		String asistenciaMin=comboBoxAuxCurso.getValue();
+		String tipoCredito="Deportivo";
+
+		if(validarDatosCredito(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
+					 horario1, horario2, dia1, dia2)==true ){
+
+
+			if(asistenciaMin==null || asistenciaMin.equalsIgnoreCase(""))
+				throw new DatosInvalidosException("Asistencia invalida");
+
+			int pisoInt=Integer.parseInt(piso);
+			int salonInt=Integer.parseInt(numSalon);
+			int cuposDisponiblesInt=Integer.parseInt(cuposDisponibles);
+			EAsistenciaMinima asistenciaMinAux=obtenerAsistencia(asistenciaMin);
+			double costoDouble=Double.parseDouble(costo);
+
+			Horario horarioAux=crearHorario(horario1,horario2,dia1,dia2);
+			Lugar   lugarAux= new Lugar(bloque, pisoInt, salonInt);	
+
+			Deportivo deportivoAux= new Deportivo(costoDouble,cuposDisponiblesInt,horarioAux,lugarAux,asistenciaMinAux,tipoCredito,nombre);
+
+			if(main.actualizarCredito(deportivoAux,creditoSeleccionado)){
+				tableCreditos.refresh();
+				mostrarMensaje("Notificacion Credito deportivo","Credito Deportivo actualizado","El Credito Deportivo se actualizado con éxito",AlertType.INFORMATION);
+				registrarAccion("Credito Deportivo con nombre : "+deportivoAux.getNombre()+" actualizado por el admin: "+admin.getName(),Level.INFO );
+			}
+		}
+		
+	}
+
+	private void actualizarCreditoCultural(String nombre, String cuposDisponibles, String bloque, String piso,
+			String numSalon, String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) throws NumberFormatException, DatosInvalidosException {
+	
+		String tipoCredito="Cultural";
+
+		if(validarDatosCredito(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
+				horario1, horario2, dia1, dia2)==true){
+
+			int pisoInt=Integer.parseInt(piso);
+			int salonInt=Integer.parseInt(numSalon);
+			int cuposDisponiblesInt=Integer.parseInt(cuposDisponibles);
+			double costoDouble=Double.parseDouble(costo);
+			if(costoDouble<50000 || costoDouble>100000)
+				throw new DatosInvalidosException("El costo debe estar entre 50.000 y 100.000");
+
+
+			Horario horarioAux=crearHorario(horario1,horario2,dia1,dia2);
+			Lugar   lugarAux= new Lugar(bloque, pisoInt, salonInt);
+
+			Cultural culturalAux= new Cultural(costoDouble,cuposDisponiblesInt,horarioAux,lugarAux
+					,tipoCredito,nombre);
+
+			if(main.actualizarCredito(culturalAux,creditoSeleccionado)){
+				tableCreditos.refresh();
+				mostrarMensaje("Notificacion Credito Cultural","Credito Cultural actualizado","El Credito Cultural se actualizado con éxito",AlertType.INFORMATION);
+				registrarAccion("Credito Cultural con nombre : "+culturalAux.getNombre()+" actualizado por el admin: "+admin.getName(),Level.INFO );
+			}
+		}
+
+	}
+
 	private void actualizarCreditoAcademico(String nombre, String cuposDisponibles, String bloque, String piso,
 			String numSalon, String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2,
 			Credito creditoSeleccionado) throws NumberFormatException, DatosInvalidosException {
@@ -1086,10 +1153,10 @@ public class AdminController implements Initializable{
 			Academico academicoAux= new Academico(costoDouble,cuposDisponiblesInt,horarioAux,lugarAux,notaDouble
 											     ,area,tipoCredito,nombre);
 
-			if(main.actualizarAcademico(academicoAux,creditoSeleccionado)){
+			if(main.actualizarCredito(academicoAux,creditoSeleccionado)){
 				tableCreditos.refresh();
-				mostrarMensaje("Notificacion Credito Academico","Credito Academico registrado","El Credito Academico se registró con éxito",AlertType.INFORMATION);
-				registrarAccion("Credito Academico con nombre : "+academico.getNombre()+"creado por el admin:"+admin.getName(),Level.INFO );
+				mostrarMensaje("Notificacion Credito Academico","Credito Academico actualizado","El Credito Academico se actualizado con éxito",AlertType.INFORMATION);
+				registrarAccion("Credito Academico con nombre : "+academicoAux.getNombre()+"actualizado por el admin:"+admin.getName(),Level.INFO );
 			}
 		}
 
@@ -1147,7 +1214,32 @@ public class AdminController implements Initializable{
 			mostrarMensaje("Notificación Instructor", "Instructor no seleccionado","Seleccione un Instructor", AlertType.WARNING);
 		}
 	}
+	private void borrarCreditoAction() {
+	if(creditoSeleccionado!=null)
+		{
+			if(mostrarMensajeConfirmacion("¿Estas seguro de eliminar el credito "+creditoSeleccionado.getNombre()+" ?") == true)
+			{
+				if(main.borrarCredito(creditoSeleccionado)){
 
+					String nombreCredito=creditoSeleccionado.getNombre();
+					listaCreditosData.remove(creditoSeleccionado);
+					creditoSeleccionado=null;
+					tableCreditos.getSelectionModel().clearSelection();
+					limpiarCreditos();
+					tableCreditos.refresh();
+
+					mostrarMensaje("Notificacion Credito","Credito borrado","El Credito se borró con éxito",AlertType.INFORMATION);
+					registrarAccion("Credito con nombre : "+nombreCredito+" borrado por el admin: "+admin.getName(),Level.WARNING );
+
+				}else{
+					mostrarMensaje("Notificación Credito", "Credito no borrado","El Credito no se borró con éxito", AlertType.ERROR);
+				}
+			}
+		}else{
+			mostrarMensaje("Notificación Credito", "Credito no seleccionado","Credito un Instructor", AlertType.WARNING);
+		}
+		
+	}
 	private boolean validarDatosEstudiante(String nombre, String iD, String correo, String contrasenia) throws DatosInvalidosException {
 
 		String mensaje="";

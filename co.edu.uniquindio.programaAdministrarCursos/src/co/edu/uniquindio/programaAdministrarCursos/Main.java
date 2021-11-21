@@ -203,7 +203,9 @@ public void mostrarVentanaLogging() {
 		return bienestar.borrarInstructor(instructorSeleccionado);
 	}
 
-
+	public boolean borrarCredito(Credito creditoSeleccionado) {
+		return bienestar.borrarCredito(creditoSeleccionado);
+	}
 	public boolean actualizarEstudiante(Estudiante estudianteAux, Estudiante estudianteSeleccionado) {
 		return bienestar.actualizarEstudiante(estudianteAux,estudianteSeleccionado);
 
@@ -214,32 +216,11 @@ public void mostrarVentanaLogging() {
 
 
 
-	public boolean actualizarAcademico(Academico academicoAux, Credito creditoSeleccionado) {
-		return bienestar.actualizarAcademico(academicoAux, creditoSeleccionado);
+	public boolean actualizarCredito(Credito creditoAux, Credito creditoSeleccionado) {
+		return bienestar.actualizarCredito(creditoAux, creditoSeleccionado);
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	
 
 
 

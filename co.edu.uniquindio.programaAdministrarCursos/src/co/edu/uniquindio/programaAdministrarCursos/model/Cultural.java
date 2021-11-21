@@ -29,4 +29,16 @@ public class Cultural extends Credito {
 				+ getCuposRegistrados() + "]";
 	}
 
+	@Override
+	public boolean actualizar(Credito creditoAux) {
+		Cultural culturalAux= (Cultural) creditoAux;
+
+		setNombre(culturalAux.getNombre());
+		setCosto(culturalAux.getCosto());
+		setCuposDisponibles(culturalAux.getCuposDisponibles());
+		setHorario(culturalAux.getHorario());
+		setLugar(culturalAux.getLugar());
+		return true;
+	}
+
 }

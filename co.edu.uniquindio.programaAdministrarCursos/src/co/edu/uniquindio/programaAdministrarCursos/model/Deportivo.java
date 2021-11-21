@@ -1,5 +1,7 @@
 package co.edu.uniquindio.programaAdministrarCursos.model;
 
+import javafx.scene.DepthTest;
+
 public class Deportivo extends Credito{
 
 	/**
@@ -39,5 +41,18 @@ public class Deportivo extends Credito{
 				+ getLugar() + ", getHorario()=" + getHorario() + ", getCuposDisponibles()=" + getCuposDisponibles()
 				+ ", getCuposRegistrados()=" + getCuposRegistrados() + "]";
 	}
-	
+
+	@Override
+	public boolean actualizar(Credito creditoAux) {
+		Deportivo deportivoAux= (Deportivo) creditoAux;
+
+		setNombre(deportivoAux.getNombre());
+		setCosto(deportivoAux.getCosto());
+		setCuposDisponibles(deportivoAux.getCuposDisponibles());
+		setHorario(deportivoAux.getHorario());
+		setLugar(deportivoAux.getLugar());
+		setAsistenciaMinima(deportivoAux.getAsistenciaMinima());
+		return true;
+	}
+
 }
