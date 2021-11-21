@@ -2,6 +2,12 @@ package co.edu.uniquindio.programaAdministrarCursos.controller;
 
 import java.beans.FeatureDescriptor;
 import java.net.URL;
+import java.sql.Date;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Random;
@@ -12,6 +18,7 @@ import co.edu.uniquindio.programaAdministrarCursos.Main;
 import co.edu.uniquindio.programaAdministrarCursos.exception.DatosInvalidosException;
 import co.edu.uniquindio.programaAdministrarCursos.exception.EstudianteNoCreadoException;
 import co.edu.uniquindio.programaAdministrarCursos.exception.InstructorNoCreadoException;
+import co.edu.uniquindio.programaAdministrarCursos.hilos.Log;
 import co.edu.uniquindio.programaAdministrarCursos.model.Academico;
 import co.edu.uniquindio.programaAdministrarCursos.model.Admin;
 import co.edu.uniquindio.programaAdministrarCursos.model.AdminHilos;
@@ -25,7 +32,6 @@ import co.edu.uniquindio.programaAdministrarCursos.model.EHorario;
 import co.edu.uniquindio.programaAdministrarCursos.model.Estudiante;
 import co.edu.uniquindio.programaAdministrarCursos.model.Horario;
 import co.edu.uniquindio.programaAdministrarCursos.model.Instructor;
-import co.edu.uniquindio.programaAdministrarCursos.model.Log;
 import co.edu.uniquindio.programaAdministrarCursos.model.Lugar;
 import javafx.fxml.Initializable;
 import javafx.collections.FXCollections;
@@ -50,7 +56,7 @@ public class AdminController implements Initializable{
 
 	Admin admin= new Admin("aizen","1991" , "aizen@lord.com", "1001");
 	Log  loggerAdmin;
-	AdminHilos administradorHilos=new AdminHilos(); 
+	AdminHilos administradorHilos;
 
 	Main main;
 
@@ -61,17 +67,23 @@ public class AdminController implements Initializable{
 
 	Estudiante estudianteSeleccionado;
 	Instructor instructorSeleccionado;
+	Credito    creditoSeleccionado;
 
 	FilteredList<Estudiante> filteredData;
 	FilteredList<Instructor> filteredDataInstructor;
 
-	
 
-    @FXML
-    private ResourceBundle resources;
+	@FXML
+	private Label lblFecha;
+	@FXML
+	private Label lblHora;
 
-    @FXML
-    private URL location;
+
+	@FXML
+	private ResourceBundle resources;
+
+	@FXML
+	private URL location;
 
     @FXML
     private Label lblUserAdmin;
@@ -237,176 +249,6 @@ public class AdminController implements Initializable{
 
     @FXML
     private TextArea textAreaDeportivosInfo;
-	
-//	@FXML
-//    private ResourceBundle resources;
-//
-//    @FXML
-//    private URL location;
-//
-//    @FXML
-//    private TableView<Estudiante> tableEstudiantes;
-//    
-//    @FXML
-//    private TableView<Credito> tableCreditos;
-//    
-//
-//    @FXML
-//    private Button btnCrearInstructor;
-//
-//    @FXML
-//    private Button btnActualizarInstructor;
-//
-//    @FXML
-//    private TextField txtIdInstructor;
-//
-//    @FXML
-//    private Button btnBorrarEstudiante;
-//
-//    @FXML
-//    private TextField txtCorreoInstructor;
-//
-//    @FXML
-//    private TextField txtContraseniaEstudiante;
-//
-//    @FXML
-//    private TextArea textAreaAcademicosInfo;
-//
-//    @FXML
-//    private TextField txtBuscarEstudiante;
-//
-//    @FXML
-//    private TextField txtCuposDisponiblesCredito;
-//
-//    @FXML
-//    private ComboBox<String> comboBoxAuxCurso;
-//
-//    @FXML
-//    private RadioButton rBtnAcademico;
-//
-//    @FXML
-//    private Button btnBorrarInstructor;
-//
-//    @FXML
-//    private TableColumn<Credito, String> columnTipoCredito;
-//
-//    @FXML
-//    private TableColumn<Credito, String> columnNombreCurso;
-//
-//    @FXML
-//    private TableColumn<Estudiante, String> columnNombreEstudiante;
-//
-//    @FXML
-//    private TextField txtBuscarInstructor;
-//
-//    @FXML
-//    private Label labelAuxCurso;
-//
-//    @FXML
-//    private TableColumn<Estudiante, String> columnIdEstudiante;
-//
-//    @FXML
-//    private ComboBox<EHorario> comboBoxHorario2;
-//
-//    @FXML
-//    private ComboBox<EDia> comboBoxDia2;
-//
-//    @FXML
-//    private TableColumn<Instructor, String> columnNombreIntructor;
-//
-//    @FXML
-//    private ComboBox<EHorario> comboBoxHorario1;
-//
-//    @FXML
-//    private ComboBox<EDia> comboBoxDia1;
-//
-//    @FXML
-//    private TextField txtNombreCredito;
-//
-//    @FXML
-//    private Button btnCerrarSesion;
-//
-//    @FXML
-//    private TableView<Instructor> tableInstructor;
-//
-//    @FXML
-//    private Button btnActualizarEstudiante;
-//
-//    @FXML
-//    private RadioButton rBtnDeportivo;
-//
-//    @FXML
-//    private Button btnCrearEstudiante;
-//
-//    @FXML
-//    private Label lblUserAdmin;
-//
-//    @FXML
-//    private TextField txtBloqueCurso;
-//
-//    @FXML
-//    private TableColumn<Instructor,String> columnIdIntructor;
-//
-//    @FXML
-//    private Button btnBorrarCurso;
-//
-//    @FXML
-//    private Button btnNuevoInstructor;
-//
-//    @FXML
-//    private TextArea textAreaCulturalesInfo;
-//
-//    @FXML
-//    private TextField txtPisoCredito;
-//
-//    @FXML
-//    private TextField txtNombreInstructor;
-//
-//    @FXML
-//    private RadioButton rBtnCultural;
-//
-//    @FXML
-//    private Button btnActualizarCurso;
-//    @FXML
-//    private Button btnNuevoEstudiante;
-//    @FXML
-//    private TextArea textAreaDeportivosInfo;
-//
-//    @FXML
-//    private TextField txtNumSalonCurso;
-//
-//    @FXML
-//    private Button btnCrearCurso;
-//
-//    @FXML
-//    private TableColumn<Credito, String> columnCupoDisponiblesCurso;
-//
-//    @FXML
-//    private TextField txtBuscarCurso;
-//
-//    @FXML
-//    private TextField txtCorreoEstudiante;
-//
-//    @FXML
-//    private TextField txtIdEstudiante;
-//
-//    @FXML
-//    private TextField txtContraseniaInstructor;
-//
-//    @FXML
-//    private TextField txtNombreEstudiante;
-//
-//    @FXML
-//    private TableColumn<Credito, String> columnCuposRegistradosCurso;
-//
-//    @FXML
-//    private TextField txtCostoCurso;
-//    
-//    @FXML
-//    private Label lblAux2;
-//    
-//    @FXML
-//    private ComboBox<EArea> comboBoxAuxCredito2;
 
     @FXML
     void crearEstudianteAction(ActionEvent event) {
@@ -466,7 +308,7 @@ public class AdminController implements Initializable{
 
     }
 
-  
+
 
 	@FXML
     void borrarCurso(ActionEvent event) {
@@ -475,10 +317,13 @@ public class AdminController implements Initializable{
 
     @FXML
     void actualizarCurso(ActionEvent event) {
+    	actualizarCreditoAction();
 
     }
 
-    @FXML
+
+
+	@FXML
     void BtnElegirDeportivo(ActionEvent event) {
     	limpiarCreditos();
     	rBtnDeportivo.setSelected(true);
@@ -516,15 +361,19 @@ public class AdminController implements Initializable{
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
+
+		lblFecha.setText(lblFecha.getText()+LocalDate.now(Clock.systemDefaultZone ()));
+		lblHora.setText(lblHora.getText()+LocalTime.now());
+
 		ObservableList<EDia> listaDiasData = FXCollections.observableArrayList();
 		listaDiasData.addAll(EDia.values());
 
 		ObservableList<EHorario> listaHorarioData = FXCollections.observableArrayList();
 		listaHorarioData.addAll(EHorario.values());
-		
+
 		ObservableList<EArea> listaAreaData = FXCollections.observableArrayList();
 		listaAreaData.addAll(EArea.values());
-		
+
 		lblUserAdmin.setText(lblUserAdmin.getText()+admin.getName());
 
 		this.columnNombreEstudiante.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -532,7 +381,7 @@ public class AdminController implements Initializable{
 
 		this.columnNombreIntructor.setCellValueFactory(new PropertyValueFactory<>("name"));
 		this.columnIdIntructor.setCellValueFactory(new PropertyValueFactory<>("iD"));
-		
+
 		this.columnNombreCurso.setCellValueFactory(new PropertyValueFactory<>("nombre"));
 		this.columnCupoDisponiblesCurso.setCellValueFactory(new PropertyValueFactory<>("cuposDisponibles"));
 		this.columnCuposRegistradosCurso.setCellValueFactory(new PropertyValueFactory<>("cuposRegistrados"));
@@ -540,10 +389,10 @@ public class AdminController implements Initializable{
 
 		comboBoxDia1.getItems().addAll(listaDiasData);
 		comboBoxDia2.getItems().addAll(listaDiasData);
-		
+
 		comboBoxHorario1.getItems().addAll(listaHorarioData);
 		comboBoxHorario2.getItems().addAll(listaHorarioData);
-		
+
 		limpiarCreditos();
 
 
@@ -563,7 +412,16 @@ public class AdminController implements Initializable{
 			mostrarInformacionInstructor(instructorSeleccionado);
 
 		});
+		tableCreditos.getSelectionModel().selectedItemProperty().addListener((obs,oldSelection,newSelection) -> {
 
+
+
+			creditoSeleccionado = newSelection;
+			mostrarInformacionCredito(creditoSeleccionado);
+
+
+
+		});
 		// 1. Wrap the ObservableList in a FilteredList (initially display all data).
     	filteredData = new FilteredList<>(listaEstudiantesData, p -> true);
 
@@ -614,6 +472,119 @@ public class AdminController implements Initializable{
 	}
 
 
+	public void mostrarInformacionCredito(Credito creditoSeleccionado) {
+		if(creditoSeleccionado!=null)
+		{
+			if(creditoSeleccionado instanceof Deportivo)
+			{
+				mostrarDatosDeportivo(creditoSeleccionado);
+			}else{
+				if(creditoSeleccionado instanceof Cultural)
+				{
+					mostrarDatosCultural(creditoSeleccionado);
+				}else{
+					mostrarDatosAcademico(creditoSeleccionado);
+				}
+			}
+		}
+	}
+	private void mostrarDatosAcademico(Credito creditoSeleccionado) {
+		Academico academicoAux=(Academico) creditoSeleccionado;
+
+		limpiarCreditos();
+		rBtnAcademico.setSelected(true);
+    	rBtnDeportivo.setSelected(false);
+    	rBtnCultural.setSelected(false);
+    	mostrarCreditoGeneral(creditoSeleccionado);
+
+    	comboBoxAuxCurso.setVisible(true);
+		comboBoxAuxCredito2.setVisible(true);
+		labelAuxCurso.setVisible(true);
+		lblAux2.setVisible(true);
+
+		lblAux2.setText("Area");
+		labelAuxCurso.setText("Homologación");
+
+
+		comboBoxAuxCredito2.setValue(academicoAux.getArea());
+
+		comboBoxAuxCurso.getItems().clear();
+		comboBoxAuxCurso.getItems().addAll("3.0","3.5","4.0");
+		comboBoxAuxCurso.setValue(""+academicoAux.getNotaMinima());
+
+	}
+
+	private void mostrarDatosCultural(Credito creditoSeleccionado) {
+		limpiarCreditos();
+		rBtnCultural.setSelected(true);
+		rBtnAcademico.setSelected(false);
+    	rBtnDeportivo.setSelected(false);
+		mostrarCreditoGeneral(creditoSeleccionado);
+
+	}
+
+	private void mostrarDatosDeportivo(Credito creditoSeleccionado) {
+
+		Deportivo deportivoAux=(Deportivo) creditoSeleccionado;
+
+		limpiarCreditos();
+    	rBtnDeportivo.setSelected(true);
+    	rBtnAcademico.setSelected(false);
+    	rBtnCultural.setSelected(false);
+    	mostrarCreditoGeneral(creditoSeleccionado);
+
+    	comboBoxAuxCurso.setVisible(true);
+    	labelAuxCurso.setVisible(true);
+
+    	labelAuxCurso.setText("Asistencia Min");
+    	comboBoxAuxCurso.getItems().clear();
+    	comboBoxAuxCurso.getItems().addAll("SETENTA_PORCIENTO","SETENTA_Y_CINCO_PORCIENTO","OCHENTA_PORCIENTO");
+    	comboBoxAuxCurso.setValue(deportivoAux.getAsistenciaMinima()+"");
+
+
+
+
+
+
+	}
+
+	private void mostrarCreditoGeneral(Credito creditoSeleccionado) {
+
+		ArrayList<EHorario> listaHorarios=creditoSeleccionado.getHorario().getListaHorarios();
+		ArrayList<EDia>     listaDias=creditoSeleccionado.getHorario().getListaDias();
+
+		 txtNombreCredito.setText(creditoSeleccionado.getNombre());
+		 txtCuposDisponiblesCredito.setText(""+creditoSeleccionado.getCuposDisponibles());
+		 txtBloqueCurso.setText(creditoSeleccionado.getLugar().getBloque());
+		 txtPisoCredito.setText(""+creditoSeleccionado.getLugar().getPiso());
+		 txtNumSalonCurso.setText(""+creditoSeleccionado.getLugar().getNumSalon());
+		 txtCostoCurso.setText(""+creditoSeleccionado.getCosto());
+
+		 if(listaHorarios.size()==2)
+		 {
+			 comboBoxHorario1.setValue(listaHorarios.get(0));
+			 comboBoxHorario2.setValue(listaHorarios.get(1));
+		 }else{
+			 comboBoxHorario1.setValue(listaHorarios.get(0));
+			 comboBoxHorario2.setValue(null);
+		 }
+
+		 if(listaDias.size()==2)
+		 {
+			 comboBoxDia1.setValue(listaDias.get(0));
+			 comboBoxDia2.setValue(listaDias.get(1));
+		 }else{
+			 comboBoxDia1.setValue(listaDias.get(0));
+			 comboBoxDia2.setValue(null);
+		 }
+
+		 comboBoxAuxCurso.setVisible(false);
+		 labelAuxCurso.setVisible(false);
+		 lblAux2.setVisible(false);
+		 comboBoxAuxCredito2.setVisible(false);
+
+	}
+
 	private void mostrarInformacionEstudiante(Estudiante estudianteSeleccionado) {
 
 		if(estudianteSeleccionado != null){
@@ -636,12 +607,13 @@ public class AdminController implements Initializable{
 
 	public void setAplicacion(Main mainAux) {
 		this.main=mainAux;
+		administradorHilos=new AdminHilos(main,this);
 		main.quemarDatos();
 
 		tableEstudiantes.getItems().clear();
 		tableInstructor.getItems().clear();
 		tableCreditos.getItems().clear();
-		
+
 		tableCreditos.setItems(getListaCreditosData());
 		tableEstudiantes.setItems(getListaEstudiantesData());
 		tableInstructor.setItems(getListaInstructoresData());
@@ -666,7 +638,7 @@ public class AdminController implements Initializable{
     	tableInstructor.setItems(sortedDataInstructor);
 	}
 
-	
+
 	public void mostrarMensaje(String titulo, String header, String contenido, AlertType alertType) {
 
 		Alert alert = new Alert(alertType);
@@ -787,7 +759,7 @@ public class AdminController implements Initializable{
 
 		comboBoxAuxCredito2.getItems().clear();
 		comboBoxAuxCredito2.getItems().addAll(listaAreasData);
-		
+
 		comboBoxAuxCurso.getItems().clear();
 		comboBoxAuxCurso.getItems().addAll("3.0","3.5","4.0");
 	}
@@ -807,7 +779,7 @@ public class AdminController implements Initializable{
 				if(estudianteAux==null)
 					throw new EstudianteNoCreadoException("ocurrió un error al crear el estudiante");
 				listaEstudiantesData.add(estudianteAux);
-				
+
 				tableEstudiantes.refresh();
 				mostrarMensaje("Notificacion Estudiante","Estudiante registrado","El estudiante se registró con éxito",AlertType.INFORMATION);
 				registrarAccion("Estudiante con ID : "+estudianteAux.getiD()+"creado por el admin:"+admin.getName(),Level.INFO );
@@ -863,29 +835,29 @@ public class AdminController implements Initializable{
 
 		} catch (NumberFormatException | DatosInvalidosException e) {
 			mostrarMensaje("Notificación credito", "Credito no creado", e.getMessage(), AlertType.ERROR);
-			
+
 		}
-		 
+
 	}
 	private void crearCreditoDeportivo(String nombre, String cuposDisponibles, String bloque, String piso, String numSalon,
 		String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) throws DatosInvalidosException,NumberFormatException {
 
 		String asistenciaMin=comboBoxAuxCurso.getValue();
 		String tipoCredito="Deportivo";
-		
+
 		if(validarDatosCredito(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
 					 horario1, horario2, dia1, dia2)==true ){
-			
-			
+
+
 			if(asistenciaMin==null || asistenciaMin.equalsIgnoreCase(""))
 				throw new DatosInvalidosException("Asistencia invalida");
-				
+
 			int pisoInt=Integer.parseInt(piso);
 			int salonInt=Integer.parseInt(numSalon);
 			int cuposDisponiblesInt=Integer.parseInt(cuposDisponibles);
 			EAsistenciaMinima asistenciaMinAux=obtenerAsistencia(asistenciaMin);
 			double costoDouble=Double.parseDouble(costo);
-			
+
 			Horario horarioAux=crearHorario(horario1,horario2,dia1,dia2);
 			Lugar   lugarAux= new Lugar(bloque, pisoInt, salonInt);
 			Deportivo deportivo=main.crearDeportivo(nombre, cuposDisponiblesInt, costoDouble,horarioAux,lugarAux,asistenciaMinAux,tipoCredito);
@@ -895,14 +867,14 @@ public class AdminController implements Initializable{
 			registrarAccion("Credito Deportivo con nombre : "+deportivo.getNombre()+"creado por el admin:"+admin.getName(),Level.INFO );
 
 
-			
+
 		}
 }
 
-	
 
 
-	
+
+
 
 	private Horario crearHorario(EHorario horario1, EHorario horario2, EDia dia1, EDia dia2)  {
 		Horario horarioAux;
@@ -913,27 +885,27 @@ public class AdminController implements Initializable{
 		if(horario2!=null){listaHorariosAux.add(horario2);}
 		if(dia1!=null){listaDiasAux.add(dia1);}
 		if(dia2!=null){listaDiasAux.add(dia2);}
-		
+
 		horarioAux=new Horario(listaDiasAux,listaHorariosAux);
-		
+
 		return horarioAux;
 	}
 
 	private void crearCreditoCultural(String nombre, String cuposDisponibles, String bloque, String piso, String numSalon,
 		String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) throws NumberFormatException, DatosInvalidosException {
-		
+
 		String tipoCredito="Cultural";
-		
+
 		if(validarDatosCredito(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
 				 horario1, horario2, dia1, dia2)==true){
-		
+
 		int pisoInt=Integer.parseInt(piso);
 		int salonInt=Integer.parseInt(numSalon);
 		int cuposDisponiblesInt=Integer.parseInt(cuposDisponibles);
 		double costoDouble=Double.parseDouble(costo);
 		if(costoDouble<50000 || costoDouble>100000)
 			throw new DatosInvalidosException("El costo debe estar entre 50.000 y 100.000");
-		
+
 		Horario horarioAux=crearHorario(horario1,horario2,dia1,dia2);
 		Lugar   lugarAux= new Lugar(bloque, pisoInt, salonInt);
 		Cultural cultural=main.crearCultural(nombre, cuposDisponiblesInt, costoDouble,horarioAux,lugarAux,tipoCredito);
@@ -943,38 +915,38 @@ public class AdminController implements Initializable{
 		registrarAccion("Credito Cultural con nombre : "+cultural.getNombre()+"creado por el admin:"+admin.getName(),Level.INFO );
 
 
-		
+
 	}
-	
-		
-	
+
+
+
 }
 
 	private void crearCreditoAcademico(String nombre, String cuposDisponibles, String bloque, String piso, String numSalon,
 		String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) throws NumberFormatException, DatosInvalidosException {
-	
-	
+
+
 		EArea area= comboBoxAuxCredito2.getValue();
 		String notaMinima=comboBoxAuxCurso.getValue();
-		
+
 		String tipoCredito="Academico";
-		
+
 		if(validarDatosCredito(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
 					 horario1, horario2, dia1, dia2)==true ){
-			
-			
+
+
 			if(area==null || notaMinima==null || notaMinima.equals(""))
 				throw new DatosInvalidosException("La nota o el area son invalidas");
-				
+
 			double notaDouble=Double.parseDouble(notaMinima);
 			int pisoInt=Integer.parseInt(piso);
 			int salonInt=Integer.parseInt(numSalon);
 			int cuposDisponiblesInt=Integer.parseInt(cuposDisponibles);
 			double costoDouble=Double.parseDouble(costo);
-			
+
 			Horario horarioAux=crearHorario(horario1,horario2,dia1,dia2);
 			Lugar   lugarAux= new Lugar(bloque, pisoInt, salonInt);
-			
+
 			Academico academico=main.crearAcademico(nombre, cuposDisponiblesInt, costoDouble, horarioAux, lugarAux, tipoCredito, notaDouble, area);
 			listaCreditosData.add(academico);
 			tableCreditos.refresh();
@@ -1047,6 +1019,80 @@ public class AdminController implements Initializable{
 		}else{
 			mostrarMensaje("Notificación Instructor", "Instructor no seleccionado","Seleccione un Instructor", AlertType.WARNING);
 		}
+	}
+	 private void actualizarCreditoAction() {
+			if(creditoSeleccionado!=null)
+			{
+				 String nombre=txtNombreCredito.getText();
+				 String cuposDisponibles=txtCuposDisponiblesCredito.getText();
+				 String bloque=txtBloqueCurso.getText();
+				 String piso=txtPisoCredito.getText();
+				 String numSalon=txtNumSalonCurso.getText();
+				 String costo=txtCostoCurso.getText();
+				 EHorario horario1=comboBoxHorario1.getValue();
+				 EHorario horario2=comboBoxHorario2.getValue();
+				 EDia     dia1=comboBoxDia1.getValue();
+				 EDia     dia2=comboBoxDia2.getValue();
+
+				 try {
+					if(rBtnAcademico.isSelected())
+					 actualizarCreditoAcademico(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
+							 			   horario1, horario2, dia1, dia2,creditoSeleccionado);
+				 if(rBtnCultural.isSelected())
+					 crearCreditoCultural(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
+							 horario1, horario2, dia1, dia2);
+				 if(rBtnDeportivo.isSelected())
+					 crearCreditoDeportivo(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
+							 horario1, horario2, dia1, dia2);
+
+
+				} catch (NumberFormatException | DatosInvalidosException e) {
+					mostrarMensaje("Notificación credito", "Credito no creado", e.getMessage(), AlertType.ERROR);
+
+				}
+
+			}else{
+				mostrarMensaje("Notificación Credito", "Credito no seleccionado","Seleccione un Credito", AlertType.WARNING);
+
+			}
+
+		}
+	private void actualizarCreditoAcademico(String nombre, String cuposDisponibles, String bloque, String piso,
+			String numSalon, String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2,
+			Credito creditoSeleccionado) throws NumberFormatException, DatosInvalidosException {
+
+
+		EArea area= comboBoxAuxCredito2.getValue();
+		String notaMinima=comboBoxAuxCurso.getValue();
+
+		String tipoCredito="Academico";
+
+		if(validarDatosCredito(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
+					 horario1, horario2, dia1, dia2)==true ){
+
+
+			if(area==null || notaMinima==null || notaMinima.equals(""))
+				throw new DatosInvalidosException("La nota o el area son invalidas");
+
+			double notaDouble=Double.parseDouble(notaMinima);
+			int pisoInt=Integer.parseInt(piso);
+			int salonInt=Integer.parseInt(numSalon);
+			int cuposDisponiblesInt=Integer.parseInt(cuposDisponibles);
+			double costoDouble=Double.parseDouble(costo);
+
+			Horario horarioAux=crearHorario(horario1,horario2,dia1,dia2);
+			Lugar   lugarAux= new Lugar(bloque, pisoInt, salonInt);
+
+			Academico academicoAux= new Academico(costoDouble,cuposDisponiblesInt,horarioAux,lugarAux,notaDouble
+											     ,area,tipoCredito,nombre);
+
+			if(main.actualizarAcademico(academicoAux,creditoSeleccionado)){
+				tableCreditos.refresh();
+				mostrarMensaje("Notificacion Credito Academico","Credito Academico registrado","El Credito Academico se registró con éxito",AlertType.INFORMATION);
+				registrarAccion("Credito Academico con nombre : "+academico.getNombre()+"creado por el admin:"+admin.getName(),Level.INFO );
+			}
+		}
+
 	}
 
 	private void borrarEstudiante() {
@@ -1180,17 +1226,17 @@ private boolean validarDatosCredito(String nombre, String cuposDisponibles, Stri
 			String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) throws DatosInvalidosException {
 		String mensaje="";
 
-		
-		
-		
-		
+
+
+
+
 		if(nombre == null || nombre.equals("")){
 			mensaje += "El nombre del credito del instructor es invalido \n";
 		}else{
 				if(main.validarNombreCredito(nombre))
 					mensaje += "Ya existe un credito academico con ese nombre \n";
 		}
-		
+
 
 		if(cuposDisponibles == null || cuposDisponibles.equals("")){
 			mensaje += "Los cupos disponibles del curso son invalidos \n";
@@ -1259,12 +1305,12 @@ private ObservableList<Estudiante> getListaEstudiantesData() {
 	}
 
 	public void registrarAccion(String mensaje, Level tipo){
-		
-		//administradorHilos.startHiloLogger(mensaje, tipo);
+
+		administradorHilos.startHiloLogger(mensaje, tipo);
 
 	}
 	private EAsistenciaMinima obtenerAsistencia(String asistenciaMin) {
-		
+
 		if(asistenciaMin.equals(EAsistenciaMinima.SETENTA_PORCIENTO)){
 			return EAsistenciaMinima.SETENTA_PORCIENTO;
 		}else{
@@ -1274,7 +1320,8 @@ private ObservableList<Estudiante> getListaEstudiantesData() {
 				return EAsistenciaMinima.OCHENTA_PORCIENTO;
 			}
 		}
-
 	}
+
+
 }
 

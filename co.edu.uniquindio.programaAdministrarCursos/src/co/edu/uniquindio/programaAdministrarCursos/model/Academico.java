@@ -1,12 +1,15 @@
 package co.edu.uniquindio.programaAdministrarCursos.model;
 
+import java.util.ArrayList;
+
 public class Academico extends Credito{
 
 	private double  notaMinima;
+	private ArrayList<Estudiante> listaEstudiantes=new ArrayList<>();
 	private static final long serialVersionUID = 1L;
 	private EArea   area;
-	
-	
+
+
 	public Academico() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -17,7 +20,7 @@ public class Academico extends Credito{
 		this.notaMinima=notaMinima;
 		this.area=area;
 	}
-	
+
 	public EArea getArea() {
 		return area;
 	}
@@ -33,10 +36,30 @@ public class Academico extends Credito{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+
+	public ArrayList<Estudiante> getListaEstudiantes() {
+		return listaEstudiantes;
+	}
+	public void setListaEstudiantes(ArrayList<Estudiante> listaEstudiantes) {
+		this.listaEstudiantes = listaEstudiantes;
+	}
 	@Override
 	public String toString() {
 		return "Academico [notaMinima=" + notaMinima + ", area=" + area + ", getCosto()=" + getCosto() + ", getLugar()="
 				+ getLugar() + ", getHorario()=" + getHorario() + ", getCuposDisponibles()=" + getCuposDisponibles()
 				+ ", getCuposRegistrados()=" + getCuposRegistrados() + "]";
+	}
+	@Override
+	public boolean actualizar(Credito creditoAux) {
+		Academico academicoAux= (Academico) creditoAux;
+
+		setNombre(academicoAux.getNombre());
+		setArea(academicoAux.getArea());
+		setCosto(academicoAux.getCosto());
+		setCuposDisponibles(academicoAux.getCuposDisponibles());
+		setHorario(academicoAux.getHorario());
+		setLugar(academicoAux.getLugar());
+		setNotaMinima(academicoAux.getNotaMinima());
+		return true;
 	}
 }

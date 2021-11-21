@@ -1,4 +1,4 @@
-package co.edu.uniquindio.programaAdministrarCursos.model;
+package co.edu.uniquindio.programaAdministrarCursos.hilos;
 
 import java.io.IOException;
 import java.util.logging.FileHandler;

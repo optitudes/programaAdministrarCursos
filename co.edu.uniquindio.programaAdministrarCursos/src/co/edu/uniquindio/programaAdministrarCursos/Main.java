@@ -1,5 +1,5 @@
 package co.edu.uniquindio.programaAdministrarCursos;
-	
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -26,14 +26,14 @@ import javafx.scene.layout.BorderPane;
 
 
 public class Main extends Application {
-	
+
 	private Stage primaryStage;
 
 	Bienestar bienestar = new Bienestar("Cooperativa", "1022");
-	
+
 	@Override
 	public void start(Stage primaryStage) {
-	
+
 		try {
 			this.primaryStage = primaryStage;
 			this.primaryStage.setTitle("Bienestar");
@@ -87,7 +87,7 @@ public void mostrarVentanaLogging() {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 	public void cargarVistaEstudiante() {
 		try {
@@ -106,7 +106,7 @@ public void mostrarVentanaLogging() {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	public void cargarVistaInstructor() {
@@ -126,7 +126,7 @@ public void mostrarVentanaLogging() {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	public ArrayList<Estudiante> obtenerEstudiantes() {
@@ -148,16 +148,16 @@ public void mostrarVentanaLogging() {
 
 	}
 
-	
+
 
 	public void quemarDatos() {
 		bienestar.quemarDatos();
-		
+
 	}
 
 	public boolean verificarIDEstudiante(String iD) {
 		return bienestar.verificarIDEstudiante(iD);
-		
+
 	}
 	public boolean verificarIDInstructor(String iD) {
 		return bienestar.verificarIDInstructor(iD);
@@ -166,7 +166,7 @@ public void mostrarVentanaLogging() {
 	public boolean verificarCorreoEstudiante(String correo) {
 		return bienestar.verificarCorreoEstudiante(correo);
 	}
-	
+
 	public boolean verificarCorreoInstructor(String correo) {
 		return bienestar.verificarCorreoInstructor(correo);
 	}
@@ -176,7 +176,7 @@ public void mostrarVentanaLogging() {
 	public Estudiante crearEstudiante(String nombre, String iD, String correo, String contrasenia) {
 		return bienestar.crearEstudiante(nombre, iD, correo, contrasenia);
 	}
-	
+
 	public Instructor crearInstructor(String nombre, String iD, String correo, String contrasenia) {
 		return bienestar.crearInstructor(nombre, iD, correo, contrasenia);
 	}
@@ -194,11 +194,11 @@ public void mostrarVentanaLogging() {
 			Lugar lugarAux, String tipoCredito, double notaDouble, EArea area) {
 		return bienestar.crearAcademico(nombre, cuposDisponiblesInt, costoDouble, horarioAux, lugarAux, tipoCredito, notaDouble, area);
 	}
-	
+
 	public boolean borrarEstudiante(Estudiante estudianteSeleccionado) {
 		return bienestar.borrarEstudiante(estudianteSeleccionado);
 	}
-	
+
 	public boolean borrarInstructor(Instructor instructorSeleccionado) {
 		return bienestar.borrarInstructor(instructorSeleccionado);
 	}
@@ -206,7 +206,7 @@ public void mostrarVentanaLogging() {
 
 	public boolean actualizarEstudiante(Estudiante estudianteAux, Estudiante estudianteSeleccionado) {
 		return bienestar.actualizarEstudiante(estudianteAux,estudianteSeleccionado);
-		
+
 	}
 	public boolean actualizarInstructor(Instructor instructorAux, Instructor instructorSeleccionado) {
 		return bienestar.actualizarInstructor(instructorAux, instructorSeleccionado);
@@ -214,27 +214,33 @@ public void mostrarVentanaLogging() {
 
 
 
-	
+	public boolean actualizarAcademico(Academico academicoAux, Credito creditoSeleccionado) {
+		return bienestar.actualizarAcademico(academicoAux, creditoSeleccionado);
+	}
 
 
 
-	
-	
-
-	
-
-	
 
 
 
-	
-	
 
-	
-	
 
-	
 
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

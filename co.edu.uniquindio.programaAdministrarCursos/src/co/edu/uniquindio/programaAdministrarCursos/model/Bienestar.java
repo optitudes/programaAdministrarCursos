@@ -14,16 +14,16 @@ import co.edu.uniquindio.programaAdministrarCursos.exception.EstudianteNoCreadoE
 public class Bienestar {
 
 	private static final Logger LOGGER = Logger.getLogger(Bienestar.class.getName());
-	
+
 	private String nombre;
 	private String nit;
-	
+
 	private ArrayList<Estudiante> listaEstudiantes=  new ArrayList<Estudiante>();
 	private ArrayList<Admin>      listaAdmins=       new ArrayList<Admin>();
 	private ArrayList<Instructor> listaInstructores= new ArrayList<Instructor>();
-	
+
 	private ArrayList<Credito> listaCreditos= new ArrayList<Credito>();
-	
+
 	public Bienestar() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -49,7 +49,7 @@ public class Bienestar {
 	public String toString() {
 		return "Bienestar [nombre=" + nombre + ", nit=" + nit + "]";
 	}
-	
+
 //	public void cargarDatos(String rutaUsuarios,String rutaCreditos){
 //		try {
 //			listaUsuarios=(ArrayList<User>) Persistencia.deseRializarObjeto(rutaUsuarios);
@@ -137,7 +137,7 @@ public ArrayList<Instructor> getInstructores() {
 public void quemarDatos() {
 	ArrayList<EDia> listaDias=new ArrayList<EDia>();
 	ArrayList<EHorario> listaHorarios= new ArrayList<EHorario>();
-	
+
 	Estudiante estudiante=new Estudiante("juan","1193370914","juan@uqvirtual.co","1111");
 	Admin       admin= new Admin("zeus","1002","admin@gmail.com","1234");
 	Instructor instructor= new Instructor("Orfeo","1002","orfeo@gmail.com","2222");
@@ -145,12 +145,12 @@ public void quemarDatos() {
 	listaDias.add(EDia.JUEVES);
 	listaHorarios.add(EHorario.SIETE_A_NUEVE_AM);
 	listaHorarios.add(EHorario.NUEVE_A_ONCE_AM);
-	
+
 	Deportivo  deportivo= new Deportivo(2,2,new Horario(listaDias, listaHorarios),new Lugar("bloque 1",3, 2),EAsistenciaMinima.OCHENTA_PORCIENTO,"Deportivo","salud fisica");
 	Cultural  cultural = new Cultural(2,2,new Horario(listaDias, listaHorarios), new Lugar("dos", 2, 2),"Cultural","lectura general");
 	Academico academico= new Academico(2, 3, new Horario(listaDias, listaHorarios), new Lugar("Ingenieria", 2, 1), 4.0, EArea.MATEMATICAS, "Academica", "Calculo");
-	
-	
+
+
 	listaEstudiantes.add(estudiante);
 	listaAdmins.add(admin);
 	listaInstructores.add(instructor);
@@ -159,30 +159,30 @@ public void quemarDatos() {
 	listaCreditos.add(cultural);
 
 
-	
+
 }
 
 public boolean verificarIDEstudiante(String iD) {
-	
+
 	for (Estudiante estudiante : listaEstudiantes) {
-		
+
 		if(estudiante.verificarID(iD))
 			return true;
-		
+
 	}
 	return false;
 }
 public boolean verificarIDInstructor(String iD) {
 for (Instructor instructor : listaInstructores) {
-		
+
 		if(instructor.verificarID(iD))
 			return true;
-		
+
 	}
 	return false;
 }
 public boolean verificarCorreoEstudiante(String correo) {
-	
+
 	for (Estudiante estudiante : listaEstudiantes) {
 
 		if(estudiante.verificarCorreo(correo))
@@ -202,12 +202,12 @@ public boolean verificarCorreoInstructor(String correo) {
 }
 
 public boolean verificarNombreCredito(String nombre) {
-	
+
 	for (Credito credito : listaCreditos) {
 			if(credito.verificarNombre(nombre))
 				return true;
 		}
-		
+
 	return false;
 }
 public Estudiante crearEstudiante(String nombre, String iD, String correo, String contrasenia) {
@@ -223,7 +223,7 @@ public Instructor crearInstructor(String nombre, String iD, String correo, Strin
 	return instructorAux;
 }
 public boolean borrarEstudiante(Estudiante estudianteSeleccionado) {
-	if(listaEstudiantes.remove(estudianteSeleccionado))	
+	if(listaEstudiantes.remove(estudianteSeleccionado))
 		return true;
 	return false;
 }
@@ -245,25 +245,31 @@ public boolean actualizarInstructor(Instructor instructorAux, Instructor instruc
 		return true;
 	return false;
 }
+public boolean actualizarAcademico(Academico academicoAux, Credito creditoSeleccionado) {
+	int index=listaCreditos.indexOf(creditoSeleccionado);
+	if(listaCreditos.get(index).actualizar(academicoAux))
+		return true;
+	return false;
+}
 public Deportivo crearDeportivo(String nombre, int cuposDisponibles, double costo, Horario horario,
 		Lugar lugar, EAsistenciaMinima asistenciaMinAux, String tipo) {
-	
+
 	Deportivo deportivoAux=new Deportivo(costo, cuposDisponibles, horario, lugar, asistenciaMinAux,tipo, nombre);
 	listaCreditos.add(deportivoAux);
-	
+
 	return deportivoAux;
 }
 
 public Cultural crearCultural(String nombre, int cuposDisponiblesInt, double costoDouble, Horario horarioAux,
 		Lugar lugarAux, String tipoCredito) {
-	
+
 	Cultural culturalAux= new Cultural(costoDouble, cuposDisponiblesInt, horarioAux, lugarAux, tipoCredito, nombre);
 	listaCreditos.add(culturalAux);
 	return culturalAux;
 }
 public Academico crearAcademico(String nombre, int cuposDisponiblesInt, double costoDouble, Horario horarioAux,
 		Lugar lugarAux, String tipoCredito, double notaDouble, EArea area) {
-	
+
 	Academico academicoAux= new Academico(costoDouble, cuposDisponiblesInt, horarioAux, lugarAux, notaDouble, area, tipoCredito, nombre);
 	listaCreditos.add(academicoAux);
 	return academicoAux;
@@ -293,6 +299,7 @@ public ArrayList<Credito> getListaCreditos() {
 public void setListaCreditos(ArrayList<Credito> listaCreditos) {
 	this.listaCreditos = listaCreditos;
 }
+
 
 
 

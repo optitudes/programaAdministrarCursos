@@ -9,7 +9,8 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 import co.edu.uniquindio.programaAdministrarCursos.Main;
-import co.edu.uniquindio.programaAdministrarCursos.model.Log;
+import co.edu.uniquindio.programaAdministrarCursos.hilos.Log;
+import co.edu.uniquindio.programaAdministrarCursos.model.AdminHilos;
 import javafx.fxml.Initializable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,7 +21,7 @@ import javafx.scene.control.TextField;
 
 public class LoggingController implements Initializable{
 	Main main;
-	Log  logger;
+	AdminHilos adminHilos;
 
 	String correoadmin="admin";
 	String correoEstudiante="estudiante";
@@ -57,6 +58,7 @@ public class LoggingController implements Initializable{
 
 	public void setAplicacion(Main mainAux) {
 		main= mainAux;
+		adminHilos=new AdminHilos(main);
 
 	}
 
@@ -98,21 +100,21 @@ public class LoggingController implements Initializable{
 	if(correoInstructor.equalsIgnoreCase(txtCorreoLogin.getText()) && clave.equalsIgnoreCase(txtClaveLogin.getText())){
 			registrarAccion("Inicio de sesion instructor",Level.INFO);
 			main.cargarVistaInstructor();}
-		
+
 	}
 
 	private void logearEstudiante() {
 	if(correoEstudiante.equalsIgnoreCase(txtCorreoLogin.getText()) && clave.equalsIgnoreCase(txtClaveLogin.getText())){
 			registrarAccion("Inicio de sesion estudiante",Level.INFO );
 			main.cargarVistaEstudiante();}
-		
+
 	}
 
 	private void logearAdmin() {
 	if(correoadmin.equalsIgnoreCase(txtCorreoLogin.getText()) && clave.equalsIgnoreCase(txtClaveLogin.getText())){
-			//registrarAccion("Inicio de sesion admin", Level.INFO);
+			registrarAccion("Inicio de sesion admin", Level.INFO);
 			main.cargarVistaAdmin();}
-		
+
 	}
 
 	private void limpiarLogging() {
@@ -122,8 +124,7 @@ public class LoggingController implements Initializable{
 	}
 
 	public void registrarAccion(String mensaje, Level tipo){
-		logger= new Log(mensaje,tipo);
-		logger.hilo.start();
+		adminHilos.startHiloLogger(mensaje, tipo);
 
 	}
 }

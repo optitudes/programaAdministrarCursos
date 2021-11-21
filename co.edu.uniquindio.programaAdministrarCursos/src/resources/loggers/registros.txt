@@ -2,3 +2,29 @@ nov 20, 2021 4:25:27 PM co.edu.uniquindio.programaAdministrarCursos.model.Log ru
 INFORMACIÓN: Inicio de sesion admin
 nov 20, 2021 4:26:02 PM co.edu.uniquindio.programaAdministrarCursos.model.Log run
 INFORMACIÓN: Inicio de sesion admin
+nov 20, 2021 8:04:07 PM co.edu.uniquindio.programaAdministrarCursos.model.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 20, 2021 8:10:23 PM co.edu.uniquindio.programaAdministrarCursos.model.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 20, 2021 8:13:03 PM co.edu.uniquindio.programaAdministrarCursos.model.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 20, 2021 8:13:06 PM co.edu.uniquindio.programaAdministrarCursos.model.Log run
+INFORMACIÓN: cierre de sesion adminaizen
+nov 20, 2021 8:54:04 PM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 20, 2021 8:55:12 PM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 20, 2021 8:56:53 PM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 20, 2021 8:58:58 PM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 20, 2021 8:59:48 PM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 20, 2021 9:05:44 PM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 20, 2021 9:11:11 PM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 20, 2021 9:17:46 PM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 20, 2021 9:18:49 PM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Inicio de sesion admin

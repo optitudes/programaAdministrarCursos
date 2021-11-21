@@ -5,8 +5,8 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 
 import co.edu.uniquindio.programaAdministrarCursos.Main;
+import co.edu.uniquindio.programaAdministrarCursos.hilos.Log;
 import co.edu.uniquindio.programaAdministrarCursos.model.Instructor;
-import co.edu.uniquindio.programaAdministrarCursos.model.Log;
 import javafx.fxml.Initializable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

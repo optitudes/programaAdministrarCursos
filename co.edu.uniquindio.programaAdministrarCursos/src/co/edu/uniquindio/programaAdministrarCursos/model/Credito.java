@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public abstract class Credito implements Serializable{
 
-	
+
 	private static final long serialVersionUID = 1L;
 
 	private int cuposDisponibles;
@@ -28,7 +28,7 @@ public abstract class Credito implements Serializable{
 		this.tipo=tipo;
 		this.nombre=nombre;
 	}
-	
+
 	public double getCosto() {
 		return costo;
 	}
@@ -62,9 +62,9 @@ public abstract class Credito implements Serializable{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	
-	
-	
+
+
+
 	public String getTipo() {
 		return tipo;
 	}
@@ -87,9 +87,10 @@ public abstract class Credito implements Serializable{
 			return true;
 		return false;
 	}
-	
-	
-	
-	
+	public abstract boolean actualizar(Credito creditoAux);
+
+
+
+
 
 }
