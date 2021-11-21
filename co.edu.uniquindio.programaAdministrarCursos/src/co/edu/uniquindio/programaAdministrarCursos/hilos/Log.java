@@ -11,6 +11,7 @@ public  class Log implements Runnable{
 	private String mensaje="";
 	private Level  tipo;
 	public Thread hilo;
+	private String ruta;
 	private static final Logger LOGGER = Logger.getLogger(Log.class.getName());
 	
 	
@@ -19,7 +20,7 @@ public  class Log implements Runnable{
 		hilo= new Thread(this);
 	    this.mensaje=mensaje;
 	    this.tipo=tipo;
-	    hilo.start();
+
 	}
 	
 	@Override
@@ -27,7 +28,7 @@ public  class Log implements Runnable{
 	FileHandler archivo;
 
 		try {
-			archivo= new FileHandler("src/resources/loggers/registros.txt",true);//si es true no sobreescribe
+			archivo= new FileHandler(ruta+"/registros.txt",true);//si es true no sobreescribe
 			archivo.setFormatter(new SimpleFormatter());
 			LOGGER.addHandler(archivo);
 
@@ -38,5 +39,41 @@ public  class Log implements Runnable{
 			e.printStackTrace();
 		}
 	}
+	public void start(){
+		  hilo.start();
+	}
+
+	public String getMensaje() {
+		return mensaje;
+	}
+
+	public void setMensaje(String mensaje) {
+		this.mensaje = mensaje;
+	}
+
+	public Level getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(Level tipo) {
+		this.tipo = tipo;
+	}
+
+	public Thread getHilo() {
+		return hilo;
+	}
+
+	public void setHilo(Thread hilo) {
+		this.hilo = hilo;
+	}
+
+	public String getRuta() {
+		return ruta;
+	}
+
+	public void setRuta(String ruta) {
+		this.ruta = ruta;
+	}
+	
 }
 

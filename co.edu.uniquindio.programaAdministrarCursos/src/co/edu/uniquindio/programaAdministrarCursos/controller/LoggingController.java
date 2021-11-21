@@ -1,5 +1,7 @@
 package co.edu.uniquindio.programaAdministrarCursos.controller;
 
+import java.awt.Window;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -18,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.stage.FileChooser;
 
 
 public class LoggingController implements Initializable{
@@ -57,6 +60,7 @@ public class LoggingController implements Initializable{
 
 	}
 
+	
 	public void setAplicacion(Main mainAux) {
 		main= mainAux;
 		adminHilos=new AdminHilos(main);
@@ -89,12 +93,17 @@ public class LoggingController implements Initializable{
 
 	@FXML
 	void accederAction(ActionEvent event) {
-		if(rBtnAdmin.isSelected())
-			logearAdmin();
-		if(rBtnEstudiante.isSelected())
-			logearEstudiante();
-		if(rBtnInstructor.isSelected())
-			logearInstructor();
+		Thread hilo=Thread.currentThread();
+		if(!(hilo==adminHilos.getObtenerDirectorioRaiz()))
+		{
+			if(rBtnAdmin.isSelected())
+				logearAdmin();
+			if(rBtnEstudiante.isSelected())
+				logearEstudiante();
+			if(rBtnInstructor.isSelected())
+				logearInstructor();
+		}
+
 	}
 
 	private void logearInstructor() {
@@ -128,4 +137,13 @@ public class LoggingController implements Initializable{
 		adminHilos.startHiloLogger(mensaje, tipo);
 
 	}
+
+
+	public void obtenerRutaPersistencia() {
+		adminHilos.startHiloObtenerRutaPersistencia();
+	
+		
+	}
+	
+
 }

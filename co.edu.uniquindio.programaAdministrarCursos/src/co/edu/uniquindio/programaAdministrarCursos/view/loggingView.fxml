@@ -20,12 +20,12 @@
    <top>
       <AnchorPane prefHeight="200.0" prefWidth="424.0" BorderPane.alignment="CENTER">
          <children>
-            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="248.0" layoutY="18.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="143.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../../../resources/pngs/logoUQ.png" />
                </image>
             </ImageView>
-            <Label layoutX="42.0" layoutY="85.0" text="Pantalla logging" textOverrun="LEADING_WORD_ELLIPSIS">
+            <Label layoutX="161.0" layoutY="19.0" text="Pantalla logging" textOverrun="LEADING_WORD_ELLIPSIS">
                <cursor>
                   <Cursor fx:constant="NONE" />
                </cursor>

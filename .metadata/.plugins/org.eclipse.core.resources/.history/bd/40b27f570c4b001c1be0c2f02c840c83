@@ -1,0 +1,5 @@
+package co.edu.uniquindio.programaAdministrarCursos.hilos;
+
+public class HiloObtenerDirectorioRaiz implements Runnable {
+	public Thread hilo;
+}

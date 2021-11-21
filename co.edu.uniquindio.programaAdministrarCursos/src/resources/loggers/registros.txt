@@ -62,3 +62,17 @@ nov 21, 2021 11:24:11 AM co.edu.uniquindio.programaAdministrarCursos.hilos.Log r
 INFORMACIÓN: Inicio de sesion admin
 nov 21, 2021 11:24:20 AM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
 INFORMACIÓN: cierre de sesion adminaizen
+nov 21, 2021 3:41:58 PM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 21, 2021 3:55:40 PM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 21, 2021 4:14:14 PM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 21, 2021 4:14:19 PM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: cierre de sesion adminaizen
+nov 21, 2021 4:14:54 PM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Inicio de sesion estudiante
+nov 21, 2021 4:14:56 PM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: cierre de sesion estudiante :sebas
+nov 21, 2021 4:14:59 PM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: cierre de sesion estudiante :sebas

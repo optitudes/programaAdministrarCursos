@@ -3,4 +3,16 @@
 <fullyQualifiedTypeName name="javafx.scene.DepthTest"/>
 <fullyQualifiedTypeName name="co.edu.uniquindio.programaAdministrarCursos.model.Deportivo"/>
 <fullyQualifiedTypeName name="javafx.scene.control.PasswordField"/>
+<fullyQualifiedTypeName name="java.awt.Window"/>
+<fullyQualifiedTypeName name="javafx.stage.FileChooser"/>
+<fullyQualifiedTypeName name="javax.swing.JFileChooser"/>
+<fullyQualifiedTypeName name="javafx.scene.layout.AnchorPane"/>
+<fullyQualifiedTypeName name="java.awt.Component"/>
+<fullyQualifiedTypeName name="java.awt.Label"/>
+<fullyQualifiedTypeName name="co.edu.uniquindio.programaAdministrarCursos.model.AdminHilos"/>
+<fullyQualifiedTypeName name="java.lang.Thread"/>
+<fullyQualifiedTypeName name="javafx.scene.control.Alert"/>
+<fullyQualifiedTypeName name="javafx.scene.control.Alert.AlertType"/>
+<fullyQualifiedTypeName name="java.io.File"/>
+<fullyQualifiedTypeName name="co.edu.uniquindio.programaAdministrarCursos.model.Persistencia"/>
 </qualifiedTypeNameHistroy>

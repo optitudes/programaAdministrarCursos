@@ -1,13 +1,19 @@
 package co.edu.uniquindio.programaAdministrarCursos;
 
+import java.awt.Component;
+import java.awt.Label;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import javax.swing.JFileChooser;
 
 import co.edu.uniquindio.programaAdministrarCursos.controller.AdminController;
 import co.edu.uniquindio.programaAdministrarCursos.controller.EstudianteController;
 import co.edu.uniquindio.programaAdministrarCursos.controller.InstructorController;
 import co.edu.uniquindio.programaAdministrarCursos.controller.LoggingController;
 import co.edu.uniquindio.programaAdministrarCursos.model.Academico;
+import co.edu.uniquindio.programaAdministrarCursos.model.AdminHilos;
 import co.edu.uniquindio.programaAdministrarCursos.model.Bienestar;
 import co.edu.uniquindio.programaAdministrarCursos.model.Credito;
 import co.edu.uniquindio.programaAdministrarCursos.model.Cultural;
@@ -18,16 +24,26 @@ import co.edu.uniquindio.programaAdministrarCursos.model.Estudiante;
 import co.edu.uniquindio.programaAdministrarCursos.model.Horario;
 import co.edu.uniquindio.programaAdministrarCursos.model.Instructor;
 import co.edu.uniquindio.programaAdministrarCursos.model.Lugar;
+import co.edu.uniquindio.programaAdministrarCursos.model.Persistencia;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 
 
 public class Main extends Application {
 
 	private Stage primaryStage;
+	private String rutaRaiz="";
+	private String rutaPersistencia;
+	private String rutaRespaldo;
+	private String rutaArchivos;
+	private String rutaLog;
 
 	Bienestar bienestar = new Bienestar("Cooperativa", "1022");
 
@@ -59,6 +75,16 @@ public void mostrarVentanaLogging() {
 			BorderPane rootLayout = (BorderPane)loader.load();
 			LoggingController loggingController = loader.getController();
 			loggingController.setAplicacion(this);
+			if(rutaRaiz==null || rutaRaiz.isEmpty())
+			{
+				mostrarMensaje("Atención!","El programa no cuenta con un directorio raiz",
+						"Por favor ingrese una carpeta para que el programa pueda "
+								+" desplegar sus ficheros. En caso de windows se recomienda"
+								+ " la dirección (C:/td/persistencia/) en caso de linux (home/td/persistencia) ", AlertType.ERROR);
+				loggingController.obtenerRutaPersistencia();
+				
+				
+			}
 
 
 			Scene scene = new Scene(rootLayout);
@@ -69,6 +95,35 @@ public void mostrarVentanaLogging() {
 			e.printStackTrace();
 		}
 }
+
+	public void setDirectorioRaiz() {
+		boolean procesoExitoso=false;
+		while(!procesoExitoso){
+			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.setFileSelectionMode(2);
+			//Abrimos la ventana, guardamos la opcion seleccionada por el usuario
+			int seleccion=fileChooser.showOpenDialog(new Component() {
+			});
+
+			//Si el usuario, pincha en aceptar
+			if(seleccion==JFileChooser.APPROVE_OPTION){
+
+				//Seleccionamos el fichero
+				File fichero=fileChooser.getSelectedFile();
+				if(fichero!=null)
+				{
+					if(fichero.isDirectory())
+					{
+						procesoExitoso=true;
+						rutaRaiz=fichero.getAbsolutePath();
+						System.out.println(rutaRaiz);
+					}
+				}
+
+
+			}
+		}
+	}
 
 	public void cargarVistaAdmin() {
 		try {
@@ -127,6 +182,63 @@ public void mostrarVentanaLogging() {
 			e.printStackTrace();
 		}
 
+	}
+
+	
+	public Stage getPrimaryStage() {
+		return primaryStage;
+	}
+
+	public void setPrimaryStage(Stage primaryStage) {
+		this.primaryStage = primaryStage;
+	}
+
+	public String getRutaPersistencia() {
+		return rutaPersistencia;
+	}
+
+	public void setRutaPersistencia(String rutaPersistencia) {
+		this.rutaPersistencia = rutaPersistencia;
+	}
+
+	public String getRutaRaiz() {
+		return rutaRaiz;
+	}
+
+	public void setRutaRaiz(String rutaRaiz) {
+		this.rutaRaiz = rutaRaiz;
+	}
+
+	public String getRutaRespaldo() {
+		return rutaRespaldo;
+	}
+
+	public void setRutaRespaldo(String rutaRespaldo) {
+		this.rutaRespaldo = rutaRespaldo;
+	}
+
+	public String getRutaArchivos() {
+		return rutaArchivos;
+	}
+
+	public void setRutaArchivos(String rutaArchivos) {
+		this.rutaArchivos = rutaArchivos;
+	}
+
+	public String getRutaLog() {
+		return rutaLog;
+	}
+
+	public void setRutaLog(String rutaLog) {
+		this.rutaLog = rutaLog;
+	}
+
+	public Bienestar getBienestar() {
+		return bienestar;
+	}
+
+	public void setBienestar(Bienestar bienestar) {
+		this.bienestar = bienestar;
 	}
 
 	public ArrayList<Estudiante> obtenerEstudiantes() {
@@ -218,6 +330,36 @@ public void mostrarVentanaLogging() {
 
 	public boolean actualizarCredito(Credito creditoAux, Credito creditoSeleccionado) {
 		return bienestar.actualizarCredito(creditoAux, creditoSeleccionado);
+	}
+
+	
+
+	public void mostrarMensaje(String titulo, String header, String contenido, AlertType alertType) {
+
+		Alert alert = new Alert(alertType);
+		alert.setTitle      (titulo);
+		alert.setHeaderText (header);
+		alert.setContentText(contenido);
+		alert.showAndWait   ();
+	}
+
+	public void crearDirectorios() {
+		if(rutaRaiz!=null)
+		{
+			Persistencia.crearCarpeta(rutaRaiz, "persistencia");
+			rutaPersistencia=rutaRaiz+"/persistencia";
+			Persistencia.crearCarpeta(rutaPersistencia,"respaldo");
+			rutaRespaldo=rutaPersistencia+"/respaldo";
+			Persistencia.crearCarpeta(rutaPersistencia, "archivos");
+			rutaArchivos=rutaPersistencia+"/archivos";
+			Persistencia.crearCarpeta(rutaPersistencia, "log");
+			rutaLog=rutaPersistencia+"/log";
+		}else{
+			mostrarMensaje("ERROR1", "No hay ruta de directorio","Por favor ingrese una ruta", AlertType.ERROR);
+			setDirectorioRaiz();
+		}
+		
+		
 	}
 
 	

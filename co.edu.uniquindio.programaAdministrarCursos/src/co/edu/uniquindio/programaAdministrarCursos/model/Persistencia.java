@@ -17,7 +17,7 @@ import javax.swing.JOptionPane;
 
 public class Persistencia {
 	
-		private static void crearCarpeta(String rutaArchivo,String nombre) {
+		public static void crearCarpeta(String rutaArchivo,String nombre) {
 			File file;
 			file = new File(rutaArchivo+"/"+nombre);
 			file.mkdir();
