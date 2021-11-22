@@ -48,6 +48,11 @@ public class Estudiante extends User{
 		return true;
 	}
 
+	@Override
+	public String getDatosTXT() {
+		return getName()+";"+getPasword()+";"+getiD()+";"+getEmail()+";";
+	}
+
 	
 
 	

@@ -64,8 +64,28 @@ public class Persistencia {
 			
 			archivoSalida.close();
 		}
-		
-		
+
+		public static void escribirObjetoTXT(String rutaArchivo, ArrayList<String> texto,boolean adicionar) throws IOException 
+		{
+
+			FileWriter archivoSalida = null;
+			BufferedWriter  bufferSalida;
+
+			archivoSalida = new FileWriter(rutaArchivo, adicionar);
+			bufferSalida =  new BufferedWriter(archivoSalida);
+
+			for (String linea : texto) 
+			{
+				bufferSalida.write(linea+"\n");
+			}
+
+
+			bufferSalida.flush();
+			bufferSalida.close();
+
+			archivoSalida.close();
+		}
+
 		public static ArrayList<String> leerArchivo(String ruta) throws IOException {
 
 			ArrayList<String>  contenido = new ArrayList<String>();

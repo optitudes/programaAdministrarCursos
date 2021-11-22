@@ -358,8 +358,15 @@ public void mostrarVentanaLogging() {
 			mostrarMensaje("ERROR1", "No hay ruta de directorio","Por favor ingrese una ruta", AlertType.ERROR);
 			setDirectorioRaiz();
 		}
+	}
 
+	public void guardarEstudiantesTXT() throws IOException {
+		
+		
+	}
 
+	public void guardarDatosTXT(String tipo) {
+		bienestar.guardarDatosTXT(rutaArchivos+"/"+tipo,tipo);
 	}
 
 

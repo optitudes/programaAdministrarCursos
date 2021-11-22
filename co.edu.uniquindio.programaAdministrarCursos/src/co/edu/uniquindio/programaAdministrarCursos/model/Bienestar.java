@@ -304,6 +304,33 @@ public ArrayList<Credito> getListaCreditos() {
 public void setListaCreditos(ArrayList<Credito> listaCreditos) {
 	this.listaCreditos = listaCreditos;
 }
+public void guardarEstudiantes(String rutaArchivo) throws IOException {
+	
+	
+	
+}
+public void guardarDatosTXT(String string, String tipo) {
+	ArrayList<String> listaInformacion= new ArrayList<String>();
+
+	if(tipo.equals("estudiante.txt")){
+		for (Estudiante estudianteAux : listaEstudiantes) {
+			listaInformacion.add(estudianteAux.getDatosTXT());
+		}
+	}
+	if(tipo.equals("instructor.txt")){
+		for (Instructor instructorAux : listaInstructores) {
+			listaInformacion.add(instructorAux.getDatosTXT());
+		}
+	}
+	if(tipo.equals("credito.txt")){
+		for (Credito creditoAux : listaCreditos) {
+			if(creditoAux instanceof Deportivo)
+			listaInformacion.add(estudianteAux.getDatosTXT());
+		}
+	}
+	Persistencia.escribirArchivo(rutaArchivo, listaInformacion, false);
+
+}
 
 
 

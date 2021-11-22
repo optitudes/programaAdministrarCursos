@@ -22,6 +22,11 @@ public class Admin extends User {
 				+ ", getPasword()=" + getPasword() + ", toString()=" + super.toString() + ", getClass()=" + getClass()
 				+ ", hashCode()=" + hashCode() + "]";
 	}
+
+	@Override
+	public String getDatosTXT() {
+		return getName()+";"+getPasword()+";"+getiD()+";"+getEmail()+";";
+	}
 	
 	
 

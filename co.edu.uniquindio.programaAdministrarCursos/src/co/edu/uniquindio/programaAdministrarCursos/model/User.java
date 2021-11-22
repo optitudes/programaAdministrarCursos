@@ -95,8 +95,5 @@ public  abstract class User implements Serializable{
 	public String toString() {
 		return "User [name=" + name + ", iD=" + iD + ", email=" + email + ", pasword=" + pasword + "]";
 	}
-	
-	
-	
-
+	public abstract String getDatosTXT();
 }

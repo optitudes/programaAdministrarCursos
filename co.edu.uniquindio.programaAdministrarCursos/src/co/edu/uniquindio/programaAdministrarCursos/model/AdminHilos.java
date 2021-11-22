@@ -1,5 +1,6 @@
 package co.edu.uniquindio.programaAdministrarCursos.model;
 
+import java.io.IOException;
 import java.util.logging.Level;
 
 import co.edu.uniquindio.programaAdministrarCursos.Main;
@@ -13,6 +14,7 @@ public class AdminHilos implements Runnable {
 	AdminController adminController;
 	Credito     creditoAux;
 
+	String archivoTXT;
 
 
 
@@ -22,7 +24,7 @@ public class AdminHilos implements Runnable {
 
 
 	Thread obtenerDirectorioRaiz;
-
+	Thread hiloGuardarTXT;
 
 
 	boolean runHilo=false;
@@ -42,6 +44,30 @@ public class AdminHilos implements Runnable {
 		{
 			main.setDirectorioRaiz();
 			main.crearDirectorios();
+		}
+		if(hiloGuardarTXT==hiloEjecucion)
+		{
+			try {
+				if(archivoTXT.equals("estudiante.txt"))
+				{
+					main.guardarDatosTXT("estudiante.txt");
+					startHiloLogger("estudiantes guardados en txt por el admin "+adminController.getAdmin().getName(),Level.INFO);
+
+				}else{
+					if(archivoTXT.equals("instructor.txt"))
+					{
+						main.guardarInstructoresTXT();
+
+					}else{
+						if(archivoTXT.equals("credito.txt"))
+						{
+							//						main.guardarCreditosTXT();
+						}
+					}
+				}		} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		}
 
 	}
@@ -72,6 +98,17 @@ public class AdminHilos implements Runnable {
 	}
 	public void setObtenerDirectorioRaiz(Thread obtenerDirectorioRaiz) {
 		this.obtenerDirectorioRaiz = obtenerDirectorioRaiz;
+	}
+	public void startHiloGuardarDatosEstudiantes() {
+		// TODO Auto-generated method stub
+		
+	}
+	public void startHiloGuardarDatosObtejos(String archivoTXT) {
+		hiloGuardarTXT= new Thread(this);
+		this.archivoTXT=archivoTXT;
+		hiloGuardarTXT.start();
+		
+		
 	}
 
 
