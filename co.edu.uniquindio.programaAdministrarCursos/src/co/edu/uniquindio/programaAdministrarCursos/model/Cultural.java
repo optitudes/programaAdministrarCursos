@@ -3,7 +3,7 @@ package co.edu.uniquindio.programaAdministrarCursos.model;
 public class Cultural extends Credito {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
@@ -39,6 +39,12 @@ public class Cultural extends Credito {
 		setHorario(culturalAux.getHorario());
 		setLugar(culturalAux.getLugar());
 		return true;
+	}
+
+	@Override
+	public String getDatosTXT() {
+		return getNombre()+";"+getCosto()+";"+getCuposDisponibles()+";"+getCuposRegistrados()+";"+getHorario()+";"
+				+getLugar()+";";
 	}
 
 }

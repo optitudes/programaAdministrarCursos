@@ -14,7 +14,8 @@ public class AdminHilos implements Runnable {
 	AdminController adminController;
 	Credito     creditoAux;
 
-	String archivoTXT;
+	String archivoTXTGuardar;
+	String archivoTXTCargar;
 
 
 
@@ -25,6 +26,7 @@ public class AdminHilos implements Runnable {
 
 	Thread obtenerDirectorioRaiz;
 	Thread hiloGuardarTXT;
+	Thread hiloCargarTXT;
 
 
 	boolean runHilo=false;
@@ -48,26 +50,24 @@ public class AdminHilos implements Runnable {
 		if(hiloGuardarTXT==hiloEjecucion)
 		{
 			try {
-				if(archivoTXT.equals("estudiante.txt"))
-				{
-					main.guardarDatosTXT("estudiante.txt");
-					startHiloLogger("estudiantes guardados en txt por el admin "+adminController.getAdmin().getName(),Level.INFO);
+				main.guardarDatosTXT(archivoTXTGuardar);
+				startHiloLogger("Datos guardados en txt en el registro ["+archivoTXTGuardar+"] por el admin "+adminController.getAdmin().getName(),Level.INFO);
 
-				}else{
-					if(archivoTXT.equals("instructor.txt"))
-					{
-						main.guardarInstructoresTXT();
+			} catch (IOException e) {
+				e.printStackTrace();
+				startHiloLogger("Error al guardar datos ["+archivoTXTGuardar+"] "+adminController.getAdmin().getName(), Level.SEVERE);
+			}
+		}
+		if(hiloCargarTXT==hiloEjecucion)
+		{
+			try {
+				main.CargarDatosTXT(archivoTXTCargar);
+				startHiloLogger("Datos Cargados del txt  del registro ["+archivoTXTCargar+"] por el admin "+adminController.getAdmin().getName(),Level.INFO);
 
-					}else{
-						if(archivoTXT.equals("credito.txt"))
-						{
-							//						main.guardarCreditosTXT();
-						}
-					}
-				}		} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			} catch (IOException e) {
+				e.printStackTrace();
+				startHiloLogger("Error al cargar datos ["+archivoTXTGuardar+"] "+adminController.getAdmin().getName(), Level.SEVERE);
+			}
 		}
 
 	}
@@ -101,14 +101,19 @@ public class AdminHilos implements Runnable {
 	}
 	public void startHiloGuardarDatosEstudiantes() {
 		// TODO Auto-generated method stub
-		
+
 	}
 	public void startHiloGuardarDatosObtejos(String archivoTXT) {
 		hiloGuardarTXT= new Thread(this);
-		this.archivoTXT=archivoTXT;
+		this.archivoTXTGuardar=archivoTXT;
 		hiloGuardarTXT.start();
-		
-		
+
+
+	}
+	public void startHiloCargarDatosObtejos(String nombreArchivo) {
+		hiloCargarTXT= new Thread(this);
+		this.archivoTXTCargar=nombreArchivo;
+		hiloCargarTXT.start();
 	}
 
 

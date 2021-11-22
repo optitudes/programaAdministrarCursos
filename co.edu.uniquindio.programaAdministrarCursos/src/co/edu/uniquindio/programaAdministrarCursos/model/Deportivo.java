@@ -5,12 +5,12 @@ import javafx.scene.DepthTest;
 public class Deportivo extends Credito{
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	EAsistenciaMinima asistenciaMinima;
 
-	
+
 
 	public Deportivo() {
 		super();
@@ -53,6 +53,13 @@ public class Deportivo extends Credito{
 		setLugar(deportivoAux.getLugar());
 		setAsistenciaMinima(deportivoAux.getAsistenciaMinima());
 		return true;
+	}
+
+	@Override
+	public String getDatosTXT() {
+
+		return getNombre()+";"+getCosto()+";"+getCuposDisponibles()+";"+getCuposRegistrados()+";"+getHorario()+";"
+			   +getLugar()+";"+getAsistenciaMinima()+";";
 	}
 
 }

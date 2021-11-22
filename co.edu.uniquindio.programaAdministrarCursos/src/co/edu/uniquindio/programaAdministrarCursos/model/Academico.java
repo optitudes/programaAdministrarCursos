@@ -62,4 +62,10 @@ public class Academico extends Credito{
 		setNotaMinima(academicoAux.getNotaMinima());
 		return true;
 	}
+
+	@Override
+	public String getDatosTXT() {
+		return getNombre()+";"+getCosto()+";"+getCuposDisponibles()+";"+getCuposRegistrados()+";"+getHorario()+";"
+				   +getLugar()+";"+getArea()+";"+getNotaMinima()+";";
+	}
 }

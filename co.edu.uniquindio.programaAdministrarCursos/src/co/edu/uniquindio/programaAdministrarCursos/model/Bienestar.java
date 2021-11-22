@@ -305,42 +305,399 @@ public void setListaCreditos(ArrayList<Credito> listaCreditos) {
 	this.listaCreditos = listaCreditos;
 }
 public void guardarEstudiantes(String rutaArchivo) throws IOException {
-	
-	
-	
+
+
+
 }
-public void guardarDatosTXT(String string, String tipo) {
+public void guardarDatosTXT(String rutaArchivo, String tipo) throws IOException {
 	ArrayList<String> listaInformacion= new ArrayList<String>();
 
-	if(tipo.equals("estudiante.txt")){
-		for (Estudiante estudianteAux : listaEstudiantes) {
-			listaInformacion.add(estudianteAux.getDatosTXT());
-		}
-	}
-	if(tipo.equals("instructor.txt")){
-		for (Instructor instructorAux : listaInstructores) {
-			listaInformacion.add(instructorAux.getDatosTXT());
-		}
-	}
-	if(tipo.equals("credito.txt")){
+
+	if(tipo.equals("credito")){
+		ArrayList<String> listaInformacionAux1= new ArrayList<String>();
+		ArrayList<String> listaInformacionAux2= new ArrayList<String>();
+
+
 		for (Credito creditoAux : listaCreditos) {
-			if(creditoAux instanceof Deportivo)
-			listaInformacion.add(estudianteAux.getDatosTXT());
+
+			if(creditoAux instanceof Deportivo){
+				Deportivo deportivoAux=(Deportivo) creditoAux;
+				listaInformacion.add(deportivoAux.getDatosTXT());
+			}
+			if(creditoAux instanceof Cultural){
+				Cultural culturalAux=(Cultural) creditoAux;
+				listaInformacionAux1.add(culturalAux.getDatosTXT());
+			}
+			if(creditoAux instanceof Academico){
+				Academico academicoAux=(Academico) creditoAux;
+				listaInformacionAux2.add(academicoAux.getDatosTXT());
+			}
 		}
+		Persistencia.escribirArchivo(rutaArchivo+"Deportivo.txt", listaInformacion, false);
+		Persistencia.escribirArchivo(rutaArchivo+"Cultural.txt", listaInformacionAux1, false);
+		Persistencia.escribirArchivo(rutaArchivo+"Academico.txt", listaInformacionAux2, false);
+
+	}else{
+
+		if(tipo.equals("estudiante.txt")){
+			for (Estudiante estudianteAux : listaEstudiantes) {
+				listaInformacion.add(estudianteAux.getDatosTXT());
+			}
+		}
+		if(tipo.equals("instructor.txt")){
+			for (Instructor instructorAux : listaInstructores) {
+				listaInformacion.add(instructorAux.getDatosTXT());
+			}
+		}
+
+		Persistencia.escribirArchivo(rutaArchivo, listaInformacion, false);
 	}
-	Persistencia.escribirArchivo(rutaArchivo, listaInformacion, false);
+}
+public void cargarDatosTXT(String rutaArchivo, String tipo) throws IOException {
+	ArrayList<String> listaInformacion= new ArrayList<String>();
+
+
+	if(tipo.equals("credito")){
+		ArrayList<String> listaInformacionAux1= new ArrayList<String>();
+		ArrayList<String> listaInformacionAux2= new ArrayList<String>();
+
+		ArrayList<Credito> listaCreditoRecuperado=  new ArrayList<>();
+
+		listaInformacionAux2=Persistencia.leerArchivo(rutaArchivo+"Academico.txt");
+		listaInformacionAux1=Persistencia.leerArchivo(rutaArchivo+"Cultural.txt");
+		listaInformacion=Persistencia.leerArchivo(rutaArchivo+"Deportivo.txt");
+
+
+		listaCreditoRecuperado.addAll(obtenerCreditos(listaInformacionAux2,"Academico"));
+		listaCreditoRecuperado.addAll(obtenerCreditos(listaInformacionAux1,"Cultural"));
+		listaCreditoRecuperado.addAll(obtenerCreditos(listaInformacion,"Deportivo"));
+		listaCreditos=listaCreditoRecuperado;
+	}
+	if(tipo.equals("estudiante.txt"))
+	{
+		listaInformacion=Persistencia.leerArchivo(rutaArchivo);
+		for (String elementos : listaInformacion) {
+			{
+
+			}
+
+		}
+
+	}
+	if(tipo.equals("instructor.txt"))
+	{
+		listaInformacion=Persistencia.leerArchivo(rutaArchivo);
+		for (String elementos : listaInformacion) {
+			{
+
+			}
+
+		}
+
+	}
+
+
 
 }
+private ArrayList<Credito> obtenerCreditos(ArrayList<String> listaInformacion, String tipo) {
+	ArrayList<Credito> listaCreditos=new ArrayList<>();
+//
+	String nombre="";
+	Double costo=0.0;
+	 int cuposDisponibles=0;
+	 int cuposRegistrados=0;
+	Horario horarioAux=null;
+	Lugar   lugarAux=null;
 
 
 
+	if(tipo.equals("Academico"))
+	{
+		EArea   areaAux=null;
+		Double  notaMin=null;
+		Academico academicoAux=null;
+
+		for (String elementos : listaInformacion) {
+
+			String[] elementoDividido=elementos.split(";");
+
+			for (int i = 0; i < elementoDividido.length; i++) {
+
+				switch(i){
+				case 0:nombre=elementoDividido[i];
+					   break;
+				case 1:costo=Double.parseDouble(elementoDividido[i]);
+					   break;
+				case 2:cuposDisponibles=Integer.parseInt(elementoDividido[i]);
+					   break;
+				case 3:cuposRegistrados=Integer.parseInt(elementoDividido[i]);
+					   break;
+				case 4:horarioAux=obtenerHorario(elementoDividido[i]);
+					   break;
+				case 5:lugarAux=obtenerLugar(elementoDividido[i]);
+					   break;
+				case 6:areaAux=obtenerArea(elementoDividido[i]);
+					   break;
+				case 7:notaMin=Double.parseDouble(elementoDividido[i]);
+					   break;
+				}
+			}
+			academicoAux=new Academico(costo, cuposDisponibles, horarioAux, lugarAux, notaMin, areaAux,tipo, nombre);
+			listaCreditos.add(academicoAux);
+		}
+	}else{
+		if(tipo.equals("Deportivo"))
+		{
+			EAsistenciaMinima asistenciaMin=null;
+
+			Deportivo deportivoAux=null;
+
+			for (String elementos : listaInformacion) {
+
+				String[] elementoDividido=elementos.split(";");
+
+				for (int i = 0; i < elementoDividido.length; i++) {
+
+					switch(i){
+					case 0:nombre=elementoDividido[i];
+					break;
+					case 1:costo=Double.parseDouble(elementoDividido[i]);
+					break;
+					case 2:cuposDisponibles=Integer.parseInt(elementoDividido[i]);
+					break;
+					case 3:cuposRegistrados=Integer.parseInt(elementoDividido[i]);
+					break;
+					case 4:horarioAux=obtenerHorario(elementoDividido[i]);
+					break;
+					case 5:lugarAux=obtenerLugar(elementoDividido[i]);
+					break;
+					case 6:asistenciaMin=obtenerAsistencia(elementoDividido[i]);
+					break;
+
+					}
+				}
+				deportivoAux=new Deportivo(costo, cuposDisponibles, horarioAux, lugarAux, asistenciaMin, tipo, nombre);
+				listaCreditos.add(deportivoAux);
+
+			}
+		}else{
+
+			Cultural culturalAux=null;
+
+			for (String elementos : listaInformacion) {
+
+				String[] elementoDividido=elementos.split(";");
+
+				for (int i = 0; i < elementoDividido.length; i++) {
+
+					switch(i){
+					case 0:nombre=elementoDividido[i];
+					break;
+					case 1:costo=Double.parseDouble(elementoDividido[i]);
+					break;
+					case 2:cuposDisponibles=Integer.parseInt(elementoDividido[i]);
+					break;
+					case 3:cuposRegistrados=Integer.parseInt(elementoDividido[i]);
+					break;
+					case 4:horarioAux=obtenerHorario(elementoDividido[i]);
+					break;
+					case 5:lugarAux=obtenerLugar(elementoDividido[i]);
+					break;
+
+					}
+				}
+				culturalAux=new Cultural(costo, cuposDisponibles, horarioAux, lugarAux, tipo, nombre);
+				listaCreditos.add(culturalAux);
+
+			}
+		}
+	}
+	return listaCreditos;
+}
+
+private EAsistenciaMinima obtenerAsistencia(String asistencia) {
+	if(asistencia.equals("OCHENTA_PORCIENTO"))
+	{
+		return EAsistenciaMinima.OCHENTA_PORCIENTO;
+	}else{
+		if(asistencia.equals("SETENTA_PORCIENTO"))
+		{
+			return EAsistenciaMinima.SETENTA_PORCIENTO;
+		}else{
+			return EAsistenciaMinima.SETENTA_Y_CINCO_PORCIENTO;
+		}
+
+	}
+}
+private Lugar obtenerLugar(String lugarString) {
+	Lugar lugar;
+	lugarString=lugarString.replace(" ", "");
+	String palabra="";
+	String bloque="";
+	int    piso=0;
+	int    numSalon=0;
+	int    contador;
+	String[] elementos=lugarString.split(",");
+	for (int i = 0; i < elementos.length; i++) {
+		contador=0;
+		palabra="";
+
+		for (int j = 0; j < elementos[i].length(); j++) {
+
+			if(elementos[i].charAt(j)=='='){
+				contador++;
+			}else{
+				if(contador==1 && elementos[i].charAt(j)!=']' )
+				{
+					palabra+=elementos[i].charAt(j);
+				}
+			}
+		}
+
+		if(i==0)
+		{
+			bloque=palabra;
+		}else{
+			if(i==1)
+			{
+				piso=Integer.parseInt(palabra);
+			}else{
+				numSalon=Integer.parseInt(palabra);
+			}
+		}
+	}
+
+	lugar=new Lugar(bloque, piso, numSalon);
+
+	return lugar;
+}
+private Horario obtenerHorario(String horarioAux) {
+	String palabra="";
+	String dias="";
+	String horarios="";
+	Horario horario;
+	int  contadorCorcheteAbre=0;
+	int  contadorCorcheteCierra=0;
+	int  contadorAgregado=0;
+	for (int i = 0; i < horarioAux.length(); i++) {
+
+		if(horarioAux.charAt(i)=='[')
+			contadorCorcheteAbre++;
+		if(horarioAux.charAt(i)==']')
+			contadorCorcheteCierra++;
+		if(horarioAux.charAt(i)!=']' && horarioAux.charAt(i)!='['){
+
+			if(contadorCorcheteAbre==2 && contadorCorcheteCierra==0)
+				palabra+=horarioAux.charAt(i);
+			if(contadorCorcheteAbre==3 && contadorCorcheteCierra==1)
+				palabra+=horarioAux.charAt(i);
+
+		}
+
+		if(contadorCorcheteAbre==2 && contadorCorcheteCierra==1 && contadorAgregado==0){
+			dias=palabra;
+			palabra="";
+			contadorAgregado++;
+		}
+		if(contadorCorcheteAbre==3 && contadorCorcheteCierra==2){
+			horarios=palabra;
+			palabra="";
+			break;
+		}
+	}
+//
+//
+
+	ArrayList<EDia> listaDias=obtenerDias(dias);
+	ArrayList<EHorario> listaHorarios=obtenerHorarios(horarios);
+	horario=new Horario(listaDias, listaHorarios);
+
+
+	return horario;
+}
+private ArrayList<EHorario> obtenerHorarios(String horarios) {
+	ArrayList<EHorario> listaHorariosEnum= new ArrayList<>();
+	horarios=horarios.replace(" ", "");
+	String[] listaHorarios=horarios.split(",");
+
+	for (String horario : listaHorarios) {
+		EHorario horarioAux=obtenerHorarioEnum(horario);
+		listaHorariosEnum.add(horarioAux);
+	}
+	return listaHorariosEnum;
+}
+private EHorario obtenerHorarioEnum(String horario) {
+	if(horario.equals("SIETE_A_NUEVE_AM"))
+	{
+		return EHorario.SIETE_A_NUEVE_AM;
+	}else{
+		if(horario.equals("NUEVE_A_ONCE_AM")){
+			return EHorario.NUEVE_A_ONCE_AM;
+		}else{
+			if(horario.equals("DOS_A_CUATRO_PM")){
+				return EHorario.DOS_A_CUATRO_PM;
+			}else{
+				return EHorario.CUATRO_A_SEIS_PM;
+			}
+
+		}
+	}
+}
+private EArea obtenerArea(String area) {
+	if(area.equals("DESARROLLO_PERSONAL"))
+	{
+		return EArea.DESARROLLO_PERSONAL;
+	}else{
+		if(area.equals("MATEMATICAS"))
+		{
+			return EArea.MATEMATICAS;
+		}else{
+			if(area.equals("PROGRAMACION"))
+			{
+				return EArea.PROGRAMACION;
+			}else{
+				return EArea.SISTEMAS;
+			}
+		}
+	}
+}
+private ArrayList<EDia> obtenerDias(String dias) {
+
+	ArrayList<EDia> listaDiasEnum= new ArrayList<>();
+	dias=dias.replace(" ", "");
+	String[] listaDias=dias.split(",");
+
+	for (String dia : listaDias) {
+		EDia diaAux=obtenerDia(dia);
+		listaDiasEnum.add(diaAux);
+	}
 
 
 
+	return listaDiasEnum;
+}
+private EDia obtenerDia(String dia) {
 
+	if(dia.equals("LUNES")){
+		return EDia.LUNES;
+	}else{
+		if(dia.equals("MARTES")){
+			return EDia.MARTES;
+		}else{
+			if(dia.equals("MIERCOLES")){
+				return EDia.MIERCOLES;
+			}else{
+				if(dia.equals("JUEVES")){
+					return EDia.JUEVES;
+				}else{
+					return EDia.VIERNES;
 
+				}
+			}
+		}
+	}
 
-
+}
 }
 
 

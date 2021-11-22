@@ -88,7 +88,7 @@ public abstract class Credito implements Serializable{
 		return false;
 	}
 	public abstract boolean actualizar(Credito creditoAux);
-
+	public abstract String  getDatosTXT();
 
 
 

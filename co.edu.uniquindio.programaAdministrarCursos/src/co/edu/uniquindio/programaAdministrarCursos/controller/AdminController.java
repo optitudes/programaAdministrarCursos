@@ -272,15 +272,16 @@ public class AdminController implements Initializable{
 
     @FXML
     void cargarDatosEstudianteAction(ActionEvent event) {
-//    	cargarDatosEstudiante();
+    	cargarDatosTXT("estudiante.txt");
 
     }
-    @FXML
+
+
+	@FXML
     void guardarDatosEstudianteAction(ActionEvent event) {
-    	guardarDatosEstudiante();
-
+    	guardarDatosTXT("estudiante.txt");
     }
-    
+
 	@FXML
     void cargarDatosInstructorAction(ActionEvent event) {
 //    	cargarDatosInstructor();
@@ -288,17 +289,17 @@ public class AdminController implements Initializable{
     }
     @FXML
     void guardarDatosInstructorAction(ActionEvent event) {
-//    	guardarDatosInstructor();
+    	guardarDatosTXT("instructor.txt");
 
     }
     @FXML
     void cargarDatosCreditoAction(ActionEvent event) {
-//    	cargarDatosCredito();
+    	cargarDatosTXT("credito");
 
     }
     @FXML
     void guardarDatosCreditoAction(ActionEvent event) {
-//    	 guardarDatosCredito();
+    	 guardarDatosTXT("credito");
 
     }
 
@@ -1471,10 +1472,14 @@ private ObservableList<Estudiante> getListaEstudiantesData() {
 			}
 		}
 	}
-	private void guardarDatosEstudiante() {
-		administradorHilos.startHiloGuardarDatosObtejos("estudiante.txt");
+	private void guardarDatosTXT(String nombreArchivo) {
+		administradorHilos.startHiloGuardarDatosObtejos(nombreArchivo);
 
 	}
+	 private void cargarDatosTXT(String nombreArchivo) {
+		 administradorHilos.startHiloCargarDatosObtejos(nombreArchivo);
+
+		}
 
 	public Admin getAdmin() {
 		return admin;

@@ -361,12 +361,17 @@ public void mostrarVentanaLogging() {
 	}
 
 	public void guardarEstudiantesTXT() throws IOException {
-		
-		
+
+
 	}
 
-	public void guardarDatosTXT(String tipo) {
+	public void guardarDatosTXT(String tipo) throws IOException {
 		bienestar.guardarDatosTXT(rutaArchivos+"/"+tipo,tipo);
+	}
+
+	public void CargarDatosTXT(String archivoTXTCargar) throws IOException {
+		bienestar.cargarDatosTXT(rutaArchivos+"/"+archivoTXTCargar,archivoTXTCargar);
+
 	}
 
 

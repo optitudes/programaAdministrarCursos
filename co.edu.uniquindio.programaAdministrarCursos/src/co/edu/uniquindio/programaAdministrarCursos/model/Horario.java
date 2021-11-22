@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Horario implements Serializable{
-	
+
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	ArrayList<EDia> listaDias=new ArrayList<EDia>();
@@ -33,4 +33,9 @@ public class Horario implements Serializable{
 	public void setListaHorarios(ArrayList<EHorario> listaHorarios) {
 		this.listaHorarios = listaHorarios;
 	}
+	@Override
+	public String toString() {
+		return "Horario [listaDias=" + listaDias + ", listaHorarios=" + listaHorarios + "]";
+	}
+
 }

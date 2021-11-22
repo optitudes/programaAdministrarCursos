@@ -1,0 +1,78 @@
+nov 20, 2021 4:25:27 PM co.edu.uniquindio.programaAdministrarCursos.model.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 20, 2021 4:26:02 PM co.edu.uniquindio.programaAdministrarCursos.model.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 20, 2021 8:04:07 PM co.edu.uniquindio.programaAdministrarCursos.model.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 20, 2021 8:10:23 PM co.edu.uniquindio.programaAdministrarCursos.model.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 20, 2021 8:13:03 PM co.edu.uniquindio.programaAdministrarCursos.model.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 20, 2021 8:13:06 PM co.edu.uniquindio.programaAdministrarCursos.model.Log run
+INFORMACIÓN: cierre de sesion adminaizen
+nov 20, 2021 8:54:04 PM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 20, 2021 8:55:12 PM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 20, 2021 8:56:53 PM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 20, 2021 8:58:58 PM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 20, 2021 8:59:48 PM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 20, 2021 9:05:44 PM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 20, 2021 9:11:11 PM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 20, 2021 9:17:46 PM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 20, 2021 9:18:49 PM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 21, 2021 10:49:15 AM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 21, 2021 10:49:38 AM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Credito Academico con nombre : Calculiñoactualizado por el admin:aizen
+nov 21, 2021 11:03:52 AM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 21, 2021 11:04:17 AM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Credito Deportivo con nombre : salud mamona actualizado por el admin: aizen
+nov 21, 2021 11:04:28 AM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Credito Academico con nombre : Calculo en el riñonactualizado por el admin:aizen
+nov 21, 2021 11:04:46 AM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Credito Cultural con nombre : lectura mamina actualizado por el admin: aizen
+nov 21, 2021 11:04:49 AM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: cierre de sesion adminaizen
+nov 21, 2021 11:10:32 AM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 21, 2021 11:12:38 AM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+ADVERTENCIA: Credito con nombre : salud fisica borrado por el admin: aizen
+nov 21, 2021 11:12:56 AM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+ADVERTENCIA: Credito con nombre : Calculo borrado por el admin: aizen
+nov 21, 2021 11:13:22 AM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+ADVERTENCIA: Credito con nombre : lectura general borrado por el admin: aizen
+nov 21, 2021 11:14:11 AM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 21, 2021 11:14:25 AM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+ADVERTENCIA: Credito con nombre : lectura general borrado por el admin: aizen
+nov 21, 2021 11:14:29 AM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+ADVERTENCIA: Credito con nombre : Calculo borrado por el admin: aizen
+nov 21, 2021 11:14:35 AM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+ADVERTENCIA: Credito con nombre : salud fisica borrado por el admin: aizen
+nov 21, 2021 11:24:11 AM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 21, 2021 11:24:20 AM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: cierre de sesion adminaizen
+nov 21, 2021 3:41:58 PM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 21, 2021 3:55:40 PM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 21, 2021 4:14:14 PM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Inicio de sesion admin
+nov 21, 2021 4:14:19 PM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: cierre de sesion adminaizen
+nov 21, 2021 4:14:54 PM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: Inicio de sesion estudiante
+nov 21, 2021 4:14:56 PM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: cierre de sesion estudiante :sebas
+nov 21, 2021 4:14:59 PM co.edu.uniquindio.programaAdministrarCursos.hilos.Log run
+INFORMACIÓN: cierre de sesion estudiante :sebas
