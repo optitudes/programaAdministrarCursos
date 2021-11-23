@@ -5,7 +5,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 
 import co.edu.uniquindio.programaAdministrarCursos.Main;
-import co.edu.uniquindio.programaAdministrarCursos.hilos.Log;
+import co.edu.uniquindio.programaAdministrarCursos.hilos.HiloLog;
 import co.edu.uniquindio.programaAdministrarCursos.model.Instructor;
 import javafx.fxml.Initializable;
 import javafx.event.ActionEvent;
@@ -16,7 +16,7 @@ import javafx.scene.control.Label;
 public class InstructorController implements Initializable{
 	Main main;
 	Instructor instructorLoggeado=new Instructor("Diego", "103","dig@instru.com", "1234");
-	Log loggerInstructor;
+	HiloLog loggerInstructor;
     @FXML
     private Label lblDia;
 
@@ -44,7 +44,7 @@ public class InstructorController implements Initializable{
 		
 	}
 public void registrarAccion(String mensaje, Level tipo){
-	loggerInstructor= new Log(mensaje,tipo);
+	loggerInstructor= new HiloLog(mensaje,tipo);
 	loggerInstructor.hilo.start();
 
 }

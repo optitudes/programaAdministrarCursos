@@ -11,11 +11,12 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 import co.edu.uniquindio.programaAdministrarCursos.Main;
-import co.edu.uniquindio.programaAdministrarCursos.hilos.Log;
+import co.edu.uniquindio.programaAdministrarCursos.hilos.HiloLog;
 import co.edu.uniquindio.programaAdministrarCursos.model.AdminHilos;
 import javafx.fxml.Initializable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
@@ -93,8 +94,14 @@ public class LoggingController implements Initializable{
 
 	@FXML
 	void accederAction(ActionEvent event) {
-		if(!main.getRutaRaiz().isEmpty())
-		{
+		if(main.getRutaRaiz().isEmpty())
+		{	main.mostrarMensaje("Atención!","El programa no cuenta con un directorio raiz",
+						"Por favor ingrese una carpeta para que el programa pueda "
+								+" desplegar sus ficheros. En caso de windows se recomienda"
+								+ " la dirección (C:/td/persistencia/) en caso de linux (home/td/persistencia) ", AlertType.ERROR);
+
+			obtenerRutaPersistencia();
+		}else{
 			if(rBtnAdmin.isSelected())
 				logearAdmin();
 			if(rBtnEstudiante.isSelected())

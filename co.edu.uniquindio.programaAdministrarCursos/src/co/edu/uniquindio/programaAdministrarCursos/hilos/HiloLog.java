@@ -6,17 +6,17 @@ import java.util.logging.SimpleFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public  class Log implements Runnable{
+public  class HiloLog implements Runnable{
 	
 	private String mensaje="";
 	private Level  tipo;
 	public Thread hilo;
 	private String ruta;
-	private static final Logger LOGGER = Logger.getLogger(Log.class.getName());
+	private static final Logger LOGGER = Logger.getLogger(HiloLog.class.getName());
 	
 	
 	
-	public Log(String mensaje, Level tipo) {
+	public HiloLog(String mensaje, Level tipo) {
 		hilo= new Thread(this);
 	    this.mensaje=mensaje;
 	    this.tipo=tipo;

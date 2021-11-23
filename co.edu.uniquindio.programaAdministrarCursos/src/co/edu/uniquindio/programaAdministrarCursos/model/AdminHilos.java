@@ -1,11 +1,14 @@
 package co.edu.uniquindio.programaAdministrarCursos.model;
 
 import java.io.IOException;
+import java.time.Clock;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.logging.Level;
 
 import co.edu.uniquindio.programaAdministrarCursos.Main;
 import co.edu.uniquindio.programaAdministrarCursos.controller.AdminController;
-import co.edu.uniquindio.programaAdministrarCursos.hilos.Log;
+import co.edu.uniquindio.programaAdministrarCursos.hilos.HiloLog;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
@@ -16,12 +19,14 @@ public class AdminHilos implements Runnable {
 
 	String archivoTXTGuardar;
 	String archivoTXTCargar;
+	String fecha;
+	String nombreArchivoBackup="backup";
 
 
 
 
 
-	Log hiloLog;
+	HiloLog hiloLog;
 
 
 	Thread obtenerDirectorioRaiz;
@@ -62,6 +67,7 @@ public class AdminHilos implements Runnable {
 		{
 			try {
 				main.CargarDatosTXT(archivoTXTCargar);
+				adminController.refrescarTablas();
 				startHiloLogger("Datos Cargados del txt  del registro ["+archivoTXTCargar+"] por el admin "+adminController.getAdmin().getName(),Level.INFO);
 
 			} catch (IOException e) {
@@ -72,7 +78,7 @@ public class AdminHilos implements Runnable {
 
 	}
 	public void startHiloLogger(String mensaje, Level tipo){
-		hiloLog=new Log(mensaje, tipo);
+		hiloLog=new HiloLog(mensaje, tipo);
 		hiloLog.setRuta(main.getRutaLog());
 		hiloLog.start();
 
@@ -87,10 +93,10 @@ public class AdminHilos implements Runnable {
 			obtenerDirectorioRaiz= new Thread(this);
 			obtenerDirectorioRaiz.start();
 	}
-	public Log getHiloLog() {
+	public HiloLog getHiloLog() {
 		return hiloLog;
 	}
-	public void setHiloLog(Log hiloLog) {
+	public void setHiloLog(HiloLog hiloLog) {
 		this.hiloLog = hiloLog;
 	}
 	public Thread getObtenerDirectorioRaiz() {
@@ -99,21 +105,39 @@ public class AdminHilos implements Runnable {
 	public void setObtenerDirectorioRaiz(Thread obtenerDirectorioRaiz) {
 		this.obtenerDirectorioRaiz = obtenerDirectorioRaiz;
 	}
-	public void startHiloGuardarDatosEstudiantes() {
-		// TODO Auto-generated method stub
-
+	
+	public String getFecha() {
+		return fecha;
+	}
+	public void setFecha(String fecha) {
+		this.fecha = fecha;
 	}
 	public void startHiloGuardarDatosObtejos(String archivoTXT) {
 		hiloGuardarTXT= new Thread(this);
 		this.archivoTXTGuardar=archivoTXT;
 		hiloGuardarTXT.start();
-
-
 	}
 	public void startHiloCargarDatosObtejos(String nombreArchivo) {
 		hiloCargarTXT= new Thread(this);
 		this.archivoTXTCargar=nombreArchivo;
 		hiloCargarTXT.start();
+	}
+	public void startHiloBackup() {
+		fecha=""+LocalDate.now(Clock.systemDefaultZone ())+LocalTime.now();
+		fecha=fecha.replaceAll("-","_");
+		fecha=fecha.replaceAll(":","_");
+		fecha=fecha.replace(".","_");
+		
+		
+		try {
+			main.serializarBienestar(nombreArchivoBackup+fecha+".dat");
+		} catch (IOException e) {
+			adminController.mostrarMensaje("Error","No se pudo hacer el backup",
+										  "El programa no pudo crear el backup"
+										  + " póngase en contacto con el proveedor"
+										  + " del servicio", AlertType.ERROR);
+			adminController.registrarAccion("Error al hacer backup admin ["+adminController.getAdmin().getName()+"]",Level.SEVERE);
+		}
 	}
 
 

@@ -1,8 +1,10 @@
 package co.edu.uniquindio.programaAdministrarCursos.model;
 
+import java.io.Serializable;
+
 import javafx.scene.DepthTest;
 
-public class Deportivo extends Credito{
+public class Deportivo extends Credito implements Serializable{
 
 	/**
 	 *
@@ -21,6 +23,12 @@ public class Deportivo extends Credito{
 					String nombre) {
 		super(costo, cuposDisponibles, 0, horario, lugar,  tipo, nombre);
 		this.asistenciaMinima=asistenciaMinima;
+	}
+
+	public Deportivo(Double costo, int cuposDisponibles, Horario horarioAux, Lugar lugarAux,
+			EAsistenciaMinima asistenciaMin, String tipo, String nombre, int cuposRegistrados) {
+		super(costo, cuposDisponibles, cuposRegistrados, horarioAux, lugarAux,  tipo, nombre);
+		this.asistenciaMinima=asistenciaMin;
 	}
 
 	public static long getSerialversionuid() {
@@ -58,8 +66,8 @@ public class Deportivo extends Credito{
 	@Override
 	public String getDatosTXT() {
 
-		return getNombre()+";"+getCosto()+";"+getCuposDisponibles()+";"+getCuposRegistrados()+";"+getHorario()+";"
-			   +getLugar()+";"+getAsistenciaMinima()+";";
+		return getNombre()+";"+getCosto()+";"+getCuposDisponibles()+";"+getCuposRegistrados()+";"+getHorario().getListaDias()+";"+
+				getHorario().getListaHorarios()+";"+getLugar().getBloque()+";"+getLugar().getPiso()+";"+getLugar().getNumSalon()+";"+getAsistenciaMinima()+";";
 	}
 
 }

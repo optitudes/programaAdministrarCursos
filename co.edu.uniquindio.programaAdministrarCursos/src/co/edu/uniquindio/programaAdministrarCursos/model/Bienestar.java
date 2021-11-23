@@ -1,17 +1,16 @@
 package co.edu.uniquindio.programaAdministrarCursos.model;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.logging.FileHandler;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 
+public class Bienestar implements Serializable {
 
-import co.edu.uniquindio.programaAdministrarCursos.exception.EstudianteNoCreadoException;
-
-public class Bienestar {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private static final Logger LOGGER = Logger.getLogger(Bienestar.class.getName());
 
@@ -49,85 +48,11 @@ public class Bienestar {
 	public String toString() {
 		return "Bienestar [nombre=" + nombre + ", nit=" + nit + "]";
 	}
+	
 
-//	public void cargarDatos(String rutaUsuarios,String rutaCreditos){
-//		try {
-//			listaUsuarios=(ArrayList<User>) Persistencia.deseRializarObjeto(rutaUsuarios);
-//			listaCreditos=(ArrayList<Credito>) Persistencia.deseRializarObjeto(rutaCreditos);
-//			registrarDatosCargados();
-//		} catch (Exception e) {
-//			registrarErrorCargarDatos(e.getMessage());
-//		}
-//	}
-//	public void guardarDatos(String rutaUsuarios,String rutaCreditos)
-//	{
-//		try {
-//			Persistencia.serializarObjeto(rutaUsuarios, listaUsuarios);
-//			Persistencia.serializarObjeto(rutaCreditos,listaCreditos);
-//			registrarDatosGuardados();
-//		} catch (IOException e) {
-//			registrarErrorGuardarDatos(e.getMessage());
-//		}
-//	}
-//
-//	private void registrarErrorGuardarDatos(String mensaje) {
-//		FileHandler archivo;
-//
-//		try {
-//			archivo= new FileHandler("src/resources/loggers/errorGuardarDatosBienestar.txt",true);//si es true no sobreescribe
-//			archivo.setFormatter(new SimpleFormatter());
-//			LOGGER.addHandler(archivo);
-//
-//			LOGGER.log(Level.INFO,mensaje);
-//
-//		} catch (SecurityException | IOException e) {
-//			e.printStackTrace();
-//		}
-//	}
-//private void registrarErrorCargarDatos(String mensaje) {
-//	FileHandler archivo;
-//
-//		try {
-//			archivo= new FileHandler("src/resources/loggers/errorCargarDatosBienestar.txt",true);//si es true no sobreescribe
-//			archivo.setFormatter(new SimpleFormatter());
-//			LOGGER.addHandler(archivo);
-//
-//			LOGGER.log(Level.INFO,mensaje);
-//
-//		} catch (SecurityException | IOException e) {
-//			e.printStackTrace();
-//		}
-//	}
-//
-//	private void registrarDatosGuardados() {
-//		FileHandler archivo;
-//
-//		try {
-//			archivo= new FileHandler("src/resources/loggers/datosGuardadosBienestar.txt",true);//si es true no sobreescribe
-//			archivo.setFormatter(new SimpleFormatter());
-//			LOGGER.addHandler(archivo);
-//
-//			LOGGER.log(Level.INFO, "datos guardados por  user:admin");
-//
-//		} catch (SecurityException | IOException e) {
-//			e.printStackTrace();
-//		}
-//	}
-//
-//private void registrarDatosCargados() {
-//	FileHandler archivo;
-//
-//		try {
-//			archivo= new FileHandler("src/resources/loggers/datosCargadosBienestar.txt",true);//si es true no sobreescribe
-//			archivo.setFormatter(new SimpleFormatter());
-//			LOGGER.addHandler(archivo);
-//
-//			LOGGER.log(Level.INFO, "datos cargados por  user:admin");
-//
-//		} catch (SecurityException | IOException e) {
-//			e.printStackTrace();
-//		}
-//	}
+public static Logger getLogger() {
+		return LOGGER;
+	}
 public ArrayList<Estudiante> getEstudiantes() {
 	return listaEstudiantes;
 }
@@ -138,25 +63,26 @@ public void quemarDatos() {
 	ArrayList<EDia> listaDias=new ArrayList<EDia>();
 	ArrayList<EHorario> listaHorarios= new ArrayList<EHorario>();
 
-	Estudiante estudiante=new Estudiante("juan","1193370914","juan@uqvirtual.co","1111");
-	Admin       admin= new Admin("zeus","1002","admin@gmail.com","1234");
+	Estudiante estudiante=new Estudiante ("juan","1193370914","juan@uqvirtual.co","1111");
+	Admin       admin= new Admin         ("zeus","1002","admin@gmail.com","1234");
 	Instructor instructor= new Instructor("Orfeo","1002","orfeo@gmail.com","2222");
+
 	listaDias.add(EDia.LUNES);
 	listaDias.add(EDia.JUEVES);
 	listaHorarios.add(EHorario.SIETE_A_NUEVE_AM);
 	listaHorarios.add(EHorario.NUEVE_A_ONCE_AM);
 
 	Deportivo  deportivo= new Deportivo(2,2,new Horario(listaDias, listaHorarios),new Lugar("bloque 1",3, 2),EAsistenciaMinima.OCHENTA_PORCIENTO,"Deportivo","salud fisica");
-	Cultural  cultural = new Cultural(2,2,new Horario(listaDias, listaHorarios), new Lugar("dos", 2, 2),"Cultural","lectura general");
-	Academico academico= new Academico(2, 3, new Horario(listaDias, listaHorarios), new Lugar("Ingenieria", 2, 1), 4.0, EArea.MATEMATICAS, "Academica", "Calculo");
+	Cultural  cultural = new Cultural  (55000,2,new Horario(listaDias, listaHorarios), new Lugar("dos", 2, 2),"Cultural","lectura general");
+	Academico academico= new Academico (2, 3, new Horario(listaDias, listaHorarios), new Lugar("Ingenieria", 2, 1), 4.0, EArea.MATEMATICAS, "Academica", "Calculo");
 
 
-	listaEstudiantes.add(estudiante);
-	listaAdmins.add(admin);
+	listaEstudiantes.add (estudiante);
+	listaAdmins.add      (admin);
 	listaInstructores.add(instructor);
-	listaCreditos.add(deportivo);
-	listaCreditos.add(academico);
-	listaCreditos.add(cultural);
+	listaCreditos.add    (deportivo);
+	listaCreditos.add    (academico);
+	listaCreditos.add    (cultural);
 
 
 
@@ -251,9 +177,37 @@ public boolean actualizarInstructor(Instructor instructorAux, Instructor instruc
 	return false;
 }
 public boolean actualizarCredito(Credito creditoAux, Credito creditoSeleccionado) {
-	int index=listaCreditos.indexOf(creditoSeleccionado);
-	if(listaCreditos.get(index).actualizar(creditoAux))
-		return true;
+	try {
+		int index=listaCreditos.indexOf(creditoSeleccionado);
+
+		if(listaCreditos.get(index) instanceof Academico){
+			Academico academicoAux=(Academico) listaCreditos.get(index);
+			academicoAux.actualizar(creditoAux);
+			listaCreditos.set(index, academicoAux);
+			if(listaCreditos.get(index).actualizar(creditoAux))
+				return true;
+
+		}
+		if(listaCreditos.get(index) instanceof Cultural){
+			Cultural culturalAux=(Cultural) listaCreditos.get(index);
+			culturalAux.actualizar(creditoAux);
+			listaCreditos.set(index, culturalAux);
+			if(listaCreditos.get(index).actualizar(creditoAux))
+				return true;
+
+		}
+		if(listaCreditos.get(index) instanceof Deportivo){
+			Deportivo deportivoAux=(Deportivo) listaCreditos.get(index);
+			deportivoAux.actualizar(creditoAux);
+			listaCreditos.set(index, deportivoAux);
+			if(listaCreditos.get(index).actualizar(creditoAux))
+				return true;
+
+		}
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+
 	return false;
 }
 public Deportivo crearDeportivo(String nombre, int cuposDisponibles, double costo, Horario horario,
@@ -371,45 +325,86 @@ public void cargarDatosTXT(String rutaArchivo, String tipo) throws IOException {
 		listaCreditoRecuperado.addAll(obtenerCreditos(listaInformacionAux2,"Academico"));
 		listaCreditoRecuperado.addAll(obtenerCreditos(listaInformacionAux1,"Cultural"));
 		listaCreditoRecuperado.addAll(obtenerCreditos(listaInformacion,"Deportivo"));
+		System.out.println("hola");
 		listaCreditos=listaCreditoRecuperado;
-	}
-	if(tipo.equals("estudiante.txt"))
-	{
+
+	}else{
+		
+		String nombre="";
+		String iD="";
+		String correo="";
+		String contrasenia="";
+
+		if(tipo.equals("estudiante.txt"))
+		{
+		ArrayList<Estudiante> listaEstudiantesRecuperados=new ArrayList<Estudiante>();
 		listaInformacion=Persistencia.leerArchivo(rutaArchivo);
 		for (String elementos : listaInformacion) {
 			{
+				String[] elementoDividido=elementos.split(";");
+				for (int i = 0; i < elementoDividido.length; i++) {
 
+					switch(i){
+					case 0:nombre=elementoDividido[i];
+					break;
+					case 1:iD=elementoDividido[i];
+					break;
+					case 2:correo=elementoDividido[i];
+					break;
+					case 3:contrasenia=elementoDividido[i];
+					break;
+					}
+				}
+				Estudiante estudianteAux= new Estudiante(nombre, iD, correo, contrasenia);
+				listaEstudiantesRecuperados.add(estudianteAux);
 			}
-
 		}
+		listaEstudiantes=listaEstudiantesRecuperados;
 
 	}
-	if(tipo.equals("instructor.txt"))
-	{
-		listaInformacion=Persistencia.leerArchivo(rutaArchivo);
-		for (String elementos : listaInformacion) {
-			{
+		if(tipo.equals("instructor.txt"))
+		{
+			ArrayList<Instructor> listaInstructoresRecuperados=new ArrayList<Instructor>();
+			listaInformacion=Persistencia.leerArchivo(rutaArchivo);
+			for (String elementos : listaInformacion) {
+				{
+					String[] elementoDividido=elementos.split(";");
+					for (int i = 0; i < elementoDividido.length; i++) {
 
+						switch(i){
+						case 0:nombre=elementoDividido[i];
+						break;
+						case 1:iD=elementoDividido[i];
+						break;
+						case 2:correo=elementoDividido[i];
+						break;
+						case 3:contrasenia=elementoDividido[i];
+						break;
+						}
+					}
+					Instructor instructorAux= new Instructor(nombre, iD, correo, contrasenia);
+					listaInstructoresRecuperados.add(instructorAux);
+				}
 			}
-
+			listaInstructores=listaInstructoresRecuperados;
 		}
-
 	}
-
-
-
 }
 private ArrayList<Credito> obtenerCreditos(ArrayList<String> listaInformacion, String tipo) {
 	ArrayList<Credito> listaCreditos=new ArrayList<>();
-//
+	ArrayList<EDia>    listaDias=new ArrayList<EDia>();
+	ArrayList<EHorario>listaHorarios=new ArrayList<EHorario>();
 	String nombre="";
+	String bloque="";
 	Double costo=0.0;
 	 int cuposDisponibles=0;
 	 int cuposRegistrados=0;
+	 int    piso=0;
+	 int    numSalon=0;
+
 	Horario horarioAux=null;
 	Lugar   lugarAux=null;
-
-
+	
 
 	if(tipo.equals("Academico"))
 	{
@@ -432,17 +427,26 @@ private ArrayList<Credito> obtenerCreditos(ArrayList<String> listaInformacion, S
 					   break;
 				case 3:cuposRegistrados=Integer.parseInt(elementoDividido[i]);
 					   break;
-				case 4:horarioAux=obtenerHorario(elementoDividido[i]);
+				case 4:listaDias=obtenerDias(elementoDividido[i]);
 					   break;
-				case 5:lugarAux=obtenerLugar(elementoDividido[i]);
+				case 5:listaHorarios=obtenerHorarios(elementoDividido[i]);
 					   break;
-				case 6:areaAux=obtenerArea(elementoDividido[i]);
+				case 6:bloque=elementoDividido[i];
 					   break;
-				case 7:notaMin=Double.parseDouble(elementoDividido[i]);
+				case 7:piso=Integer.parseInt(elementoDividido[i]);
+					   break;
+				case 8:numSalon=Integer.parseInt(elementoDividido[i]);
+					   break;
+				case 9:areaAux=obtenerArea(elementoDividido[i]);
+					   break;
+				case 10:notaMin=Double.parseDouble(elementoDividido[i]);
 					   break;
 				}
 			}
-			academicoAux=new Academico(costo, cuposDisponibles, horarioAux, lugarAux, notaMin, areaAux,tipo, nombre);
+			horarioAux= new Horario(listaDias, listaHorarios);
+			lugarAux= new Lugar(bloque, piso, numSalon);
+			
+			academicoAux=new Academico(costo, cuposDisponibles, horarioAux, lugarAux, notaMin, areaAux,tipo, nombre,cuposRegistrados);
 			listaCreditos.add(academicoAux);
 		}
 	}else{
@@ -467,16 +471,24 @@ private ArrayList<Credito> obtenerCreditos(ArrayList<String> listaInformacion, S
 					break;
 					case 3:cuposRegistrados=Integer.parseInt(elementoDividido[i]);
 					break;
-					case 4:horarioAux=obtenerHorario(elementoDividido[i]);
+					case 4:listaDias=obtenerDias(elementoDividido[i]);
 					break;
-					case 5:lugarAux=obtenerLugar(elementoDividido[i]);
+					case 5:listaHorarios=obtenerHorarios(elementoDividido[i]);
 					break;
-					case 6:asistenciaMin=obtenerAsistencia(elementoDividido[i]);
+					case 6:bloque=elementoDividido[i];
+					break;
+					case 7:piso=Integer.parseInt(elementoDividido[i]);
+					break;
+					case 8:numSalon=Integer.parseInt(elementoDividido[i]);
+					break;
+					case 9:asistenciaMin=obtenerAsistencia(elementoDividido[i]);
 					break;
 
 					}
 				}
-				deportivoAux=new Deportivo(costo, cuposDisponibles, horarioAux, lugarAux, asistenciaMin, tipo, nombre);
+				horarioAux= new Horario(listaDias, listaHorarios);
+				lugarAux= new Lugar(bloque, piso, numSalon);
+				deportivoAux=new Deportivo(costo, cuposDisponibles, horarioAux, lugarAux, asistenciaMin, tipo, nombre,cuposRegistrados);
 				listaCreditos.add(deportivoAux);
 
 			}
@@ -499,14 +511,22 @@ private ArrayList<Credito> obtenerCreditos(ArrayList<String> listaInformacion, S
 					break;
 					case 3:cuposRegistrados=Integer.parseInt(elementoDividido[i]);
 					break;
-					case 4:horarioAux=obtenerHorario(elementoDividido[i]);
+					case 4:listaDias=obtenerDias(elementoDividido[i]);
 					break;
-					case 5:lugarAux=obtenerLugar(elementoDividido[i]);
+					case 5:listaHorarios=obtenerHorarios(elementoDividido[i]);
+					break;
+					case 6:bloque=elementoDividido[i];
+					break;
+					case 7:piso=Integer.parseInt(elementoDividido[i]);
+					break;
+					case 8:numSalon=Integer.parseInt(elementoDividido[i]);
 					break;
 
 					}
 				}
-				culturalAux=new Cultural(costo, cuposDisponibles, horarioAux, lugarAux, tipo, nombre);
+				horarioAux= new Horario(listaDias, listaHorarios);
+				lugarAux= new Lugar(bloque, piso, numSalon);
+				culturalAux=new Cultural(costo, cuposDisponibles, horarioAux, lugarAux, tipo, nombre,cuposRegistrados);
 				listaCreditos.add(culturalAux);
 
 			}
@@ -529,95 +549,12 @@ private EAsistenciaMinima obtenerAsistencia(String asistencia) {
 
 	}
 }
-private Lugar obtenerLugar(String lugarString) {
-	Lugar lugar;
-	lugarString=lugarString.replace(" ", "");
-	String palabra="";
-	String bloque="";
-	int    piso=0;
-	int    numSalon=0;
-	int    contador;
-	String[] elementos=lugarString.split(",");
-	for (int i = 0; i < elementos.length; i++) {
-		contador=0;
-		palabra="";
 
-		for (int j = 0; j < elementos[i].length(); j++) {
-
-			if(elementos[i].charAt(j)=='='){
-				contador++;
-			}else{
-				if(contador==1 && elementos[i].charAt(j)!=']' )
-				{
-					palabra+=elementos[i].charAt(j);
-				}
-			}
-		}
-
-		if(i==0)
-		{
-			bloque=palabra;
-		}else{
-			if(i==1)
-			{
-				piso=Integer.parseInt(palabra);
-			}else{
-				numSalon=Integer.parseInt(palabra);
-			}
-		}
-	}
-
-	lugar=new Lugar(bloque, piso, numSalon);
-
-	return lugar;
-}
-private Horario obtenerHorario(String horarioAux) {
-	String palabra="";
-	String dias="";
-	String horarios="";
-	Horario horario;
-	int  contadorCorcheteAbre=0;
-	int  contadorCorcheteCierra=0;
-	int  contadorAgregado=0;
-	for (int i = 0; i < horarioAux.length(); i++) {
-
-		if(horarioAux.charAt(i)=='[')
-			contadorCorcheteAbre++;
-		if(horarioAux.charAt(i)==']')
-			contadorCorcheteCierra++;
-		if(horarioAux.charAt(i)!=']' && horarioAux.charAt(i)!='['){
-
-			if(contadorCorcheteAbre==2 && contadorCorcheteCierra==0)
-				palabra+=horarioAux.charAt(i);
-			if(contadorCorcheteAbre==3 && contadorCorcheteCierra==1)
-				palabra+=horarioAux.charAt(i);
-
-		}
-
-		if(contadorCorcheteAbre==2 && contadorCorcheteCierra==1 && contadorAgregado==0){
-			dias=palabra;
-			palabra="";
-			contadorAgregado++;
-		}
-		if(contadorCorcheteAbre==3 && contadorCorcheteCierra==2){
-			horarios=palabra;
-			palabra="";
-			break;
-		}
-	}
-//
-//
-
-	ArrayList<EDia> listaDias=obtenerDias(dias);
-	ArrayList<EHorario> listaHorarios=obtenerHorarios(horarios);
-	horario=new Horario(listaDias, listaHorarios);
-
-
-	return horario;
-}
 private ArrayList<EHorario> obtenerHorarios(String horarios) {
 	ArrayList<EHorario> listaHorariosEnum= new ArrayList<>();
 	horarios=horarios.replace(" ", "");
+	horarios=horarios.replace("[", "");
+	horarios=horarios.replace("]", "");
 	String[] listaHorarios=horarios.split(",");
 
 	for (String horario : listaHorarios) {
@@ -665,15 +602,14 @@ private ArrayList<EDia> obtenerDias(String dias) {
 
 	ArrayList<EDia> listaDiasEnum= new ArrayList<>();
 	dias=dias.replace(" ", "");
+	dias=dias.replace("[", "");
+	dias=dias.replace("]", "");
 	String[] listaDias=dias.split(",");
 
 	for (String dia : listaDias) {
 		EDia diaAux=obtenerDia(dia);
 		listaDiasEnum.add(diaAux);
 	}
-
-
-
 	return listaDiasEnum;
 }
 private EDia obtenerDia(String dia) {

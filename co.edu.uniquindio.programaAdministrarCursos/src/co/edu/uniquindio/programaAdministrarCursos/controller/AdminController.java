@@ -18,7 +18,7 @@ import co.edu.uniquindio.programaAdministrarCursos.Main;
 import co.edu.uniquindio.programaAdministrarCursos.exception.DatosInvalidosException;
 import co.edu.uniquindio.programaAdministrarCursos.exception.EstudianteNoCreadoException;
 import co.edu.uniquindio.programaAdministrarCursos.exception.InstructorNoCreadoException;
-import co.edu.uniquindio.programaAdministrarCursos.hilos.Log;
+import co.edu.uniquindio.programaAdministrarCursos.hilos.HiloLog;
 import co.edu.uniquindio.programaAdministrarCursos.model.Academico;
 import co.edu.uniquindio.programaAdministrarCursos.model.Admin;
 import co.edu.uniquindio.programaAdministrarCursos.model.AdminHilos;
@@ -55,7 +55,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 public class AdminController implements Initializable{
 
 	Admin admin= new Admin("aizen","1991" , "aizen@lord.com", "1001");
-	Log  loggerAdmin;
+	HiloLog  loggerAdmin;
 	AdminHilos administradorHilos;
 
 	Main main;
@@ -90,7 +90,8 @@ public class AdminController implements Initializable{
 
     @FXML
     private Button btnCerrarSesion;
-
+    @FXML
+    private Button btnMenuBackup;
     @FXML
     private TextField txtNombreEstudiante;
 
@@ -284,7 +285,7 @@ public class AdminController implements Initializable{
 
 	@FXML
     void cargarDatosInstructorAction(ActionEvent event) {
-//    	cargarDatosInstructor();
+		cargarDatosTXT("instructor.txt");
 
     }
     @FXML
@@ -295,6 +296,7 @@ public class AdminController implements Initializable{
     @FXML
     void cargarDatosCreditoAction(ActionEvent event) {
     	cargarDatosTXT("credito");
+    	refrescarTablas();
 
     }
     @FXML
@@ -302,13 +304,6 @@ public class AdminController implements Initializable{
     	 guardarDatosTXT("credito");
 
     }
-
-
-
-
-
-
-
 	@FXML
     void nuevoEstudianteAction(ActionEvent event) {
     	nuevoEstudiante();
@@ -375,9 +370,19 @@ public class AdminController implements Initializable{
     void actualizarCurso(ActionEvent event) {
     	actualizarCreditoAction();
 
-    }
+	}
+
+	@FXML
+	void menuBackupAction(ActionEvent event) {
+		main.cargarDatosBackup();
+		refrescarTablas();
+	
+//		menuBackup();
+
+	}
 
 
+	
 
 	@FXML
     void BtnElegirDeportivo(ActionEvent event) {
@@ -411,9 +416,12 @@ public class AdminController implements Initializable{
     @FXML
     void cerrarSesionActrion(ActionEvent event) {
     	registrarAccion("cierre de sesion admin"+admin.getName(),Level.INFO );
+    	hacerBackup();
     	main.mostrarVentanaLogging();
 
     }
+
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
@@ -1437,20 +1445,21 @@ private boolean validarDatosCredito(String nombre, String cuposDisponibles, Stri
 		}
 }
 private ObservableList<Credito> getListaCreditosData() {
+	listaCreditosData.clear();
 	listaCreditosData.addAll(main.obtenerCreditos());
 
 	return listaCreditosData;
 }
 
 private ObservableList<Estudiante> getListaEstudiantesData() {
-
+	listaEstudiantesData.clear();
 	listaEstudiantesData.addAll(main.obtenerEstudiantes());
 
 	return listaEstudiantesData;
 }
 
 	private ObservableList<Instructor> getListaInstructoresData() {
-
+		listaInstructoresData.clear();
 		listaInstructoresData.addAll(main.obtenerInstructores());
 		return listaInstructoresData;
 	}
@@ -1480,13 +1489,32 @@ private ObservableList<Estudiante> getListaEstudiantesData() {
 		 administradorHilos.startHiloCargarDatosObtejos(nombreArchivo);
 
 		}
-
+	private void hacerBackup() {
+		administradorHilos.startHiloBackup();
+	}
+	private void menuBackup() {
+		// TODO Auto-generated method stub
+		
+	}
 	public Admin getAdmin() {
 		return admin;
 	}
 
 	public void setAdmin(Admin admin) {
 		this.admin = admin;
+	}
+
+	public void refrescarTablas() {
+		
+		
+		tableCreditos.setItems(getListaCreditosData());
+		tableEstudiantes.setItems(getListaEstudiantesData());
+		tableInstructor.setItems(getListaInstructoresData());
+		
+		tableCreditos.refresh();
+		tableEstudiantes.refresh();
+		tableInstructor.refresh();
+		
 	}
 
 

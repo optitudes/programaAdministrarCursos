@@ -5,7 +5,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 
 import co.edu.uniquindio.programaAdministrarCursos.Main;
-import co.edu.uniquindio.programaAdministrarCursos.hilos.Log;
+import co.edu.uniquindio.programaAdministrarCursos.hilos.HiloLog;
 import co.edu.uniquindio.programaAdministrarCursos.model.Estudiante;
 
 import java.net.URL;
@@ -22,7 +22,7 @@ public class EstudianteController implements Initializable{
 
 	Main main;
 	Estudiante estudianteLoggeado=new Estudiante("sebas", "1002", "sebas@bienestar.con", "1234");
-	Log loggerEstudiante;
+	HiloLog loggerEstudiante;
     @FXML
     private ResourceBundle resources;
 
@@ -57,7 +57,7 @@ public class EstudianteController implements Initializable{
 		
 	}
 public void registrarAccion(String mensaje, Level tipo){
-	loggerEstudiante= new Log(mensaje,tipo);
+	loggerEstudiante= new HiloLog(mensaje,tipo);
 	loggerEstudiante.hilo.start();
 
 }

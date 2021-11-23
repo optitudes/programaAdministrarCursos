@@ -26,7 +26,7 @@
       <AnchorPane prefHeight="124.0" prefWidth="710.0" BorderPane.alignment="CENTER">
          <children>
             <Label fx:id="lblUserAdmin" layoutX="14.0" layoutY="93.0" prefHeight="17.0" prefWidth="196.0" text="User :" />
-            <ImageView fitHeight="110.0" fitWidth="176.0" layoutX="575.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="110.0" fitWidth="176.0" layoutX="582.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../../../resources/pngs/Admin.png" />
                </image>
@@ -39,6 +39,8 @@
                </image>
             </ImageView>
             <Button fx:id="btnCerrarSesion" layoutX="240.0" layoutY="89.0" mnemonicParsing="false" onAction="#cerrarSesionActrion" text="Cerrar Sesion" />
+            <Button fx:id="btnMenuBackup" layoutX="480.0" layoutY="89.0" mnemonicParsing="false" onAction="#menuBackupAction" text="Menú backups" />
+            <Button layoutX="481.0" layoutY="55.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="92.0" text="Configuracion" />
          </children>
       </AnchorPane>
    </top>

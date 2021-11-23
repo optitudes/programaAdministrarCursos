@@ -1,6 +1,8 @@
 package co.edu.uniquindio.programaAdministrarCursos.model;
 
-public class Cultural extends Credito {
+import java.io.Serializable;
+
+public class Cultural extends Credito  implements Serializable{
 
 	/**
 	 *
@@ -16,6 +18,11 @@ public class Cultural extends Credito {
 					,String nombre) {
 		super(costo, cuposDisponibles, 0, horario, lugar,  tipo,  nombre);
 		// TODO Auto-generated constructor stub
+	}
+
+	public Cultural(Double costo, int cuposDisponibles, Horario horarioAux, Lugar lugarAux, String tipo, String nombre,
+			int cuposRegistrados) {
+		super(costo, cuposDisponibles, cuposRegistrados, horarioAux, lugarAux,  tipo,  nombre);
 	}
 
 	public static long getSerialversionuid() {
@@ -43,8 +50,8 @@ public class Cultural extends Credito {
 
 	@Override
 	public String getDatosTXT() {
-		return getNombre()+";"+getCosto()+";"+getCuposDisponibles()+";"+getCuposRegistrados()+";"+getHorario()+";"
-				+getLugar()+";";
+		return getNombre()+";"+getCosto()+";"+getCuposDisponibles()+";"+getCuposRegistrados()+";"+getHorario().getListaDias()+";"+
+				getHorario().getListaHorarios()+";"+getLugar().getBloque()+";"+getLugar().getPiso()+";"+getLugar().getNumSalon()+";";
 	}
 
 }

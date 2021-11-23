@@ -1,6 +1,8 @@
 package co.edu.uniquindio.programaAdministrarCursos.model;
 
-public class Instructor extends User{
+import java.io.Serializable;
+
+public class Instructor extends User implements Serializable{
 
 	/**
 	 * 

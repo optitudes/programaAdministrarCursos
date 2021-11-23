@@ -1,7 +1,13 @@
 package co.edu.uniquindio.programaAdministrarCursos.model;
 
-public class Lugar {
+import java.io.Serializable;
+
+public class Lugar  implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String bloque;
 	private int piso;
 	private int numSalon;
@@ -14,6 +20,10 @@ public class Lugar {
 		this.bloque = bloque;
 		this.piso = piso;
 		this.numSalon = numSalon;
+	}
+	
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 	public String getBloque() {
 		return bloque;

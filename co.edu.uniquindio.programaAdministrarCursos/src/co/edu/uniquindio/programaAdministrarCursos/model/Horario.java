@@ -33,6 +33,10 @@ public class Horario implements Serializable{
 	public void setListaHorarios(ArrayList<EHorario> listaHorarios) {
 		this.listaHorarios = listaHorarios;
 	}
+	
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 	@Override
 	public String toString() {
 		return "Horario [listaDias=" + listaDias + ", listaHorarios=" + listaHorarios + "]";

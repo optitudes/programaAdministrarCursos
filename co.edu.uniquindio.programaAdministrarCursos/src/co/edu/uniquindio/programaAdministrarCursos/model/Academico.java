@@ -1,8 +1,9 @@
 package co.edu.uniquindio.programaAdministrarCursos.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Academico extends Credito{
+public class Academico extends Credito implements Serializable{
 
 	private double  notaMinima;
 	private ArrayList<Estudiante> listaEstudiantes=new ArrayList<>();
@@ -21,6 +22,12 @@ public class Academico extends Credito{
 		this.area=area;
 	}
 
+	public Academico(Double costo, int cuposDisponibles, Horario horarioAux, Lugar lugarAux, Double notaMin,
+			EArea areaAux, String tipo, String nombre, int cuposRegistrados) {
+		super(costo, cuposDisponibles, cuposRegistrados, horarioAux, lugarAux,tipo, nombre);
+		this.notaMinima=notaMin;
+		this.area=areaAux;
+	}
 	public EArea getArea() {
 		return area;
 	}
@@ -65,7 +72,8 @@ public class Academico extends Credito{
 
 	@Override
 	public String getDatosTXT() {
-		return getNombre()+";"+getCosto()+";"+getCuposDisponibles()+";"+getCuposRegistrados()+";"+getHorario()+";"
-				   +getLugar()+";"+getArea()+";"+getNotaMinima()+";";
+		return getNombre()+";"+getCosto()+";"+getCuposDisponibles()+";"+getCuposRegistrados()+";"+getHorario().getListaDias()+";"+
+				getHorario().getListaHorarios()+";"+getLugar().getBloque()+";"+getLugar().getPiso()+";"+getLugar().getNumSalon()+";"
+				+getArea()+";"+getNotaMinima()+";";
 	}
 }

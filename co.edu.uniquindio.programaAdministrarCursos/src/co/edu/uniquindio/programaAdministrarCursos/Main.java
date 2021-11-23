@@ -85,8 +85,6 @@ public void mostrarVentanaLogging() {
 
 
 			}
-
-
 			Scene scene = new Scene(rootLayout);
 			primaryStage.setScene(scene);
 			primaryStage.show();
@@ -105,7 +103,8 @@ public void mostrarVentanaLogging() {
 			//Abrimos la ventana, guardamos la opcion seleccionada por el usuario
 			seleccion=fileChooser.showOpenDialog(new Component() {
 			});
-
+			if(seleccion==JFileChooser.CANCEL_OPTION)
+				break;
 			//Si el usuario, pincha en aceptar
 			if(seleccion==JFileChooser.APPROVE_OPTION){
 
@@ -371,6 +370,45 @@ public void mostrarVentanaLogging() {
 
 	public void CargarDatosTXT(String archivoTXTCargar) throws IOException {
 		bienestar.cargarDatosTXT(rutaArchivos+"/"+archivoTXTCargar,archivoTXTCargar);
+
+	}
+	public void serializarBienestar(String nombreArchivo) throws IOException {
+		Persistencia.serializarObjeto(rutaRespaldo+"/"+nombreArchivo, bienestar);
+		
+	}
+
+	public void cargarDatosBackup()  {
+		int seleccion=JFileChooser.APPROVE_OPTION;
+		boolean procesoExitoso=false;
+		while(!procesoExitoso ){
+			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.setFileSelectionMode(1);
+			//Abrimos la ventana, guardamos la opcion seleccionada por el usuario
+			seleccion=fileChooser.showOpenDialog(new Component() {
+			});
+			if(seleccion==JFileChooser.CANCEL_OPTION)
+				break;
+			//Si el usuario, pincha en aceptar
+			if(seleccion==JFileChooser.APPROVE_OPTION){
+
+				//Seleccionamos el fichero
+				File file=fileChooser.getSelectedFile();
+				if(file!=null)
+				{
+					if(file.isFile())
+					{
+						try {
+							bienestar=(Bienestar) Persistencia.deseRializarObjeto(file.getAbsolutePath());
+							
+						} catch (Exception e) {
+							mostrarMensaje("Error", "Backup no reconocido","Elija un backup de la carpeta "+rutaRespaldo,AlertType.ERROR);
+						}
+						
+					}
+				}
+			}
+
+		}
 
 	}
 
