@@ -90,8 +90,12 @@ public class AdminController implements Initializable{
 
     @FXML
     private Button btnCerrarSesion;
+    
     @FXML
-    private Button btnMenuBackup;
+    private Button btnCrearBackup;
+    
+    @FXML
+    private Button btnCargarBackup;
     @FXML
     private TextField txtNombreEstudiante;
 
@@ -373,12 +377,21 @@ public class AdminController implements Initializable{
 	}
 
 	@FXML
-	void menuBackupAction(ActionEvent event) {
-		main.cargarDatosBackup();
-		refrescarTablas();
-	
-//		menuBackup();
+	void cargarBackupAction(ActionEvent event) {
+		String mensaje="";
+		try {
+			mensaje=main.cargarDatosBackup();
+			refrescarTablas();	
+			administradorHilos.startHiloLogger("Backup "+mensaje+" por admin ["+admin.getName()+"]", Level.INFO);
+		} catch (Exception e) {
+			mostrarMensaje("Error", "Backup no reconocido","Hubo un error al cargar el archivo backup",AlertType.ERROR);
+			administradorHilos.startHiloLogger("Error al cargar datos admin ["+admin.getName()+"]"+"error tipo[Exception]", Level.SEVERE);
+		}
+	}
 
+	@FXML
+	void crearBackupAction(ActionEvent event) {
+		hacerBackup();
 	}
 
 
@@ -672,8 +685,6 @@ public class AdminController implements Initializable{
 	public void setAplicacion(Main mainAux) {
 		this.main=mainAux;
 		administradorHilos=new AdminHilos(main,this);
-		main.quemarDatos();
-
 		tableEstudiantes.getItems().clear();
 		tableInstructor.getItems().clear();
 		tableCreditos.getItems().clear();
@@ -1490,12 +1501,9 @@ private ObservableList<Estudiante> getListaEstudiantesData() {
 
 		}
 	private void hacerBackup() {
-		administradorHilos.startHiloBackup();
+		administradorHilos.startHiloCrearBackup();
 	}
-	private void menuBackup() {
-		// TODO Auto-generated method stub
-		
-	}
+
 	public Admin getAdmin() {
 		return admin;
 	}

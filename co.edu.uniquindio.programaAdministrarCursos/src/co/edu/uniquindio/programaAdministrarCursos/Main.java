@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import co.edu.uniquindio.programaAdministrarCursos.controller.AdminController;
 import co.edu.uniquindio.programaAdministrarCursos.controller.EstudianteController;
@@ -260,11 +262,11 @@ public void mostrarVentanaLogging() {
 	}
 
 
-
-	public void quemarDatos() {
-		bienestar.quemarDatos();
-
-	}
+//
+//	public void quemarDatos() {
+//		bienestar.quemarDatos();
+//
+//	}
 
 	public boolean verificarIDEstudiante(String iD) {
 		return bienestar.verificarIDEstudiante(iD);
@@ -377,18 +379,22 @@ public void mostrarVentanaLogging() {
 		
 	}
 
-	public void cargarDatosBackup()  {
+	public String cargarDatosBackup() throws Exception  {
+		
+		String mensaje="";
 		int seleccion=JFileChooser.APPROVE_OPTION;
 		boolean procesoExitoso=false;
 		while(!procesoExitoso ){
 			JFileChooser fileChooser = new JFileChooser();
-			fileChooser.setFileSelectionMode(1);
+			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			fileChooser.setFileFilter(new FileNameExtensionFilter("Backup", "dat"));
 			//Abrimos la ventana, guardamos la opcion seleccionada por el usuario
 			seleccion=fileChooser.showOpenDialog(new Component() {
 			});
-			if(seleccion==JFileChooser.CANCEL_OPTION)
-				break;
-			//Si el usuario, pincha en aceptar
+			if(seleccion==JFileChooser.CANCEL_OPTION){
+				mensaje="cancelado";
+				return mensaje;
+			}			//Si el usuario, pincha en aceptar
 			if(seleccion==JFileChooser.APPROVE_OPTION){
 
 				//Seleccionamos el fichero
@@ -397,19 +403,15 @@ public void mostrarVentanaLogging() {
 				{
 					if(file.isFile())
 					{
-						try {
 							bienestar=(Bienestar) Persistencia.deseRializarObjeto(file.getAbsolutePath());
-							
-						} catch (Exception e) {
-							mostrarMensaje("Error", "Backup no reconocido","Elija un backup de la carpeta "+rutaRespaldo,AlertType.ERROR);
-						}
-						
+							mensaje="cargado con éxito ";
+							return mensaje;
 					}
 				}
 			}
 
 		}
-
+		return mensaje;
 	}
 
 

@@ -44,12 +44,19 @@ public class Bienestar implements Serializable {
 	public void setNit(String nit) {
 		this.nit = nit;
 	}
-	@Override
-	public String toString() {
-		return "Bienestar [nombre=" + nombre + ", nit=" + nit + "]";
+	
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 	
+	
 
+@Override
+	public String toString() {
+		return "Bienestar [nombre=" + nombre + ", nit=" + nit + ", listaEstudiantes=" + listaEstudiantes
+				+ ", listaAdmins=" + listaAdmins + ", listaInstructores=" + listaInstructores + ", listaCreditos="
+				+ listaCreditos + "]";
+	}
 public static Logger getLogger() {
 		return LOGGER;
 	}
@@ -59,34 +66,34 @@ public ArrayList<Estudiante> getEstudiantes() {
 public ArrayList<Instructor> getInstructores() {
 	return listaInstructores;
 }
-public void quemarDatos() {
-	ArrayList<EDia> listaDias=new ArrayList<EDia>();
-	ArrayList<EHorario> listaHorarios= new ArrayList<EHorario>();
-
-	Estudiante estudiante=new Estudiante ("juan","1193370914","juan@uqvirtual.co","1111");
-	Admin       admin= new Admin         ("zeus","1002","admin@gmail.com","1234");
-	Instructor instructor= new Instructor("Orfeo","1002","orfeo@gmail.com","2222");
-
-	listaDias.add(EDia.LUNES);
-	listaDias.add(EDia.JUEVES);
-	listaHorarios.add(EHorario.SIETE_A_NUEVE_AM);
-	listaHorarios.add(EHorario.NUEVE_A_ONCE_AM);
-
-	Deportivo  deportivo= new Deportivo(2,2,new Horario(listaDias, listaHorarios),new Lugar("bloque 1",3, 2),EAsistenciaMinima.OCHENTA_PORCIENTO,"Deportivo","salud fisica");
-	Cultural  cultural = new Cultural  (55000,2,new Horario(listaDias, listaHorarios), new Lugar("dos", 2, 2),"Cultural","lectura general");
-	Academico academico= new Academico (2, 3, new Horario(listaDias, listaHorarios), new Lugar("Ingenieria", 2, 1), 4.0, EArea.MATEMATICAS, "Academica", "Calculo");
-
-
-	listaEstudiantes.add (estudiante);
-	listaAdmins.add      (admin);
-	listaInstructores.add(instructor);
-	listaCreditos.add    (deportivo);
-	listaCreditos.add    (academico);
-	listaCreditos.add    (cultural);
-
-
-
-}
+//public void quemarDatos() {
+//	ArrayList<EDia> listaDias=new ArrayList<EDia>();
+//	ArrayList<EHorario> listaHorarios= new ArrayList<EHorario>();
+//
+//	Estudiante estudiante=new Estudiante ("juan","1193370914","juan@uqvirtual.co","1111");
+//	Admin       admin= new Admin         ("zeus","1002","admin@gmail.com","1234");
+//	Instructor instructor= new Instructor("Orfeo","1002","orfeo@gmail.com","2222");
+//
+//	listaDias.add(EDia.LUNES);
+//	listaDias.add(EDia.JUEVES);
+//	listaHorarios.add(EHorario.SIETE_A_NUEVE_AM);
+//	listaHorarios.add(EHorario.NUEVE_A_ONCE_AM);
+//
+//	Deportivo  deportivo= new Deportivo(2,2,new Horario(listaDias, listaHorarios),new Lugar("bloque 1",3, 2),EAsistenciaMinima.OCHENTA_PORCIENTO,"Deportivo","salud fisica");
+//	Cultural  cultural = new Cultural  (55000,2,new Horario(listaDias, listaHorarios), new Lugar("dos", 2, 2),"Cultural","lectura general");
+//	Academico academico= new Academico (2, 3, new Horario(listaDias, listaHorarios), new Lugar("Ingenieria", 2, 1), 4.0, EArea.MATEMATICAS, "Academica", "Calculo");
+//
+//
+//	listaEstudiantes.add (estudiante);
+//	listaAdmins.add      (admin);
+//	listaInstructores.add(instructor);
+//	listaCreditos.add    (deportivo);
+//	listaCreditos.add    (academico);
+//	listaCreditos.add    (cultural);
+//
+//
+//
+//}
 
 public boolean verificarIDEstudiante(String iD) {
 

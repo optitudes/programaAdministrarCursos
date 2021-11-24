@@ -122,7 +122,7 @@ public class AdminHilos implements Runnable {
 		this.archivoTXTCargar=nombreArchivo;
 		hiloCargarTXT.start();
 	}
-	public void startHiloBackup() {
+	public void startHiloCrearBackup() {
 		fecha=""+LocalDate.now(Clock.systemDefaultZone ())+LocalTime.now();
 		fecha=fecha.replaceAll("-","_");
 		fecha=fecha.replaceAll(":","_");
@@ -139,6 +139,7 @@ public class AdminHilos implements Runnable {
 			adminController.registrarAccion("Error al hacer backup admin ["+adminController.getAdmin().getName()+"]",Level.SEVERE);
 		}
 	}
+	
 
 
 
