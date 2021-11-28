@@ -8,13 +8,17 @@ import java.util.logging.Level;
 
 import co.edu.uniquindio.programaAdministrarCursos.Main;
 import co.edu.uniquindio.programaAdministrarCursos.controller.AdminController;
+import co.edu.uniquindio.programaAdministrarCursos.controller.EstudianteController;
 import co.edu.uniquindio.programaAdministrarCursos.hilos.HiloLog;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
 public class AdminHilos implements Runnable {
 	Main main;
+
 	AdminController adminController;
+	EstudianteController estudianteController;
+	
 	Credito     creditoAux;
 
 	String archivoTXTGuardar;
@@ -37,6 +41,10 @@ public class AdminHilos implements Runnable {
 	boolean runHilo=false;
 	int valorEntrada;
 	int contador=1;
+	public AdminHilos(Main main, EstudianteController estudianteController) {
+		this.main=main;
+		this.estudianteController=estudianteController;
+	}
 	public AdminHilos(Main main, AdminController adminController) {
 		this.main=main;
 		this.adminController=adminController;

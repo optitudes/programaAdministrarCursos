@@ -14,6 +14,7 @@ import co.edu.uniquindio.programaAdministrarCursos.controller.AdminController;
 import co.edu.uniquindio.programaAdministrarCursos.controller.EstudianteController;
 import co.edu.uniquindio.programaAdministrarCursos.controller.InstructorController;
 import co.edu.uniquindio.programaAdministrarCursos.controller.LoggingController;
+import co.edu.uniquindio.programaAdministrarCursos.exception.UsuarioNoEncontradoException;
 import co.edu.uniquindio.programaAdministrarCursos.model.Academico;
 import co.edu.uniquindio.programaAdministrarCursos.model.AdminHilos;
 import co.edu.uniquindio.programaAdministrarCursos.model.Bienestar;
@@ -77,6 +78,7 @@ public void mostrarVentanaLogging() {
 			BorderPane rootLayout = (BorderPane)loader.load();
 			LoggingController loggingController = loader.getController();
 			loggingController.setAplicacion(this);
+
 			if(rutaRaiz==null || rutaRaiz.isEmpty())
 			{
 				mostrarMensaje("Atención!","El programa no cuenta con un directorio raiz",
@@ -87,6 +89,7 @@ public void mostrarVentanaLogging() {
 
 
 			}
+			
 			Scene scene = new Scene(rootLayout);
 			primaryStage.setScene(scene);
 			primaryStage.show();
@@ -412,6 +415,10 @@ public void mostrarVentanaLogging() {
 
 		}
 		return mensaje;
+	}
+
+	public boolean validarEstudiante(String correo, String clave) throws UsuarioNoEncontradoException {
+		return bienestar.validarEstudiante(correo,clave);
 	}
 
 

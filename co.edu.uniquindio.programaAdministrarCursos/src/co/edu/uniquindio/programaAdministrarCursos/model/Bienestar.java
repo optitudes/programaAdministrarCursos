@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
+import co.edu.uniquindio.programaAdministrarCursos.exception.UsuarioNoEncontradoException;
+
 public class Bienestar implements Serializable {
 
 	/**
@@ -348,6 +350,8 @@ public void cargarDatosTXT(String rutaArchivo, String tipo) throws IOException {
 		listaInformacion=Persistencia.leerArchivo(rutaArchivo);
 		for (String elementos : listaInformacion) {
 			{
+				ArrayList<Credito> listaCreditosregistrados=new ArrayList<Credito>();
+				
 				String[] elementoDividido=elementos.split(";");
 				for (int i = 0; i < elementoDividido.length; i++) {
 
@@ -360,9 +364,13 @@ public void cargarDatosTXT(String rutaArchivo, String tipo) throws IOException {
 					break;
 					case 3:contrasenia=elementoDividido[i];
 					break;
-					}
+					case 4:listaCreditosregistrados.add(obtenerCredito(elementoDividido[i]));
+					break;
+					case 5:listaCreditosregistrados.add(obtenerCredito(elementoDividido[i]));
+					break;
 				}
-				Estudiante estudianteAux= new Estudiante(nombre, iD, correo, contrasenia);
+			}
+				Estudiante estudianteAux= new Estudiante(nombre, iD, correo, contrasenia,listaCreditosregistrados);
 				listaEstudiantesRecuperados.add(estudianteAux);
 			}
 		}
@@ -396,6 +404,14 @@ public void cargarDatosTXT(String rutaArchivo, String tipo) throws IOException {
 			listaInstructores=listaInstructoresRecuperados;
 		}
 	}
+}
+private Credito obtenerCredito(String string) {
+	for (Credito creditoAux : listaCreditos) {
+		if(creditoAux.verificarNombre(string))
+			return creditoAux;
+	}
+	
+	return null;
 }
 private ArrayList<Credito> obtenerCreditos(ArrayList<String> listaInformacion, String tipo) {
 	ArrayList<Credito> listaCreditos=new ArrayList<>();
@@ -640,6 +656,14 @@ private EDia obtenerDia(String dia) {
 		}
 	}
 
+}
+public boolean validarEstudiante(String correo, String clave) throws UsuarioNoEncontradoException {
+	for (Estudiante estudianteAux : listaEstudiantes) {
+		if(estudianteAux.validarLoggin(correo,clave))
+			return true;
+		
+	}
+	throw new UsuarioNoEncontradoException("La clave o el correo es incorrecta");
 }
 }
 

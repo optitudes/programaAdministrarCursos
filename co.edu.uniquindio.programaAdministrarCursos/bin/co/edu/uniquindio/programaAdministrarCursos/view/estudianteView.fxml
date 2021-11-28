@@ -6,8 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-
-<BorderPane prefHeight="517.0" prefWidth="528.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="co.edu.uniquindio.programaAdministrarCursos.controller.EstudianteController">
+<BorderPane prefHeight="517.0" prefWidth="528.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.programaAdministrarCursos.controller.EstudianteController">
    <top>
       <HBox prefHeight="115.0" prefWidth="445.0" BorderPane.alignment="CENTER">
          <children>
@@ -41,14 +40,51 @@
         <tabs>
           <Tab text="Horario ">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="201.0" prefWidth="447.0" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="201.0" prefWidth="447.0">
+                     <children>
+                        <TextArea fx:id="textAreaHorarioRegistrado" layoutX="14.0" layoutY="64.0" prefHeight="266.0" prefWidth="500.0" />
+                        <Label blendMode="MULTIPLY" layoutX="221.0" layoutY="41.0" text="HORARIO REGISTRADO" />
+                     </children></AnchorPane>
             </content>
           </Tab>
           <Tab text="Registro de cursos">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="tableCreditos" layoutX="14.0" layoutY="37.0" prefHeight="204.0" prefWidth="500.0">
+                          <columns>
+                            <TableColumn fx:id="columnNombreCredito" prefWidth="94.0" text="Nombre" />
+                            <TableColumn fx:id="columnCuposDisponiblesCredito" prefWidth="79.0" text="Cupos disponibles" />
+                              <TableColumn fx:id="columnCuposRegistradosCredito" prefWidth="74.0" text="Cupos registrados" />
+                              <TableColumn fx:id="columnLugarCredito" prefWidth="139.0" text="Lugar" />
+                              <TableColumn fx:id="columnHorarioCredito" prefWidth="113.0" text="Horario" />
+                          </columns>
+                        </TableView>
+                        <Label layoutX="238.0" layoutY="14.0" text="CREDITOS" />
+                        <Button fx:id="btnRegistrarCredito" layoutX="227.0" layoutY="248.0" mnemonicParsing="false" onAction="#registrarCreditoAction" text="Registrarse" />
+                     </children></AnchorPane>
             </content>
           </Tab>
+            <Tab text="Chat">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="tableCreditosRegistrados" layoutX="90.0" layoutY="37.0" prefHeight="111.0" prefWidth="349.0">
+                           <columns>
+                              <TableColumn fx:id="columnNombreCreditoRegistrado" prefWidth="94.0" text="Nombre" />
+                              <TableColumn fx:id="columnLugarRegistrado" prefWidth="139.0" text="Lugar" />
+                              <TableColumn fx:id="columnHorarioRegistrado" prefWidth="113.0" text="Horario" />
+                           </columns>
+                        </TableView>
+                        <Label layoutX="198.0" layoutY="14.0" text="CREDITOS REGISTRADOS" />
+                        <Label layoutX="239.0" layoutY="160.0" text="Chat" />
+                        <TextArea fx:id="textAreaChat" layoutX="89.0" layoutY="182.0" prefHeight="118.0" prefWidth="348.0" />
+                        <Button fx:id="btnEnviarMensaje" layoutX="389.0" layoutY="306.0" mnemonicParsing="false" onAction="#enviarMensajeAction" text="Enviar" />
+                        <TextField fx:id="txtMensaje" layoutX="89.0" layoutY="306.0" prefHeight="25.0" prefWidth="299.0" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
         </tabs>
       </TabPane>
    </center>

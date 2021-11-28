@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
 import co.edu.uniquindio.programaAdministrarCursos.Main;
+import co.edu.uniquindio.programaAdministrarCursos.exception.UsuarioNoEncontradoException;
 import co.edu.uniquindio.programaAdministrarCursos.hilos.HiloLog;
 import co.edu.uniquindio.programaAdministrarCursos.model.AdminHilos;
 import javafx.fxml.Initializable;
@@ -102,13 +103,19 @@ public class LoggingController implements Initializable{
 
 			obtenerRutaPersistencia();
 		}else{
-			if(rBtnAdmin.isSelected())
-				logearAdmin();
-			if(rBtnEstudiante.isSelected())
-				logearEstudiante();
-			if(rBtnInstructor.isSelected())
-				logearInstructor();
-		}
+			
+			try {
+				if(rBtnAdmin.isSelected())
+					logearAdmin();
+				if(rBtnEstudiante.isSelected())
+					logearEstudiante();
+				if(rBtnInstructor.isSelected())
+					logearInstructor();
+
+			} catch (UsuarioNoEncontradoException e) {
+				registrarAccion("Error en el logging [Usuario no encontrado] ="+e.getMessage(), Level.SEVERE);
+				}
+					}
 
 	}
 
@@ -119,9 +126,9 @@ public class LoggingController implements Initializable{
 
 	}
 
-	private void logearEstudiante() {
-	if(correoEstudiante.equalsIgnoreCase(txtCorreoLogin.getText()) && clave.equalsIgnoreCase(txtClaveLogin.getText())){
-			registrarAccion("Inicio de sesion estudiante",Level.INFO );
+	private void logearEstudiante() throws UsuarioNoEncontradoException {
+	if(main.validarEstudiante(txtCorreoLogin.getText(),txtClaveLogin.getText())){
+			registrarAccion("Inicio de sesion estudiante "+txtCorreoLogin.getText(),Level.INFO );
 			main.cargarVistaEstudiante();}
 
 	}
