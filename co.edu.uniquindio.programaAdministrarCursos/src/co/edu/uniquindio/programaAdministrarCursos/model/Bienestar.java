@@ -657,10 +657,10 @@ private EDia obtenerDia(String dia) {
 	}
 
 }
-public boolean validarEstudiante(String correo, String clave) throws UsuarioNoEncontradoException {
+public Estudiante validarEstudiante(String correo, String clave) throws UsuarioNoEncontradoException {
 	for (Estudiante estudianteAux : listaEstudiantes) {
 		if(estudianteAux.validarLoggin(correo,clave))
-			return true;
+			return estudianteAux;
 		
 	}
 	throw new UsuarioNoEncontradoException("La clave o el correo es incorrecta");

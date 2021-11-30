@@ -14,6 +14,7 @@ import co.edu.uniquindio.programaAdministrarCursos.Main;
 import co.edu.uniquindio.programaAdministrarCursos.exception.UsuarioNoEncontradoException;
 import co.edu.uniquindio.programaAdministrarCursos.hilos.HiloLog;
 import co.edu.uniquindio.programaAdministrarCursos.model.AdminHilos;
+import co.edu.uniquindio.programaAdministrarCursos.model.Estudiante;
 import javafx.fxml.Initializable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -127,11 +128,10 @@ public class LoggingController implements Initializable{
 	}
 
 	private void logearEstudiante() throws UsuarioNoEncontradoException {
-	if(main.validarEstudiante(txtCorreoLogin.getText(),txtClaveLogin.getText())){
-			registrarAccion("Inicio de sesion estudiante "+txtCorreoLogin.getText(),Level.INFO );
-			main.cargarVistaEstudiante();}
-
-	}
+		Estudiante estudianteAux;
+		estudianteAux=main.validarEstudiante(txtCorreoLogin.getText(),txtClaveLogin.getText());
+		registrarAccion("Inicio de sesion estudiante "+txtCorreoLogin.getText(),Level.INFO );
+		main.cargarVistaEstudiante(estudianteAux);}
 
 	private void logearAdmin() {
 	if(correoadmin.equalsIgnoreCase(txtCorreoLogin.getText()) && clave.equalsIgnoreCase(txtClaveLogin.getText())){

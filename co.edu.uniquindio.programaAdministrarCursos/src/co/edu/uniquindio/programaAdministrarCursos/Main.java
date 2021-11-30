@@ -148,15 +148,14 @@ public void mostrarVentanaLogging() {
 		}
 
 	}
-	public void cargarVistaEstudiante() {
+	public void cargarVistaEstudiante(Estudiante estudianteAux) {
 		try {
 			FXMLLoader loaderEstudiante = new FXMLLoader();
 			loaderEstudiante.setLocation(Main.class.getResource("view/estudianteView.fxml"));
 
 			BorderPane rootLayout = (BorderPane)loaderEstudiante.load();
 			EstudianteController estudianteController = loaderEstudiante.getController();
-			estudianteController.setAplicacion(this);
-
+			estudianteController.setDatos(this,estudianteAux);
 
 			Scene scene = new Scene(rootLayout);
 			primaryStage.setScene(scene);
@@ -417,7 +416,7 @@ public void mostrarVentanaLogging() {
 		return mensaje;
 	}
 
-	public boolean validarEstudiante(String correo, String clave) throws UsuarioNoEncontradoException {
+	public Estudiante validarEstudiante(String correo, String clave) throws UsuarioNoEncontradoException {
 		return bienestar.validarEstudiante(correo,clave);
 	}
 

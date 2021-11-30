@@ -23,8 +23,8 @@
             </VBox>
             <VBox alignment="CENTER" prefHeight="135.0" prefWidth="229.0">
                <children>
-                  <Label fx:id="lblDia" prefHeight="17.0" prefWidth="99.0" text="Dia" />
-                  <Label fx:id="lblHora" prefHeight="17.0" prefWidth="97.0" text="Hora" />
+                  <Label fx:id="lblDia" prefHeight="17.0" prefWidth="136.0" text="Dia" />
+                  <Label fx:id="lblHora" prefHeight="17.0" prefWidth="137.0" text="Hora" />
                </children>
             </VBox>
             <ImageView fitHeight="138.0" fitWidth="135.0" pickOnBounds="true" preserveRatio="true">
@@ -55,8 +55,8 @@
                           <columns>
                             <TableColumn fx:id="columnNombreCredito" prefWidth="94.0" text="Nombre" />
                             <TableColumn fx:id="columnCuposDisponiblesCredito" prefWidth="79.0" text="Cupos disponibles" />
-                              <TableColumn fx:id="columnCuposRegistradosCredito" prefWidth="74.0" text="Cupos registrados" />
-                              <TableColumn fx:id="columnLugarCredito" prefWidth="139.0" text="Lugar" />
+                              <TableColumn fx:id="columnCuposRegistradosCredito" prefWidth="75.0" text="Cupos registrados" />
+                              <TableColumn fx:id="columnLugarCredito" prefWidth="138.0" text="Lugar" />
                               <TableColumn fx:id="columnHorarioCredito" prefWidth="113.0" text="Horario" />
                           </columns>
                         </TableView>

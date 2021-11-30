@@ -1,6 +1,9 @@
 package co.edu.uniquindio.programaAdministrarCursos.controller;
 
 import java.net.URL;
+import java.time.Clock;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 
@@ -13,6 +16,8 @@ import co.edu.uniquindio.programaAdministrarCursos.model.Estudiante;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -21,14 +26,17 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.fxml.Initializable;
 
 public class EstudianteController implements Initializable{
 
 	Main main;
-	Estudiante estudianteLoggeado=new Estudiante("sebas", "1002", "sebas@bienestar.con", "1234");
+	Estudiante estudianteLoggeado;
 	AdminHilos adminHilos;
-	
+	ObservableList<Credito> listaCreditosData = FXCollections.observableArrayList();
+	ObservableList<Credito> listaCreditosRegistradosData = FXCollections.observableArrayList();
+
     @FXML
     private ResourceBundle resources;
 
@@ -110,16 +118,44 @@ public class EstudianteController implements Initializable{
     }
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		// TODO Auto-generated method stub
+		lblDia.setText("Dia :"+LocalDate.now(Clock.systemDefaultZone ()));
+		lblHora.setText("Hora :"+LocalTime.now());
 		
+		this.columnNombreCredito.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+		this.columnCuposDisponiblesCredito.setCellValueFactory(new PropertyValueFactory<>("cuposDisponibles"));
+		this.columnCuposRegistradosCredito.setCellValueFactory(new PropertyValueFactory<>("cuposRegistrados"));
+		this.columnLugarCredito.setCellValueFactory(new PropertyValueFactory<>("lugar"));
+		this.columnHorarioCredito.setCellValueFactory(new PropertyValueFactory<>("horario"));
+		
+		
+		this.columnNombreCreditoRegistrado.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+		this.columnLugarRegistrado.setCellValueFactory(new PropertyValueFactory<>("lugar"));
+		this.columnHorarioRegistrado.setCellValueFactory(new PropertyValueFactory<>("horario"));
+
+
 	}
-	public void setAplicacion(Main mainAux) {
+	public void setDatos(Main mainAux,Estudiante estudianteAux) {
 		main=mainAux;
+		this.estudianteLoggeado=estudianteAux;
 		adminHilos= new AdminHilos(mainAux,this);
+
+		labelUsuario.setText("Usuario :"+estudianteLoggeado.getName());
+
+		tableCreditos.getItems().clear();
+		tableCreditosRegistrados.getItems().clear();
+		
+		tableCreditos.setItems(getlistaCreditosData());
 		
 	}
+private ObservableList<Credito> getlistaCreditosData() {
+		listaCreditosData.clear();
+		listaCreditosData.addAll(main.obtenerCreditos());
+		return listaCreditosData;
+	}
+
 public void registrarAccion(String mensaje, Level tipo){
 	adminHilos.startHiloLogger(mensaje, tipo);
 	
 }
+
 }
