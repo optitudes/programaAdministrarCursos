@@ -1,12 +1,21 @@
 package co.edu.uniquindio.programaAdministrarCursos.model;
 
 import java.io.IOException;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.logging.Level;
 
+import javax.swing.JOptionPane;
+
+import co.edu.uniquindio.programaAdministrarCursos.ClienteMain;
 import co.edu.uniquindio.programaAdministrarCursos.Main;
+import co.edu.uniquindio.programaAdministrarCursos.ServerMain;
 import co.edu.uniquindio.programaAdministrarCursos.controller.AdminController;
 import co.edu.uniquindio.programaAdministrarCursos.controller.EstudianteController;
 import co.edu.uniquindio.programaAdministrarCursos.hilos.HiloLog;
@@ -14,11 +23,13 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
 public class AdminHilos implements Runnable {
-	Main main;
+	ClienteMain mainCliente;
+	Server  mainServer;
+	Socket  socket;
 
 	AdminController adminController;
 	EstudianteController estudianteController;
-	
+
 	Credito     creditoAux;
 
 	String archivoTXTGuardar;
@@ -26,14 +37,13 @@ public class AdminHilos implements Runnable {
 	String fecha;
 	String nombreArchivoBackup="backup";
 
-
-
+	ArrayList<String> datosLoggin=null;
+	ObjectOutputStream flujoSalidaObjeto;
 
 
 	HiloLog hiloLog;
 
 
-	Thread obtenerDirectorioRaiz;
 	Thread hiloGuardarTXT;
 	Thread hiloCargarTXT;
 
@@ -41,53 +51,68 @@ public class AdminHilos implements Runnable {
 	boolean runHilo=false;
 	int valorEntrada;
 	int contador=1;
-	public AdminHilos(Main main, EstudianteController estudianteController) {
-		this.main=main;
+	public AdminHilos(ClienteMain main, EstudianteController estudianteController) {
+		this.mainCliente=main;
 		this.estudianteController=estudianteController;
 	}
-	public AdminHilos(Main main, AdminController adminController) {
-		this.main=main;
+	public AdminHilos(ClienteMain main, AdminController adminController) {
+		this.mainCliente=main;
 		this.adminController=adminController;
 	}
-	public AdminHilos(Main main) {
-		this.main=main;
+	public AdminHilos(ClienteMain main2) {
+		this.mainCliente=main2;
+	}
+
+
+	public AdminHilos() {
+		super();
+		}
+
+	public AdminHilos(Server server) {
+		this.mainServer=server;
 	}
 	@Override
 	public void run() {
 		Thread hiloEjecucion= Thread.currentThread();
-		if( obtenerDirectorioRaiz==hiloEjecucion)
-		{
-			main.setDirectorioRaiz();
-			main.crearDirectorios();
-		}
-		if(hiloGuardarTXT==hiloEjecucion)
-		{
-			try {
-				main.guardarDatosTXT(archivoTXTGuardar);
-				startHiloLogger("Datos guardados en txt en el registro ["+archivoTXTGuardar+"] por el admin "+adminController.getAdmin().getName(),Level.INFO);
+		
+//		if(hiloGuardarTXT==hiloEjecucion)
+//		{
+//			try {
+////				main.guardarDatosTXT(archivoTXTGuardar);
+//				startHiloLogger("Datos guardados en txt en el registro ["+archivoTXTGuardar+"] por el admin "+adminController.getAdmin().getName(),Level.INFO);
+//
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//				startHiloLogger("Error al guardar datos ["+archivoTXTGuardar+"] "+adminController.getAdmin().getName(), Level.SEVERE);
+//			}
+//		}
+//		if(hiloCargarTXT==hiloEjecucion)
+//		{
+//			try {
+////				main.CargarDatosTXT(archivoTXTCargar);
+//				adminController.refrescarTablas();
+//				startHiloLogger("Datos Cargados del txt  del registro ["+archivoTXTCargar+"] por el admin "+adminController.getAdmin().getName(),Level.INFO);
+//
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//				startHiloLogger("Error al cargar datos ["+archivoTXTGuardar+"] "+adminController.getAdmin().getName(), Level.SEVERE);
+//			}
+//		}
 
-			} catch (IOException e) {
-				e.printStackTrace();
-				startHiloLogger("Error al guardar datos ["+archivoTXTGuardar+"] "+adminController.getAdmin().getName(), Level.SEVERE);
-			}
-		}
-		if(hiloCargarTXT==hiloEjecucion)
-		{
-			try {
-				main.CargarDatosTXT(archivoTXTCargar);
-				adminController.refrescarTablas();
-				startHiloLogger("Datos Cargados del txt  del registro ["+archivoTXTCargar+"] por el admin "+adminController.getAdmin().getName(),Level.INFO);
+	}
+	private void validarEstudiante() throws UnknownHostException, IOException {
 
-			} catch (IOException e) {
-				e.printStackTrace();
-				startHiloLogger("Error al cargar datos ["+archivoTXTGuardar+"] "+adminController.getAdmin().getName(), Level.SEVERE);
-			}
-		}
+		socket= new Socket("localhost", 8081);
+		flujoSalidaObjeto= new ObjectOutputStream(socket.getOutputStream());
+		flujoSalidaObjeto.writeObject(datosLoggin);
+		flujoSalidaObjeto.close();
+		JOptionPane.showInputDialog("objeto enviado");
+
 
 	}
 	public void startHiloLogger(String mensaje, Level tipo){
 		hiloLog=new HiloLog(mensaje, tipo);
-		hiloLog.setRuta(main.getRutaLog());
+		hiloLog.setRuta(mainServer.getRutaLog());
 		hiloLog.start();
 
 	}
@@ -97,23 +122,13 @@ public class AdminHilos implements Runnable {
 //		mostrarCredito.start();
 //
 //	}
-	public void startHiloObtenerRutaPersistencia() {
-			obtenerDirectorioRaiz= new Thread(this);
-			obtenerDirectorioRaiz.start();
-	}
 	public HiloLog getHiloLog() {
 		return hiloLog;
 	}
 	public void setHiloLog(HiloLog hiloLog) {
 		this.hiloLog = hiloLog;
 	}
-	public Thread getObtenerDirectorioRaiz() {
-		return obtenerDirectorioRaiz;
-	}
-	public void setObtenerDirectorioRaiz(Thread obtenerDirectorioRaiz) {
-		this.obtenerDirectorioRaiz = obtenerDirectorioRaiz;
-	}
-	
+
 	public String getFecha() {
 		return fecha;
 	}
@@ -130,24 +145,24 @@ public class AdminHilos implements Runnable {
 		this.archivoTXTCargar=nombreArchivo;
 		hiloCargarTXT.start();
 	}
-	public void startHiloCrearBackup() {
-		fecha=""+LocalDate.now(Clock.systemDefaultZone ())+LocalTime.now();
-		fecha=fecha.replaceAll("-","_");
-		fecha=fecha.replaceAll(":","_");
-		fecha=fecha.replace(".","_");
-		
-		
-		try {
-			main.serializarBienestar(nombreArchivoBackup+fecha+".dat");
-		} catch (IOException e) {
-			adminController.mostrarMensaje("Error","No se pudo hacer el backup",
-										  "El programa no pudo crear el backup"
-										  + " póngase en contacto con el proveedor"
-										  + " del servicio", AlertType.ERROR);
-			adminController.registrarAccion("Error al hacer backup admin ["+adminController.getAdmin().getName()+"]",Level.SEVERE);
-		}
-	}
-	
+//	public void startHiloCrearBackup() {
+//		fecha=""+LocalDate.now(Clock.systemDefaultZone ())+LocalTime.now();
+//		fecha=fecha.replaceAll("-","_");
+//		fecha=fecha.replaceAll(":","_");
+//		fecha=fecha.replace(".","_");
+//
+//
+//		try {
+//			main.serializarBienestar(nombreArchivoBackup+fecha+".dat");
+//		} catch (IOException e) {
+//			adminController.mostrarMensaje("Error","No se pudo hacer el backup",
+//										  "El programa no pudo crear el backup"
+//										  + " póngase en contacto con el proveedor"
+//										  + " del servicio", AlertType.ERROR);
+//			adminController.registrarAccion("Error al hacer backup admin ["+adminController.getAdmin().getName()+"]",Level.SEVERE);
+//		}
+//	}
+
 
 
 

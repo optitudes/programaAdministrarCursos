@@ -13,6 +13,7 @@ import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 
+import co.edu.uniquindio.programaAdministrarCursos.ClienteMain;
 import co.edu.uniquindio.programaAdministrarCursos.Main;
 import co.edu.uniquindio.programaAdministrarCursos.exception.DatosInvalidosException;
 import co.edu.uniquindio.programaAdministrarCursos.exception.EstudianteNoCreadoException;
@@ -57,7 +58,7 @@ public class AdminController implements Initializable{
 	HiloLog  loggerAdmin;
 	AdminHilos administradorHilos;
 
-	Main main;
+	ClienteMain mainCliente;
 
 	ObservableList<Estudiante> listaEstudiantesData = FXCollections.observableArrayList();
 	ObservableList<Instructor> listaInstructoresData = FXCollections.observableArrayList();
@@ -89,10 +90,10 @@ public class AdminController implements Initializable{
 
     @FXML
     private Button btnCerrarSesion;
-    
+
     @FXML
     private Button btnCrearBackup;
-    
+
     @FXML
     private Button btnCargarBackup;
     @FXML
@@ -379,8 +380,8 @@ public class AdminController implements Initializable{
 	void cargarBackupAction(ActionEvent event) {
 		String mensaje="";
 		try {
-			mensaje=main.cargarDatosBackup();
-			refrescarTablas();	
+			mensaje=mainCliente.cargarDatosBackup();
+			refrescarTablas();
 			administradorHilos.startHiloLogger("Backup "+mensaje+" por admin ["+admin.getName()+"]", Level.INFO);
 		} catch (Exception e) {
 			mostrarMensaje("Error", "Backup no reconocido","Hubo un error al cargar el archivo backup",AlertType.ERROR);
@@ -394,7 +395,7 @@ public class AdminController implements Initializable{
 	}
 
 
-	
+
 
 	@FXML
     void BtnElegirDeportivo(ActionEvent event) {
@@ -429,7 +430,7 @@ public class AdminController implements Initializable{
     void cerrarSesionActrion(ActionEvent event) {
     	registrarAccion("cierre de sesion admin"+admin.getName(),Level.INFO );
     	hacerBackup();
-    	main.mostrarVentanaLogging();
+    	mainCliente.mostrarVentanaLogging();
 
     }
 
@@ -681,8 +682,8 @@ public class AdminController implements Initializable{
 	}
 
 
-	public void setAplicacion(Main mainAux) {
-		this.main=mainAux;
+	public void setAplicacion(ClienteMain clienteMain) {
+		this.mainCliente=clienteMain;
 		administradorHilos=new AdminHilos(main,this);
 		tableEstudiantes.getItems().clear();
 		tableInstructor.getItems().clear();
@@ -873,7 +874,7 @@ public class AdminController implements Initializable{
 
 				Instructor instructorAux=null;
 
-				instructorAux= main.crearInstructor(nombre, iD, correo, contrasenia);
+				instructorAux= mainCliente.crearInstructor(nombre, iD, correo, contrasenia);
 				if(instructorAux==null)
 					throw new InstructorNoCreadoException("ocurrió un error al crear el instructor");
 				listaInstructoresData.add(instructorAux);
@@ -937,7 +938,7 @@ public class AdminController implements Initializable{
 
 			Horario horarioAux=crearHorario(horario1,horario2,dia1,dia2);
 			Lugar   lugarAux= new Lugar(bloque, pisoInt, salonInt);
-			Deportivo deportivo=main.crearDeportivo(nombre, cuposDisponiblesInt, costoDouble,horarioAux,lugarAux,asistenciaMinAux,tipoCredito);
+			Deportivo deportivo=mainCliente.crearDeportivo(nombre, cuposDisponiblesInt, costoDouble,horarioAux,lugarAux,asistenciaMinAux,tipoCredito);
 			listaCreditosData.add(deportivo);
 			tableCreditos.refresh();
 			mostrarMensaje("Notificacion Credito Deportivo","Credito Deportivo registrado","El Credito Deportivo se registró con éxito",AlertType.INFORMATION);
@@ -985,7 +986,7 @@ public class AdminController implements Initializable{
 
 		Horario horarioAux=crearHorario(horario1,horario2,dia1,dia2);
 		Lugar   lugarAux= new Lugar(bloque, pisoInt, salonInt);
-		Cultural cultural=main.crearCultural(nombre, cuposDisponiblesInt, costoDouble,horarioAux,lugarAux,tipoCredito);
+		Cultural cultural=mainCliente.crearCultural(nombre, cuposDisponiblesInt, costoDouble,horarioAux,lugarAux,tipoCredito);
 		listaCreditosData.add(cultural);
 		tableCreditos.refresh();
 		mostrarMensaje("Notificacion Credito Cultural","Credito Cultural registrado","El Credito Cultural se registró con éxito",AlertType.INFORMATION);
@@ -1024,7 +1025,7 @@ public class AdminController implements Initializable{
 			Horario horarioAux=crearHorario(horario1,horario2,dia1,dia2);
 			Lugar   lugarAux= new Lugar(bloque, pisoInt, salonInt);
 
-			Academico academico=main.crearAcademico(nombre, cuposDisponiblesInt, costoDouble, horarioAux, lugarAux, tipoCredito, notaDouble, area);
+			Academico academico=mainCliente.crearAcademico(nombre, cuposDisponiblesInt, costoDouble, horarioAux, lugarAux, tipoCredito, notaDouble, area);
 			listaCreditosData.add(academico);
 			tableCreditos.refresh();
 			mostrarMensaje("Notificacion Credito Academico","Credito Academico registrado","El Credito Academico se registró con éxito",AlertType.INFORMATION);
@@ -1080,7 +1081,7 @@ public class AdminController implements Initializable{
 
 					Instructor instructorAux=new Instructor(nombre, iD, correo, contrasenia);
 
-					if(main.actualizarInstructor(instructorAux,instructorSeleccionado)){
+					if(mainCliente.actualizarInstructor(instructorAux,instructorSeleccionado)){
 						tableInstructor.refresh();
 						limpiarCamposInstructor();
 						mostrarMensaje("Notificacion Instructor","Instructor actualizado","El Instructor se actualizó con éxito",AlertType.INFORMATION);
@@ -1161,7 +1162,7 @@ public class AdminController implements Initializable{
 
 			Deportivo deportivoAux= new Deportivo(costoDouble,cuposDisponiblesInt,horarioAux,lugarAux,asistenciaMinAux,tipoCredito,nombre);
 
-			if(main.actualizarCredito(deportivoAux,creditoSeleccionado)){
+			if(mainCliente.actualizarCredito(deportivoAux,creditoSeleccionado)){
 				tableCreditos.refresh();
 				mostrarMensaje("Notificacion Credito deportivo","Credito Deportivo actualizado","El Credito Deportivo se actualizado con éxito",AlertType.INFORMATION);
 				registrarAccion("Credito Deportivo con nombre : "+deportivoAux.getNombre()+" actualizado por el admin: "+admin.getName(),Level.INFO );
@@ -1192,7 +1193,7 @@ public class AdminController implements Initializable{
 			Cultural culturalAux= new Cultural(costoDouble,cuposDisponiblesInt,horarioAux,lugarAux
 					,tipoCredito,nombre);
 
-			if(main.actualizarCredito(culturalAux,creditoSeleccionado)){
+			if(mainCliente.actualizarCredito(culturalAux,creditoSeleccionado)){
 				tableCreditos.refresh();
 				mostrarMensaje("Notificacion Credito Cultural","Credito Cultural actualizado","El Credito Cultural se actualizado con éxito",AlertType.INFORMATION);
 				registrarAccion("Credito Cultural con nombre : "+culturalAux.getNombre()+" actualizado por el admin: "+admin.getName(),Level.INFO );
@@ -1230,7 +1231,7 @@ public class AdminController implements Initializable{
 			Academico academicoAux= new Academico(costoDouble,cuposDisponiblesInt,horarioAux,lugarAux,notaDouble
 											     ,area,tipoCredito,nombre);
 
-			if(main.actualizarCredito(academicoAux,creditoSeleccionado)){
+			if(mainCliente.actualizarCredito(academicoAux,creditoSeleccionado)){
 				tableCreditos.refresh();
 				mostrarMensaje("Notificacion Credito Academico","Credito Academico actualizado","El Credito Academico se actualizado con éxito",AlertType.INFORMATION);
 				registrarAccion("Credito Academico con nombre : "+academicoAux.getNombre()+"actualizado por el admin:"+admin.getName(),Level.INFO );
@@ -1245,7 +1246,7 @@ public class AdminController implements Initializable{
 		{
 			if(mostrarMensajeConfirmacion("¿Estas seguro de eliminar al estudiante?") == true)
 			{
-				if(main.borrarEstudiante(estudianteSeleccionado)){
+				if(mainCliente.borrarEstudiante(estudianteSeleccionado)){
 
 					String iDEstudiante=estudianteSeleccionado.getName();
 					listaEstudiantesData.remove(estudianteSeleccionado);
@@ -1296,7 +1297,7 @@ public class AdminController implements Initializable{
 		{
 			if(mostrarMensajeConfirmacion("¿Estas seguro de eliminar el credito "+creditoSeleccionado.getNombre()+" ?") == true)
 			{
-				if(main.borrarCredito(creditoSeleccionado)){
+				if(mainCliente.borrarCredito(creditoSeleccionado)){
 
 					String nombreCredito=creditoSeleccionado.getNombre();
 					listaCreditosData.remove(creditoSeleccionado);
@@ -1512,16 +1513,16 @@ private ObservableList<Estudiante> getListaEstudiantesData() {
 	}
 
 	public void refrescarTablas() {
-		
-		
+
+
 		tableCreditos.setItems(getListaCreditosData());
 		tableEstudiantes.setItems(getListaEstudiantesData());
 		tableInstructor.setItems(getListaInstructoresData());
-		
+
 		tableCreditos.refresh();
 		tableEstudiantes.refresh();
 		tableInstructor.refresh();
-		
+
 	}
 
 

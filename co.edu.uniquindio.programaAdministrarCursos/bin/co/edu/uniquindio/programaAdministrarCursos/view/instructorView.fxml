@@ -48,9 +48,24 @@
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
             </content>
           </Tab>
-            <Tab text="Chats">
+            <Tab text="Chat">
                <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="201.0" prefWidth="447.0" />
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="tableCreditosRegistrados" layoutX="90.0" layoutY="37.0" prefHeight="111.0" prefWidth="349.0">
+                           <columns>
+                              <TableColumn fx:id="columnNombreCreditoRegistrado" prefWidth="94.0" text="Nombre" />
+                              <TableColumn fx:id="columnLugarRegistrado" prefWidth="139.0" text="Lugar" />
+                              <TableColumn fx:id="columnHorarioRegistrado" prefWidth="113.0" text="Horario" />
+                           </columns>
+                        </TableView>
+                        <Label layoutX="198.0" layoutY="14.0" text="CREDITOS REGISTRADOS" />
+                        <Label layoutX="239.0" layoutY="160.0" text="Chat" />
+                        <TextArea fx:id="textAreaChat" layoutX="89.0" layoutY="182.0" prefHeight="118.0" prefWidth="348.0" />
+                        <Button fx:id="btnEnviarMensaje" layoutX="389.0" layoutY="306.0" mnemonicParsing="false" onAction="#enviarMensajeAction" text="Enviar" />
+                        <TextField fx:id="txtMensaje" layoutX="89.0" layoutY="306.0" prefHeight="25.0" prefWidth="299.0" />
+                     </children>
+                  </AnchorPane>
                </content>
             </Tab>
         </tabs>

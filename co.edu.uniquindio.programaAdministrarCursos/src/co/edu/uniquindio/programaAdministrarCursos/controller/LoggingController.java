@@ -3,18 +3,25 @@ package co.edu.uniquindio.programaAdministrarCursos.controller;
 import java.awt.Window;
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-import co.edu.uniquindio.programaAdministrarCursos.Main;
+import javax.swing.JOptionPane;
+
+import co.edu.uniquindio.programaAdministrarCursos.ClienteMain;
 import co.edu.uniquindio.programaAdministrarCursos.exception.UsuarioNoEncontradoException;
 import co.edu.uniquindio.programaAdministrarCursos.hilos.HiloLog;
+import co.edu.uniquindio.programaAdministrarCursos.model.AccionEnum;
 import co.edu.uniquindio.programaAdministrarCursos.model.AdminHilos;
 import co.edu.uniquindio.programaAdministrarCursos.model.Estudiante;
+import co.edu.uniquindio.programaAdministrarCursos.model.PaqueteDatos;
 import javafx.fxml.Initializable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -27,7 +34,7 @@ import javafx.stage.FileChooser;
 
 
 public class LoggingController implements Initializable{
-	Main main;
+	ClienteMain main;
 	AdminHilos adminHilos;
 
 	String correoadmin="admin";
@@ -64,7 +71,7 @@ public class LoggingController implements Initializable{
 	}
 
 
-	public void setAplicacion(Main mainAux) {
+	public void setAplicacion(ClienteMain mainAux) {
 		main= mainAux;
 		adminHilos=new AdminHilos(main);
 
@@ -96,15 +103,7 @@ public class LoggingController implements Initializable{
 
 	@FXML
 	void accederAction(ActionEvent event) {
-		if(main.getRutaRaiz().isEmpty())
-		{	main.mostrarMensaje("Atención!","El programa no cuenta con un directorio raiz",
-						"Por favor ingrese una carpeta para que el programa pueda "
-								+" desplegar sus ficheros. En caso de windows se recomienda"
-								+ " la dirección (C:/td/persistencia/) en caso de linux (home/td/persistencia) ", AlertType.ERROR);
 
-			obtenerRutaPersistencia();
-		}else{
-			
 			try {
 				if(rBtnAdmin.isSelected())
 					logearAdmin();
@@ -114,28 +113,56 @@ public class LoggingController implements Initializable{
 					logearInstructor();
 
 			} catch (UsuarioNoEncontradoException e) {
-				registrarAccion("Error en el logging [Usuario no encontrado] ="+e.getMessage(), Level.SEVERE);
+//				registrarAccion("Error en el logging [Usuario no encontrado] ="+e.getMessage(), Level.SEVERE);
 				}
-					}
 
 	}
 
 	private void logearInstructor() {
 	if(correoInstructor.equalsIgnoreCase(txtCorreoLogin.getText()) && clave.equalsIgnoreCase(txtClaveLogin.getText())){
-			registrarAccion("Inicio de sesion instructor",Level.INFO);
+//			registrarAccion("Inicio de sesion instructor",Level.INFO);
 			main.cargarVistaInstructor();}
 
 	}
 
 	private void logearEstudiante() throws UsuarioNoEncontradoException {
 		Estudiante estudianteAux;
-		estudianteAux=main.validarEstudiante(txtCorreoLogin.getText(),txtClaveLogin.getText());
-		registrarAccion("Inicio de sesion estudiante "+txtCorreoLogin.getText(),Level.INFO );
-		main.cargarVistaEstudiante(estudianteAux);}
+		estudianteAux=validarEstudiante(txtCorreoLogin.getText(),txtClaveLogin.getText());
+//		registrarAccion("Inicio de sesion estudiante "+txtCorreoLogin.getText(),Level.INFO );
+//		main.cargarVistaEstudiante(estudianteAux);
+		}
+
+	public Estudiante validarEstudiante(String correo, String clave) {
+		PaqueteDatos paqueteLogin;
+		ArrayList<String> listaDatos=new ArrayList<>();
+		listaDatos.add(correo);
+		listaDatos.add(clave);
+		paqueteLogin= new PaqueteDatos(AccionEnum.LOGGEAR_ESTUDIANTE,listaDatos);
+		return validarEstudiante(paqueteLogin);
+	}
+
+
+	private Estudiante validarEstudiante(PaqueteDatos paqueteLogin) {
+
+		try {
+			Socket socket= new Socket("localhost",8081);
+			ObjectOutputStream flujoSalida= new ObjectOutputStream(socket.getOutputStream());
+			flujoSalida.writeObject(paqueteLogin);
+			JOptionPane.showMessageDialog(null, "datos enviados");
+			flujoSalida.close();
+			socket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+
 
 	private void logearAdmin() {
-	if(correoadmin.equalsIgnoreCase(txtCorreoLogin.getText()) && clave.equalsIgnoreCase(txtClaveLogin.getText())){
-			registrarAccion("Inicio de sesion admin", Level.INFO);
+		if(correoadmin.equalsIgnoreCase(txtCorreoLogin.getText()) && clave.equalsIgnoreCase(txtClaveLogin.getText())){
+//			registrarAccion("Inicio de sesion admin", Level.INFO);
 			main.cargarVistaAdmin();}
 
 	}
@@ -146,17 +173,17 @@ public class LoggingController implements Initializable{
 
 	}
 
-	public void registrarAccion(String mensaje, Level tipo){
-		adminHilos.startHiloLogger(mensaje, tipo);
-
-	}
-
-
-	public void obtenerRutaPersistencia() {
-		adminHilos.startHiloObtenerRutaPersistencia();
-
-
-	}
+//	public void registrarAccion(String mensaje, Level tipo){
+//		adminHilos.startHiloLogger(mensaje, tipo);
+//
+//	}
+//
+//
+//	public void obtenerRutaPersistencia() {
+//		adminHilos.startHiloObtenerRutaPersistencia();
+//
+//
+//	}
 
 
 }

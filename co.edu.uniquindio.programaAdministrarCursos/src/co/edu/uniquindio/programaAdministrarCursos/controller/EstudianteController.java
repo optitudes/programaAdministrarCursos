@@ -7,6 +7,7 @@ import java.time.LocalTime;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 
+import co.edu.uniquindio.programaAdministrarCursos.ClienteMain;
 import co.edu.uniquindio.programaAdministrarCursos.Main;
 import co.edu.uniquindio.programaAdministrarCursos.hilos.HiloLog;
 import co.edu.uniquindio.programaAdministrarCursos.model.AdminHilos;
@@ -31,7 +32,7 @@ import javafx.fxml.Initializable;
 
 public class EstudianteController implements Initializable{
 
-	Main main;
+	ClienteMain mainCliente;
 	Estudiante estudianteLoggeado;
 	AdminHilos adminHilos;
 	ObservableList<Credito> listaCreditosData = FXCollections.observableArrayList();
@@ -113,49 +114,49 @@ public class EstudianteController implements Initializable{
     @FXML
     void cerrarSesionAction(ActionEvent event) {
     	registrarAccion("cierre de sesion estudiante :"+estudianteLoggeado.getName(),Level.INFO );
-    	main.mostrarVentanaLogging();
+    	mainCliente.mostrarVentanaLogging();
 
     }
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		lblDia.setText("Dia :"+LocalDate.now(Clock.systemDefaultZone ()));
 		lblHora.setText("Hora :"+LocalTime.now());
-		
+
 		this.columnNombreCredito.setCellValueFactory(new PropertyValueFactory<>("nombre"));
 		this.columnCuposDisponiblesCredito.setCellValueFactory(new PropertyValueFactory<>("cuposDisponibles"));
 		this.columnCuposRegistradosCredito.setCellValueFactory(new PropertyValueFactory<>("cuposRegistrados"));
 		this.columnLugarCredito.setCellValueFactory(new PropertyValueFactory<>("lugar"));
 		this.columnHorarioCredito.setCellValueFactory(new PropertyValueFactory<>("horario"));
-		
-		
+
+
 		this.columnNombreCreditoRegistrado.setCellValueFactory(new PropertyValueFactory<>("nombre"));
 		this.columnLugarRegistrado.setCellValueFactory(new PropertyValueFactory<>("lugar"));
 		this.columnHorarioRegistrado.setCellValueFactory(new PropertyValueFactory<>("horario"));
 
 
 	}
-	public void setDatos(Main mainAux,Estudiante estudianteAux) {
-		main=mainAux;
+	public void setDatos(ClienteMain clienteMain,Estudiante estudianteAux) {
+		mainCliente=clienteMain;
 		this.estudianteLoggeado=estudianteAux;
-		adminHilos= new AdminHilos(mainAux,this);
+		adminHilos= new AdminHilos(clienteMain,this);
 
 		labelUsuario.setText("Usuario :"+estudianteLoggeado.getName());
 
 		tableCreditos.getItems().clear();
 		tableCreditosRegistrados.getItems().clear();
-		
+
 		tableCreditos.setItems(getlistaCreditosData());
-		
+
 	}
 private ObservableList<Credito> getlistaCreditosData() {
 		listaCreditosData.clear();
-		listaCreditosData.addAll(main.obtenerCreditos());
+		listaCreditosData.addAll(mainCliente.obtenerCreditos());
 		return listaCreditosData;
 	}
 
 public void registrarAccion(String mensaje, Level tipo){
 	adminHilos.startHiloLogger(mensaje, tipo);
-	
+
 }
 
 }
