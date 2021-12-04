@@ -306,11 +306,6 @@ public class Bienestar implements Serializable {
 	public void setListaCreditos(ArrayList<Credito> listaCreditos) {
 		this.listaCreditos = listaCreditos;
 	}
-	public void guardarEstudiantes(String rutaArchivo) throws IOException {
-
-
-
-	}
 	public void guardarDatosTXT(String rutaArchivo, String tipo) throws IOException {
 		ArrayList<String> listaInformacion= new ArrayList<String>();
 

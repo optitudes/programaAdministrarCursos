@@ -18,6 +18,7 @@ import co.edu.uniquindio.programaAdministrarCursos.Main;
 import co.edu.uniquindio.programaAdministrarCursos.ServerMain;
 import co.edu.uniquindio.programaAdministrarCursos.controller.AdminController;
 import co.edu.uniquindio.programaAdministrarCursos.controller.EstudianteController;
+import co.edu.uniquindio.programaAdministrarCursos.hilos.HiloEnviarPaqueteServer;
 import co.edu.uniquindio.programaAdministrarCursos.hilos.HiloLog;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -42,7 +43,7 @@ public class AdminHilos implements Runnable {
 
 
 	HiloLog hiloLog;
-
+	HiloEnviarPaqueteServer hiloEnviarPaqueteServer;
 
 	Thread hiloGuardarTXT;
 	Thread hiloCargarTXT;
@@ -74,7 +75,8 @@ public class AdminHilos implements Runnable {
 	@Override
 	public void run() {
 		Thread hiloEjecucion= Thread.currentThread();
-		
+
+
 //		if(hiloGuardarTXT==hiloEjecucion)
 //		{
 //			try {
@@ -145,25 +147,9 @@ public class AdminHilos implements Runnable {
 		this.archivoTXTCargar=nombreArchivo;
 		hiloCargarTXT.start();
 	}
-//	public void startHiloCrearBackup() {
-//		fecha=""+LocalDate.now(Clock.systemDefaultZone ())+LocalTime.now();
-//		fecha=fecha.replaceAll("-","_");
-//		fecha=fecha.replaceAll(":","_");
-//		fecha=fecha.replace(".","_");
-//
-//
-//		try {
-//			main.serializarBienestar(nombreArchivoBackup+fecha+".dat");
-//		} catch (IOException e) {
-//			adminController.mostrarMensaje("Error","No se pudo hacer el backup",
-//										  "El programa no pudo crear el backup"
-//										  + " póngase en contacto con el proveedor"
-//										  + " del servicio", AlertType.ERROR);
-//			adminController.registrarAccion("Error al hacer backup admin ["+adminController.getAdmin().getName()+"]",Level.SEVERE);
-//		}
-//	}
 
+	public void startHiloEnviarPaqueteServer(PaqueteDatos paqueteAux) {
+		hiloEnviarPaqueteServer= new HiloEnviarPaqueteServer(paqueteAux,"localhost",8081);
 
-
-
+	}
 }

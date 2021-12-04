@@ -40,7 +40,7 @@ public void mostrarVentanaLogging() {
 
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("view/loggingView.fxml"));
+			loader.setLocation(ClienteMain.class.getResource("view/loggingView.fxml"));
 
 			BorderPane rootLayout = (BorderPane)loader.load();
 			LoggingController loggingController = loader.getController();
@@ -59,7 +59,7 @@ public void mostrarVentanaLogging() {
 public void cargarVistaAdmin() {
 	try {
 		FXMLLoader loaderAdmin = new FXMLLoader();
-		loaderAdmin.setLocation(Main.class.getResource("view/adminView.fxml"));
+		loaderAdmin.setLocation(ClienteMain.class.getResource("view/adminView.fxml"));
 
 		BorderPane rootLayout = (BorderPane)loaderAdmin.load();
 		AdminController adminController = loaderAdmin.getController();

@@ -5,10 +5,15 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.Clock;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
 import javax.swing.JOptionPane;
+
+import javafx.scene.control.Alert.AlertType;
 
 
 public class Server{
@@ -65,31 +70,27 @@ public class Server{
 		}
 		clear();
 		System.out.println("(Este mensaje solo se mostrará una vez)\n"
-				+ "El programa ha detectado backups, elija uno si desea cargar un "
-				+ "backup.\n");
+				+ "Menú backups\n elija un backup  si desea cargarlo.\n");
 		buscarBackups();
 
 		while(true){
 			System.out.println("Esperando usuario...");
+			AccionEnum accionServer;
 
 			try {
 				socket = servidor.accept();
 				flujoEntradaObjeto = new ObjectInputStream(socket.getInputStream());//10101
 				paqueteDatos =  (PaqueteDatos) flujoEntradaObjeto.readObject();
-
-				if(paqueteDatos.getAccion()==AccionEnum.LOGGEAR_ESTUDIANTE)
-				{
-					ArrayList<String> contenido = (ArrayList<String>) paqueteDatos.getContenido();
-					datosLoggin=contenido;
-					if(datosLoggin!=null){
-
-						for (String string : datosLoggin) {
-							System.out.println(string);
-
-						}
-					}
+				accionServer=paqueteDatos.getAccion();
+				switch(accionServer){
+				case LOGGEAR_ESTUDIANTE:logearEstudiante();
+									    break;
+				case REGISTRAR_ACCION:  registrarAccion();
+										break;
+				case HACER_BACKUP:      hacerBackup();
+										break;
 				}
-				
+
 			} catch (IOException | ClassNotFoundException e) {
 				e.printStackTrace();
 			}finally{
@@ -103,12 +104,44 @@ public class Server{
 
 
 			}
+		}
+	}
 
+	private void hacerBackup() {
+		String nombre=(String) paqueteDatos.getContenido();
+		crearBackup(nombre);
 
+	}
+	private void registrarAccion() {
+		try {
+			ArrayList<Object> contenido= new ArrayList<>();
+			contenido= (ArrayList<Object>) paqueteDatos.getContenido();
+			String mensaje;
+			Level  tipo;
 
+			mensaje=(String) contenido.get(0);
+			tipo=(Level) contenido.get(1);
 
+			adminHilos.startHiloLogger(mensaje, tipo);
+
+		} catch (ClassCastException e) {
+			adminHilos.startHiloLogger("Error al registrar accion [ClassCastException]",Level.SEVERE);
 
 		}
+
+
+	}
+	private void logearEstudiante() {
+		ArrayList<String> contenido = (ArrayList<String>) paqueteDatos.getContenido();
+		datosLoggin=contenido;
+		if(datosLoggin!=null){
+
+			for (String string : datosLoggin) {
+				System.out.println(string);
+
+			}
+		}
+
 
 	}
 	private void buscarBackups() {
@@ -121,7 +154,7 @@ public class Server{
 		if(posicion!=listaArchivos.length)
 			System.out.println("-->Backup ["+listaArchivos[posicion]+"]");
 
-		
+
 
 
 
@@ -149,16 +182,38 @@ public class Server{
 						+ "FormatException]", Level.SEVERE);
 			}
 		}
-		
+
 		return eleccion;
-		
-		
+
+
 	}
 	public void clear(){
 		System.out.println("\n\n\n\n\n\n\n\n\n");
 	}
 	public String getRutaLog() {
 		return bienestar.getRutaLog();
+	}
+	public void serializarBienestar(String nombreArchivo) throws IOException {
+		Persistencia.serializarObjeto(bienestar.getRutaRespaldo()+"/"+nombreArchivo, bienestar);
+
+	}
+	public void crearBackup(String nombre) {
+		String fecha;
+		fecha=""+LocalDate.now(Clock.systemDefaultZone ())+LocalTime.now();
+		fecha=fecha.replaceAll("-","_");
+		fecha=fecha.replaceAll(":","_");
+		fecha=fecha.replace(".","_");
+
+
+		try {
+			serializarBienestar("Backup_"+fecha+".dat");
+		} catch (IOException e) {
+			System.out.println("Error\n"+"No se pudo hacer el backup\n"+
+										  "El programa no pudo crear el backup "
+										  + " póngase en contacto con el proveedor"
+										  + " del servicio");
+			adminHilos.startHiloLogger("Error al hacer backup admin ["+nombre+"]",Level.SEVERE);
+		}
 	}
 }
 

@@ -155,17 +155,19 @@ public class LoggingController implements Initializable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return null;
 	}
 
 
 	private void logearAdmin() {
 		if(correoadmin.equalsIgnoreCase(txtCorreoLogin.getText()) && clave.equalsIgnoreCase(txtClaveLogin.getText())){
-//			registrarAccion("Inicio de sesion admin", Level.INFO);
+			registrarAccion("Inicio de sesion admin", Level.INFO);
 			main.cargarVistaAdmin();}
 
 	}
+
+
 
 	private void limpiarLogging() {
 		txtCorreoLogin.setText("");
@@ -173,10 +175,15 @@ public class LoggingController implements Initializable{
 
 	}
 
-//	public void registrarAccion(String mensaje, Level tipo){
-//		adminHilos.startHiloLogger(mensaje, tipo);
-//
-//	}
+	public void registrarAccion(String mensaje, Level tipo){
+		ArrayList<Object> listaContenido= new ArrayList<>();
+		listaContenido.add(mensaje);
+		listaContenido.add(tipo);
+		PaqueteDatos paqueteAux= new PaqueteDatos(AccionEnum.REGISTRAR_ACCION, listaContenido);
+
+		adminHilos.startHiloEnviarPaqueteServer(paqueteAux);
+
+	}
 //
 //
 //	public void obtenerRutaPersistencia() {
