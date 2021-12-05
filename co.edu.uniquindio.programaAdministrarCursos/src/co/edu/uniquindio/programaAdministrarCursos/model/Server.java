@@ -139,9 +139,11 @@ public class Server{
 										break;
 				case GUARDAR_DATOS_TXT: guardarDatosTXT();
 										break;
+				case CARGAR_BACKUP:		 cargarBackup();
+										break;
 				}
 
-			} catch (IOException | ClassNotFoundException e) {
+			} catch ( Exception e) {
 				e.printStackTrace();
 				adminHilos.startHiloLogger("Error I/O [Servidor]"+e.getCause(),Level.SEVERE);
 			}finally{
@@ -156,6 +158,22 @@ public class Server{
 		}
 	}
 	
+	private void cargarBackup() throws Exception {
+		String correoAdmin;
+		String rutaArchivo;
+
+		ArrayList<String> listaDatos;
+		listaDatos= (ArrayList<String>) paqueteDatos.getContenido();
+
+		correoAdmin=       	        (String)     listaDatos.get(0);
+		rutaArchivo= 				(String) 	 listaDatos.get(1);
+
+		System.out.println("datos recibidos con éxito");
+		this.bienestar=(Bienestar) Persistencia.deseRializarObjeto(rutaArchivo);
+		adminHilos.startHiloLogger("Backup cargado["+rutaArchivo+"] por el admin ["+correoAdmin+"]",Level.INFO);
+	
+		
+	}
 	private void guardarDatosTXT() throws IOException {
 		String correoAdmin;
 		String nombreArchivo;
@@ -169,7 +187,7 @@ public class Server{
 		System.out.println("datos recibidos con éxito");
 		bienestar.guardarDatosTXT(bienestar.getRutaArchivos()+"/"+nombreArchivo, nombreArchivo);
 
-		adminHilos.startHiloLogger("datos cargador en el registro["+nombreArchivo+"] por el admin ["+correoAdmin+"]",Level.INFO);
+		adminHilos.startHiloLogger("datos guardados en el registro["+nombreArchivo+"] por el admin ["+correoAdmin+"]",Level.INFO);
 	
 		
 	}

@@ -92,14 +92,8 @@ public class AdminHilos implements Runnable {
 		Thread hiloEjecucion= Thread.currentThread();
 
 		if(hiloRefrescarTablas==hiloEjecucion){
-			while(sesion==true){
+			if(sesion==true){
 				adminController.refrescarTablas();
-				try {
-					Thread.sleep(60000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-					break;
-				}
 			}
 		}
 		if(hiloCargarDatosBackup==hiloEjecucion){
@@ -126,8 +120,12 @@ public class AdminHilos implements Runnable {
 					{
 						if(file.isFile())
 						{
-							paqueteDatos= new PaqueteDatos(AccionEnum.CARGAR_BACKUP,file.getAbsolutePath());
+							ArrayList<String> listaDatos= new ArrayList<String>();
+							listaDatos.add(adminController.getAdmin().getEmail());
+							listaDatos.add(file.getAbsolutePath());
+							paqueteDatos= new PaqueteDatos(AccionEnum.CARGAR_BACKUP,listaDatos);
 							startHiloEnviarPaqueteServer(paqueteDatos);
+							procesoExitoso=true;
 						}
 					}
 				}

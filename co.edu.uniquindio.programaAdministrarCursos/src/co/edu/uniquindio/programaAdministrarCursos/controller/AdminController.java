@@ -300,6 +300,7 @@ public class AdminController implements Initializable{
     @FXML
     void cargarDatosEstudianteAction(ActionEvent event) {
     	cargarDatosTXT("estudiante.txt");
+		administradorHilos.starHiloRefrescarTablas();
 
     }
 
@@ -312,6 +313,7 @@ public class AdminController implements Initializable{
 	@FXML
     void cargarDatosInstructorAction(ActionEvent event) {
 		cargarDatosTXT("instructor.txt");
+		administradorHilos.starHiloRefrescarTablas();
 
     }
     @FXML
@@ -322,6 +324,7 @@ public class AdminController implements Initializable{
     @FXML
     void cargarDatosCreditoAction(ActionEvent event) {
     	cargarDatosTXT("credito");
+		administradorHilos.starHiloRefrescarTablas();
 
     }
     @FXML
@@ -405,13 +408,11 @@ public class AdminController implements Initializable{
 	}
 	@FXML
 	void refrescarTablasAction2(ActionEvent event) {
-		actualizarCreditoAction();
 		administradorHilos.starHiloRefrescarTablas();
 
 	}
 	@FXML
 	void refrescarTablasAction1(ActionEvent event) {
-		actualizarCreditoAction();
 		administradorHilos.starHiloRefrescarTablas();
 
 	}
@@ -424,7 +425,6 @@ public class AdminController implements Initializable{
 	 */
 	@FXML
 	void cargarBackupAction(ActionEvent event) {
-		String mensaje="";
 		try {
 			administradorHilos.starHiloCargarDatosBackup();
 		} catch (Exception e) {
@@ -432,6 +432,7 @@ public class AdminController implements Initializable{
 			PaqueteDatos paqueteDatos= new PaqueteDatos(AccionEnum.REGISTRAR_ACCION,"Error al cargar backup admin["+admin.getEmail()+""
 					+ 									"]"+e.getMessage()+" cause:"+e.getCause());
 		}
+		administradorHilos.starHiloRefrescarTablas();
 	}
 
 	/**
@@ -1328,7 +1329,7 @@ private void crearCreditoDeportivo(String nombre, String cuposDisponibles, Strin
 
 		if(estudianteSeleccionado!=null)
 		{
-			String iDEstudiante=estudianteSeleccionado.getName();
+			String iDEstudiante=estudianteSeleccionado.getiD();
 			if(mostrarMensajeConfirmacion("¿Estas seguro de eliminar al estudiante?") == true)
 			{
 				try {
