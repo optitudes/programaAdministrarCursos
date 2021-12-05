@@ -1,6 +1,11 @@
 package co.edu.uniquindio.programaAdministrarCursos.controller;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.sql.Date;
 import java.time.Clock;
 import java.time.Instant;
@@ -18,6 +23,7 @@ import co.edu.uniquindio.programaAdministrarCursos.Main;
 import co.edu.uniquindio.programaAdministrarCursos.exception.DatosInvalidosException;
 import co.edu.uniquindio.programaAdministrarCursos.exception.EstudianteNoCreadoException;
 import co.edu.uniquindio.programaAdministrarCursos.exception.InstructorNoCreadoException;
+import co.edu.uniquindio.programaAdministrarCursos.exception.PaqueteNoReconocidoException;
 import co.edu.uniquindio.programaAdministrarCursos.hilos.HiloLog;
 import co.edu.uniquindio.programaAdministrarCursos.model.Academico;
 import co.edu.uniquindio.programaAdministrarCursos.model.AccionEnum;
@@ -59,6 +65,11 @@ public class AdminController implements Initializable{
 	Admin admin= new Admin("aizen","1991" , "aizen@lord.com", "1001");
 	HiloLog  loggerAdmin;
 	AdminHilos administradorHilos;
+	Socket  socket;
+	ObjectOutputStream flujoSalida;
+	ObjectInputStream  flujoEntrada;
+	PaqueteDatos  paqueteDatos;
+	PaqueteDatos  paqueteDatosAux;
 
 	ClienteMain mainCliente;
 
@@ -154,6 +165,15 @@ public class AdminController implements Initializable{
     private Button btnCargarDatosEstudiante;
     @FXML
     private Button btnGuardarDatosEstudiante;
+
+    @FXML
+    private Button btnRefrescarTablas1;
+    @FXML
+    private Button btnRefrescarTablas2;
+    @FXML
+    private Button btnRefrescarTablas3;
+
+
     @FXML
     private Button btnCargarDatosInstructor;
     @FXML
@@ -273,41 +293,40 @@ public class AdminController implements Initializable{
 
     @FXML
     void crearEstudianteAction(ActionEvent event) {
-//    	crearEstudiante();
+    	crearEstudiante();
 
     }
 
     @FXML
     void cargarDatosEstudianteAction(ActionEvent event) {
-//    	cargarDatosTXT("estudiante.txt");
+    	cargarDatosTXT("estudiante.txt");
 
     }
 
 
 	@FXML
     void guardarDatosEstudianteAction(ActionEvent event) {
-//    	guardarDatosTXT("estudiante.txt");
+    	guardarDatosTXT("estudiante.txt");
     }
 
 	@FXML
     void cargarDatosInstructorAction(ActionEvent event) {
-//		cargarDatosTXT("instructor.txt");
+		cargarDatosTXT("instructor.txt");
 
     }
     @FXML
     void guardarDatosInstructorAction(ActionEvent event) {
-//    	guardarDatosTXT("instructor.txt");
+    	guardarDatosTXT("instructor.txt");
 
     }
     @FXML
     void cargarDatosCreditoAction(ActionEvent event) {
-//    	cargarDatosTXT("credito");
-//    	refrescarTablas();
+    	cargarDatosTXT("credito");
 
     }
     @FXML
     void guardarDatosCreditoAction(ActionEvent event) {
-//    	 guardarDatosTXT("credito");
+    	 guardarDatosTXT("credito");
 
     }
 	@FXML
@@ -324,20 +343,20 @@ public class AdminController implements Initializable{
 
 	@FXML
     void borrarEstudianteAction(ActionEvent event) {
-//		borrarEstudiante();
+		borrarEstudiante();
     }
 
 
 
 	@FXML
     void actualizarEstudianteAction(ActionEvent event) {
-//		actualizarEstudiante();
+		actualizarEstudiante();
     }
 
 
 	@FXML
     void crearInstructor(ActionEvent event) {
-//		crearInstructor();
+		crearInstructor();
 
     }
 
@@ -345,20 +364,20 @@ public class AdminController implements Initializable{
 
 	@FXML
     void borrarInstructor(ActionEvent event) {
-//		borrarInstructor();
+		borrarInstructor();
     }
 
 
 
 	@FXML
     void actualizarInstructor(ActionEvent event) {
-//		actualizarInstructor();
+		actualizarInstructor();
     }
 
 
 	@FXML
     void crearCurso(ActionEvent event) {
-//		crearCurso();
+		crearCurso();
 
     }
 
@@ -366,7 +385,7 @@ public class AdminController implements Initializable{
 
 	@FXML
     void borrarCurso(ActionEvent event) {
-//		borrarCreditoAction();
+		borrarCreditoAction();
 
     }
 
@@ -374,25 +393,45 @@ public class AdminController implements Initializable{
 
 	@FXML
     void actualizarCurso(ActionEvent event) {
-//    	actualizarCreditoAction();
+    	actualizarCreditoAction();
 
 	}
 
+	
+	@FXML
+	void refrescarTablasAction3(ActionEvent event) {
+		administradorHilos.starHiloRefrescarTablas();
+
+	}
+	@FXML
+	void refrescarTablasAction2(ActionEvent event) {
+		actualizarCreditoAction();
+		administradorHilos.starHiloRefrescarTablas();
+
+	}
+	@FXML
+	void refrescarTablasAction1(ActionEvent event) {
+		actualizarCreditoAction();
+		administradorHilos.starHiloRefrescarTablas();
+
+	}
+
+
+	
 	/**
 	 * método que permite cargar un backup
 	 * @param event
 	 */
 	@FXML
 	void cargarBackupAction(ActionEvent event) {
-//		String mensaje="";
-//		try {
-////			mensaje=mainCliente.cargarDatosBackup();
-////			refrescarTablas();
-//			administradorHilos.startHiloLogger("Backup "+mensaje+" por admin ["+admin.getName()+"]", Level.INFO);
-//		} catch (Exception e) {
-//			mostrarMensaje("Error", "Backup no reconocido","Hubo un error al cargar el archivo backup",AlertType.ERROR);
-//			administradorHilos.startHiloLogger("Error al cargar datos admin ["+admin.getName()+"]"+"error tipo[Exception]", Level.SEVERE);
-//		}
+		String mensaje="";
+		try {
+			administradorHilos.starHiloCargarDatosBackup();
+		} catch (Exception e) {
+			mostrarMensaje("Error", "Backup no reconocido","Hubo un error al cargar el archivo backup",AlertType.ERROR);
+			PaqueteDatos paqueteDatos= new PaqueteDatos(AccionEnum.REGISTRAR_ACCION,"Error al cargar backup admin["+admin.getEmail()+""
+					+ 									"]"+e.getMessage()+" cause:"+e.getCause());
+		}
 	}
 
 	/**
@@ -440,6 +479,7 @@ public class AdminController implements Initializable{
     void cerrarSesionActrion(ActionEvent event) {
     	registrarAccion("cierre de sesion admin"+admin.getName(),Level.INFO );
     	hacerBackup();
+    	administradorHilos.setSesion(false);
     	mainCliente.mostrarVentanaLogging();
 
     }
@@ -703,14 +743,12 @@ public class AdminController implements Initializable{
 
 	public void setAplicacion(ClienteMain clienteMain) {
 		this.mainCliente=clienteMain;
-		administradorHilos=new AdminHilos(mainCliente,this);
+		administradorHilos=new AdminHilos(mainCliente,this, true);
 		tableEstudiantes.getItems().clear();
 		tableInstructor.getItems().clear();
 		tableCreditos.getItems().clear();
-
-//		tableCreditos.setItems(getListaCreditosData());
-//		tableEstudiantes.setItems(getListaEstudiantesData());
-//		tableInstructor.setItems(getListaInstructoresData());
+		
+		administradorHilos.starHiloRefrescarTablas();
 
 
 		// 3. Wrap the FilteredList in a SortedList.
@@ -857,643 +895,1069 @@ public class AdminController implements Initializable{
 		comboBoxAuxCurso.getItems().clear();
 		comboBoxAuxCurso.getItems().addAll("3.0","3.5","4.0");
 	}
-//
-//	private void crearEstudiante() {
-//
-//		String nombre=txtNombreEstudiante.getText();
-//		String iD=txtIdEstudiante.getText();
-//		String correo=txtCorreoEstudiante.getText();
-//		String contrasenia=txtContraseniaEstudiante.getText();
-//		try {
-//			if(validarDatosEstudiante(nombre,iD,correo,contrasenia)){
-//
-//				Estudiante estudianteAux=null;
-//
-////				estudianteAux= main.crearEstudiante(nombre, iD, correo, contrasenia);
-//				if(estudianteAux==null)
-//					throw new EstudianteNoCreadoException("ocurrió un error al crear el estudiante");
-//				listaEstudiantesData.add(estudianteAux);
-//
-//				tableEstudiantes.refresh();
-//				mostrarMensaje("Notificacion Estudiante","Estudiante registrado","El estudiante se registró con éxito",AlertType.INFORMATION);
-//				registrarAccion("Estudiante con ID : "+estudianteAux.getiD()+"creado por el admin:"+admin.getName(),Level.INFO );
-//			}
-//		} catch (DatosInvalidosException | EstudianteNoCreadoException e) {
-//	    	registrarAccion("Error al crear estudiante "+admin.getName()+"DatosInvalidosException ó EstudianteNoCreadoException",Level.SEVERE );
-//			mostrarMensaje("Notificación Estudiante", "Estudiante no registrado",e.getMessage(), AlertType.ERROR);		}
-//	}
-//
-//	private void crearInstructor() {
-//		String nombre=txtNombreInstructor.getText();
-//		String iD=txtIdInstructor.getText();
-//		String correo=txtCorreoInstructor.getText();
-//		String contrasenia=txtContraseniaInstructor.getText();
-//		try {
-//			if(validarDatosInstructor(nombre,iD,correo,contrasenia)){
-//
-//				Instructor instructorAux=null;
-//
-////				instructorAux= mainCliente.crearInstructor(nombre, iD, correo, contrasenia);
-//				if(instructorAux==null)
-//					throw new InstructorNoCreadoException("ocurrió un error al crear el instructor");
-//				listaInstructoresData.add(instructorAux);
-//				tableInstructor.refresh();
-//				limpiarCamposInstructor();
-//				mostrarMensaje("Notificacion Instructor","Instructor registrado","El instructor se registró con éxito",AlertType.INFORMATION);
-//				registrarAccion("Instructor con ID : "+instructorAux.getiD()+"creado por el admin: "+admin.getName(),Level.INFO );
-//			}
-//		} catch (DatosInvalidosException |  InstructorNoCreadoException e) {
-//			registrarAccion("Error al crear el instructor\n"+admin.getName()+"\n"+"DatosInvalidosException ó  InstructorNoCreadoException",Level.SEVERE );
-//			mostrarMensaje("Notificación instructor", "Instructor no registrado",e.getMessage(), AlertType.ERROR);		}
-//	}
-//  private void crearCurso() {
-//		 String nombre=txtNombreCredito.getText();
-//		 String cuposDisponibles=txtCuposDisponiblesCredito.getText();
-//		 String bloque=txtBloqueCurso.getText();
-//		 String piso=txtPisoCredito.getText();
-//		 String numSalon=txtNumSalonCurso.getText();
-//		 String costo=txtCostoCurso.getText();
-//		 EHorario horario1=comboBoxHorario1.getValue();
-//		 EHorario horario2=comboBoxHorario2.getValue();
-//		 EDia     dia1=comboBoxDia1.getValue();
-//		 EDia     dia2=comboBoxDia2.getValue();
-//		 try {
-//			if(rBtnAcademico.isSelected())
-//			 crearCreditoAcademico(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
-//					 			   horario1, horario2, dia1, dia2);
-//		 if(rBtnCultural.isSelected())
-//			 crearCreditoCultural(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
-//					 horario1, horario2, dia1, dia2);
-//		 if(rBtnDeportivo.isSelected())
-//			 crearCreditoDeportivo(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
-//					 horario1, horario2, dia1, dia2);
-//
-//
-//		} catch (NumberFormatException | DatosInvalidosException e) {
-//			registrarAccion("Error al crear el curso\n"+admin.getName()+"\n"+" NumberFormatException ó DatosInvalidosException",Level.SEVERE );
-//			mostrarMensaje("Notificación credito", "Credito no creado", e.getMessage(), AlertType.ERROR);
-//
-//		}
-//
-//	}
-//	private void crearCreditoDeportivo(String nombre, String cuposDisponibles, String bloque, String piso, String numSalon,
-//		String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) throws DatosInvalidosException,NumberFormatException {
-//
-//		String asistenciaMin=comboBoxAuxCurso.getValue();
-//		String tipoCredito="Deportivo";
-//
-//		if(validarDatosCredito(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
-//					 horario1, horario2, dia1, dia2)==true ){
-//
-//
-//			if(asistenciaMin==null || asistenciaMin.equalsIgnoreCase(""))
-//				throw new DatosInvalidosException("Asistencia invalida");
-//
-//			int pisoInt=Integer.parseInt(piso);
-//			int salonInt=Integer.parseInt(numSalon);
-//			int cuposDisponiblesInt=Integer.parseInt(cuposDisponibles);
-//			EAsistenciaMinima asistenciaMinAux=obtenerAsistencia(asistenciaMin);
-//			double costoDouble=Double.parseDouble(costo);
-//
-//			Horario horarioAux=crearHorario(horario1,horario2,dia1,dia2);
-//			Lugar   lugarAux= new Lugar(bloque, pisoInt, salonInt);
-////			Deportivo deportivo=mainCliente.crearDeportivo(nombre, cuposDisponiblesInt, costoDouble,horarioAux,lugarAux,asistenciaMinAux,tipoCredito);
-////			listaCreditosData.add(deportivo);
-//			tableCreditos.refresh();
-//			mostrarMensaje("Notificacion Credito Deportivo","Credito Deportivo registrado","El Credito Deportivo se registró con éxito",AlertType.INFORMATION);
-////			registrarAccion("Credito Deportivo con nombre : "+deportivo.getNombre()+"creado por el admin:"+admin.getName(),Level.INFO );
-//
-//
-//
-//		}
-//}
-//
-//
-//
-//
-//
-//
-//	private Horario crearHorario(EHorario horario1, EHorario horario2, EDia dia1, EDia dia2)  {
-//		Horario horarioAux;
-//		ArrayList<EHorario> listaHorariosAux= new ArrayList<EHorario>();
-//		ArrayList<EDia> listaDiasAux= new ArrayList<EDia>();
-//
-//		if(horario1!=null){listaHorariosAux.add(horario1);}
-//		if(horario2!=null){listaHorariosAux.add(horario2);}
-//		if(dia1!=null){listaDiasAux.add(dia1);}
-//		if(dia2!=null){listaDiasAux.add(dia2);}
-//
-//		horarioAux=new Horario(listaDiasAux,listaHorariosAux);
-//
-//		return horarioAux;
-//	}
-//
-//	private void crearCreditoCultural(String nombre, String cuposDisponibles, String bloque, String piso, String numSalon,
-//		String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) throws NumberFormatException, DatosInvalidosException {
-//
-//		String tipoCredito="Cultural";
-//
-//		if(validarDatosCredito(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
-//				 horario1, horario2, dia1, dia2)==true){
-//
-//		int pisoInt=Integer.parseInt(piso);
-//		int salonInt=Integer.parseInt(numSalon);
-//		int cuposDisponiblesInt=Integer.parseInt(cuposDisponibles);
-//		double costoDouble=Double.parseDouble(costo);
-//		if(costoDouble<50000 || costoDouble>100000)
-//			throw new DatosInvalidosException("El costo debe estar entre 50.000 y 100.000");
-//
-//		Horario horarioAux=crearHorario(horario1,horario2,dia1,dia2);
-//		Lugar   lugarAux= new Lugar(bloque, pisoInt, salonInt);
-////		Cultural cultural=mainCliente.crearCultural(nombre, cuposDisponiblesInt, costoDouble,horarioAux,lugarAux,tipoCredito);
-////		listaCreditosData.add(cultural);
-//		tableCreditos.refresh();
-//		mostrarMensaje("Notificacion Credito Cultural","Credito Cultural registrado","El Credito Cultural se registró con éxito",AlertType.INFORMATION);
-////		registrarAccion("Credito Cultural con nombre : "+cultural.getNombre()+"creado por el admin:"+admin.getName(),Level.INFO );
-//
-//
-//
-//	}
-//
-//
-//
-//}
-//
-//	private void crearCreditoAcademico(String nombre, String cuposDisponibles, String bloque, String piso, String numSalon,
-//		String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) throws NumberFormatException, DatosInvalidosException {
-//
-//
-//		EArea area= comboBoxAuxCredito2.getValue();
-//		String notaMinima=comboBoxAuxCurso.getValue();
-//
-//		String tipoCredito="Academico";
-//
-//		if(validarDatosCredito(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
-//					 horario1, horario2, dia1, dia2)==true ){
-//
-//
-//			if(area==null || notaMinima==null || notaMinima.equals(""))
-//				throw new DatosInvalidosException("La nota o el area son invalidas");
-//
-//			double notaDouble=Double.parseDouble(notaMinima);
-//			int pisoInt=Integer.parseInt(piso);
-//			int salonInt=Integer.parseInt(numSalon);
-//			int cuposDisponiblesInt=Integer.parseInt(cuposDisponibles);
-//			double costoDouble=Double.parseDouble(costo);
-//
-//			Horario horarioAux=crearHorario(horario1,horario2,dia1,dia2);
-//			Lugar   lugarAux= new Lugar(bloque, pisoInt, salonInt);
-//
-////			Academico academico=mainCliente.crearAcademico(nombre, cuposDisponiblesInt, costoDouble, horarioAux, lugarAux, tipoCredito, notaDouble, area);
-////			listaCreditosData.add(academico);
-//			tableCreditos.refresh();
-//			mostrarMensaje("Notificacion Credito Academico","Credito Academico registrado","El Credito Academico se registró con éxito",AlertType.INFORMATION);
-////			registrarAccion("Credito Academico con nombre : "+academico.getNombre()+"creado por el admin:"+admin.getName(),Level.INFO );
-//
-//
-//		}
-//}
 
-//	private void actualizarEstudiante() {
-//		if(estudianteSeleccionado!=null){
-//
-//			String nombre=txtNombreEstudiante.getText();
-//			String iD=txtIdEstudiante.getText();
-//			String correo=txtCorreoEstudiante.getText();
-////			String contrasenia=txtContraseniaEstudiante.getText();
-//
-////			try {
-////				if(validarDatosEstudiante(nombre,iD,correo,contrasenia)){
-////
-////					Estudiante estudianteAux=new Estudiante(nombre, iD, correo, contrasenia);
-////
-//////					if(main.actualizarEstudiante(estudianteAux,estudianteSeleccionado)){
-////						tableEstudiantes.refresh();
-////						mostrarMensaje("Notificacion Estudiante","Estudiante actualizado","El estudiante se actualizó con éxito",AlertType.INFORMATION);
-////						registrarAccion("Estudiante con ID : "+estudianteSeleccionado.getiD()+"actualizado por el admin: "+admin.getName(),Level.WARNING );
-////
-////					}else
-////					{
-////						mostrarMensaje("Notificación Estudiante", "Estudiante no actualizado","el estudiante no se actualizó", AlertType.WARNING);
-////
-////					}
-////				}
-////			}catch (DatosInvalidosException e) {
-////				registrarAccion("Error al actualizar el estudiante admin="+admin.getName()+"\n"+" DatosInvalidosException",Level.SEVERE );
-////				mostrarMensaje("Notificación Estudiante", "Estudiante no actualizado",e.getMessage(), AlertType.ERROR);
-////			}
-////		}else{
-////			mostrarMensaje("Notificación Estudiante", "Estudiante no seleccionado","Seleccione un estudiante", AlertType.WARNING);
-////		}
-//	}
-//
-//	private void actualizarInstructor() {
-//		if(instructorSeleccionado!=null){
-//
-//			String nombre=txtNombreInstructor.getText();
-//			String iD=txtIdInstructor.getText();
-//			String correo=txtCorreoInstructor.getText();
-//			String contrasenia=txtContraseniaInstructor.getText();
-//
-//			try {
-//				if(validarDatosInstructor(nombre,iD,correo,contrasenia)){
-//
-//					Instructor instructorAux=new Instructor(nombre, iD, correo, contrasenia);
-//
-////					if(mainCliente.actualizarInstructor(instructorAux,instructorSeleccionado)){
-//						tableInstructor.refresh();
-//						limpiarCamposInstructor();
-//						mostrarMensaje("Notificacion Instructor","Instructor actualizado","El Instructor se actualizó con éxito",AlertType.INFORMATION);
-//						registrarAccion("Instructor con ID : "+instructorAux.getiD()+"actualizado por el admin: "+admin.getName(),Level.INFO );
-//					}else
-//					{
-//						mostrarMensaje("Notificación Instructor", "Instructor no actualizado","el Instructor no se actualizó", AlertType.WARNING);
-//
-//					}
-//				}
-//			}catch (DatosInvalidosException e) {
-//				registrarAccion("Error al actualizar el instructor admin="+admin.getName()+"\n"+" DatosInvalidosException",Level.SEVERE );
-//				mostrarMensaje("Notificación Instructor", "Instructor no actualizado",e.getMessage(), AlertType.ERROR);
-//			}
-//		}else{
-//			mostrarMensaje("Notificación Instructor", "Instructor no seleccionado","Seleccione un Instructor", AlertType.WARNING);
-//		}
-//	}
-//	 private void actualizarCreditoAction() {
-//			if(creditoSeleccionado!=null)
-//			{
-//				 String nombre=txtNombreCredito.getText();
-//				 String cuposDisponibles=txtCuposDisponiblesCredito.getText();
-//				 String bloque=txtBloqueCurso.getText();
-//				 String piso=txtPisoCredito.getText();
-//				 String numSalon=txtNumSalonCurso.getText();
-//				 String costo=txtCostoCurso.getText();
-//				 EHorario horario1=comboBoxHorario1.getValue();
-//				 EHorario horario2=comboBoxHorario2.getValue();
-//				 EDia     dia1=comboBoxDia1.getValue();
-//				 EDia     dia2=comboBoxDia2.getValue();
-//
-//				 try {
-//					if(rBtnAcademico.isSelected())
-//					 actualizarCreditoAcademico(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
-//							 			   horario1, horario2, dia1, dia2,creditoSeleccionado);
-//				 if(rBtnCultural.isSelected())
-//					 actualizarCreditoCultural(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
-//							 horario1, horario2, dia1, dia2);
-//				 if(rBtnDeportivo.isSelected())
-//					 ActualizarCreditoDeportivo(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
-//							 horario1, horario2, dia1, dia2);
-//
-//
-//				} catch (NumberFormatException | DatosInvalidosException e) {
-//					registrarAccion("Error al actualizar el credito admin="+admin.getName()+"\n"+" NumberFormatException ó DatosInvalidosException",Level.SEVERE );
-//					mostrarMensaje("Notificación credito", "Credito no actualizado", e.getMessage(), AlertType.ERROR);
-//
-//				}
-//
-//			}else{
-//				mostrarMensaje("Notificación Credito", "Credito no seleccionado","Seleccione un Credito", AlertType.WARNING);
-//
-//			}
-//
-//		}
-//	private void ActualizarCreditoDeportivo(String nombre, String cuposDisponibles, String bloque, String piso,
-//			String numSalon, String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) throws NumberFormatException, DatosInvalidosException {
-//
-//		String asistenciaMin=comboBoxAuxCurso.getValue();
-//		String tipoCredito="Deportivo";
-//
-//		if(validarDatosCredito(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
-//					 horario1, horario2, dia1, dia2)==true ){
-//
-//
-//			if(asistenciaMin==null || asistenciaMin.equalsIgnoreCase(""))
-//				throw new DatosInvalidosException("Asistencia invalida");
-//
-//			int pisoInt=Integer.parseInt(piso);
-//			int salonInt=Integer.parseInt(numSalon);
-//			int cuposDisponiblesInt=Integer.parseInt(cuposDisponibles);
-//			EAsistenciaMinima asistenciaMinAux=obtenerAsistencia(asistenciaMin);
-//			double costoDouble=Double.parseDouble(costo);
-//
-//			Horario horarioAux=crearHorario(horario1,horario2,dia1,dia2);
-//			Lugar   lugarAux= new Lugar(bloque, pisoInt, salonInt);
-//
-//			Deportivo deportivoAux= new Deportivo(costoDouble,cuposDisponiblesInt,horarioAux,lugarAux,asistenciaMinAux,tipoCredito,nombre);
-//
-//			if(mainCliente.actualizarCredito(deportivoAux,creditoSeleccionado)){
-//				tableCreditos.refresh();
-//				mostrarMensaje("Notificacion Credito deportivo","Credito Deportivo actualizado","El Credito Deportivo se actualizado con éxito",AlertType.INFORMATION);
-//				registrarAccion("Credito Deportivo con nombre : "+deportivoAux.getNombre()+" actualizado por el admin: "+admin.getName(),Level.INFO );
-//			}
-//		}
-//
-//	}
-//
-//	private void actualizarCreditoCultural(String nombre, String cuposDisponibles, String bloque, String piso,
-//			String numSalon, String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) throws NumberFormatException, DatosInvalidosException {
-//
-//		String tipoCredito="Cultural";
-//
-//		if(validarDatosCredito(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
-//				horario1, horario2, dia1, dia2)==true){
-//
-//			int pisoInt=Integer.parseInt(piso);
-//			int salonInt=Integer.parseInt(numSalon);
-//			int cuposDisponiblesInt=Integer.parseInt(cuposDisponibles);
-//			double costoDouble=Double.parseDouble(costo);
-//			if(costoDouble<50000 || costoDouble>100000)
-//				throw new DatosInvalidosException("El costo debe estar entre 50.000 y 100.000");
-//
-//
-//			Horario horarioAux=crearHorario(horario1,horario2,dia1,dia2);
-//			Lugar   lugarAux= new Lugar(bloque, pisoInt, salonInt);
-//
-//			Cultural culturalAux= new Cultural(costoDouble,cuposDisponiblesInt,horarioAux,lugarAux
-//					,tipoCredito,nombre);
-//
-//			if(mainCliente.actualizarCredito(culturalAux,creditoSeleccionado)){
-//				tableCreditos.refresh();
-//				mostrarMensaje("Notificacion Credito Cultural","Credito Cultural actualizado","El Credito Cultural se actualizado con éxito",AlertType.INFORMATION);
-//				registrarAccion("Credito Cultural con nombre : "+culturalAux.getNombre()+" actualizado por el admin: "+admin.getName(),Level.INFO );
-//			}
-//		}
-//
-//	}
-//
-//	private void actualizarCreditoAcademico(String nombre, String cuposDisponibles, String bloque, String piso,
-//			String numSalon, String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2,
-//			Credito creditoSeleccionado) throws NumberFormatException, DatosInvalidosException {
-//
-//
-//		EArea area= comboBoxAuxCredito2.getValue();
-//		String notaMinima=comboBoxAuxCurso.getValue();
-//
-//		String tipoCredito="Academico";
-//
-//		if(validarDatosCredito(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
-//					 horario1, horario2, dia1, dia2)==true ){
-//
-//
-//			if(area==null || notaMinima==null || notaMinima.equals(""))
-//				throw new DatosInvalidosException("La nota o el area son invalidas");
-//
-//			double notaDouble=Double.parseDouble(notaMinima);
-//			int pisoInt=Integer.parseInt(piso);
-//			int salonInt=Integer.parseInt(numSalon);
-//			int cuposDisponiblesInt=Integer.parseInt(cuposDisponibles);
-//			double costoDouble=Double.parseDouble(costo);
-//
-//			Horario horarioAux=crearHorario(horario1,horario2,dia1,dia2);
-//			Lugar   lugarAux= new Lugar(bloque, pisoInt, salonInt);
-//
-//			Academico academicoAux= new Academico(costoDouble,cuposDisponiblesInt,horarioAux,lugarAux,notaDouble
-//											     ,area,tipoCredito,nombre);
-//
-//			if(mainCliente.actualizarCredito(academicoAux,creditoSeleccionado)){
-//				tableCreditos.refresh();
-//				mostrarMensaje("Notificacion Credito Academico","Credito Academico actualizado","El Credito Academico se actualizado con éxito",AlertType.INFORMATION);
-//				registrarAccion("Credito Academico con nombre : "+academicoAux.getNombre()+"actualizado por el admin:"+admin.getName(),Level.INFO );
-//			}
-//		}
-//
-//	}
-//
-//	private void borrarEstudiante() {
-//
-//		if(estudianteSeleccionado!=null)
-//		{
-//			if(mostrarMensajeConfirmacion("¿Estas seguro de eliminar al estudiante?") == true)
-//			{
-//				if(mainCliente.borrarEstudiante(estudianteSeleccionado)){
-//
-//					String iDEstudiante=estudianteSeleccionado.getName();
-//					listaEstudiantesData.remove(estudianteSeleccionado);
-//					estudianteSeleccionado=null;
-//					tableEstudiantes.getSelectionModel().clearSelection();
-//					limpiarCamposEstudiante();
-//					tableEstudiantes.refresh();
-//
-//					mostrarMensaje("Notificacion Estudiante","Estudiante borrado","El estudiante se borró con éxito",AlertType.INFORMATION);
-//					registrarAccion("Estudiante con ID : "+iDEstudiante+" borrado por el admin: "+admin.getName(),Level.WARNING );
-//
-//				}else{
-//					mostrarMensaje("Notificación Estudiante", "Estudiante no borrado","El estudiante no se borró con éxito", AlertType.ERROR);
-//				}
-//			}
-//		}else{
-//			mostrarMensaje("Notificación Estudiante", "Estudiante no seleccionado","Seleccione un estudiante", AlertType.WARNING);
-//		}
-//	}
-//
-//	private void borrarInstructor() {
-//		if(instructorSeleccionado!=null)
-//		{
-//			if(mostrarMensajeConfirmacion("¿Estas seguro de eliminar al instructor?") == true)
-//			{
-//				if(main.borrarInstructor(instructorSeleccionado)){
-//
-//					String iDInstructor=instructorSeleccionado.getiD();
-//					listaInstructoresData.remove(instructorSeleccionado);
-//					instructorSeleccionado=null;
-//					tableInstructor.getSelectionModel().clearSelection();
-//					limpiarCamposInstructor();
-//					tableInstructor.refresh();
-//
-//					mostrarMensaje("Notificacion Instructor","Instructor borrado","El Instructor se borró con éxito",AlertType.INFORMATION);
-//					registrarAccion("Instructor con ID : "+iDInstructor+" borrado por el admin: "+admin.getName(),Level.WARNING );
-//
-//				}else{
-//					mostrarMensaje("Notificación Instructor", "Instructor no borrado","El Instructor no se borró con éxito", AlertType.ERROR);
-//				}
-//			}
-//		}else{
-//			mostrarMensaje("Notificación Instructor", "Instructor no seleccionado","Seleccione un Instructor", AlertType.WARNING);
-//		}
-//	}
-//	private void borrarCreditoAction() {
-//	if(creditoSeleccionado!=null)
-//		{
-//			if(mostrarMensajeConfirmacion("¿Estas seguro de eliminar el credito "+creditoSeleccionado.getNombre()+" ?") == true)
-//			{
-//				if(mainCliente.borrarCredito(creditoSeleccionado)){
-//
-//					String nombreCredito=creditoSeleccionado.getNombre();
-//					listaCreditosData.remove(creditoSeleccionado);
-//					creditoSeleccionado=null;
-//					tableCreditos.getSelectionModel().clearSelection();
-//					limpiarCreditos();
-//					tableCreditos.refresh();
-//
-//					mostrarMensaje("Notificacion Credito","Credito borrado","El Credito se borró con éxito",AlertType.INFORMATION);
-//					registrarAccion("Credito con nombre : "+nombreCredito+" borrado por el admin: "+admin.getName(),Level.WARNING );
-//
-//				}else{
-//					mostrarMensaje("Notificación Credito", "Credito no borrado","El Credito no se borró con éxito", AlertType.ERROR);
-//				}
-//			}
-//		}else{
-//			mostrarMensaje("Notificación Credito", "Credito no seleccionado","Credito un Instructor", AlertType.WARNING);
-//		}
-//
-//	}
-//	private boolean validarDatosEstudiante(String nombre, String iD, String correo, String contrasenia) throws DatosInvalidosException {
-//
-//		String mensaje="";
-//
-//		if(nombre == null || nombre.equals(""))
-//			mensaje += "El nombre del estudiante es invalido \n";
-//
-//		if(iD == null || iD.equals("")){
-//			mensaje += "El ID del retiro es invalido \n";
-//		}else{
-//			if(main.verificarIDEstudiante(iD))
-//			{
-//				mensaje+="El ID ya está registrado";
-//			}
-//		}
-//
-//		if(correo == null || correo.equals("")){
-//			mensaje += "El correo es invalido \n";
-//		}else{
-//			if(main.verificarCorreoEstudiante(correo))
-//			{
-//				mensaje+="El correo ya está registrado";
-//			}
-//		}
-//
-//		if(contrasenia == null || contrasenia.equals(""))
-//			mensaje += "La contraseña es invalida \n";
-//
-//
-//		if(mensaje.isEmpty())
-//		{
-//			return true;
-//		}else
-//		{
-//			throw new DatosInvalidosException(mensaje);
-//		}
-//	}
-//
-//	private boolean validarDatosInstructor(String nombre, String iD, String correo, String contrasenia) throws DatosInvalidosException {
-//		String mensaje="";
-//
-//		if(nombre == null || nombre.equals(""))
-//			mensaje += "El nombre del instructor es invalido \n";
-//
-//		if(iD == null || iD.equals("")){
-//			mensaje += "El ID del instructor es invalido \n";
-//		}else{
-//			if(main.verificarIDInstructor(iD))
-//			{
-//				mensaje+="El ID ya está registrado";
-//			}
-//		}
-//
-//		if(correo == null || correo.equals("")){
-//			mensaje += "El correo es invalido \n";
-//		}else{
-//			if(main.verificarCorreoInstructor(correo))
-//			{
-//				mensaje+="El correo ya está registrado";
-//			}
-//		}
-//
-//		if(contrasenia == null || contrasenia.equals(""))
-//			mensaje += "La contraseña es invalida \n";
-//
-//
-//		if(mensaje.isEmpty())
-//		{
-//			return true;
-//		}else
-//		{
-//			throw new DatosInvalidosException(mensaje);
-//		}
-//	}
-//private boolean validarDatosCredito(String nombre, String cuposDisponibles, String bloque, String piso, String numSalon,
-//			String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) throws DatosInvalidosException {
-//		String mensaje="";
-//
-//
-//
-//
-//
-//		if(nombre == null || nombre.equals("")){
-//			mensaje += "El nombre del credito del instructor es invalido \n";
-//		}else{
-//				if(main.validarNombreCredito(nombre))
-//					mensaje += "Ya existe un credito academico con ese nombre \n";
-//		}
-//
-//
-//		if(cuposDisponibles == null || cuposDisponibles.equals("")){
-//			mensaje += "Los cupos disponibles del curso son invalidos \n";
-//		}
-//
-//		if(bloque == null || bloque.equals("")){
-//			mensaje += "El bloque es invalido \n";
-//		}
-//
-//		if(piso == null || piso.equals(""))
-//			mensaje += "El piso es invalido \n";
-//
-//		if(numSalon == null || numSalon.equals(""))
-//			mensaje += "El número de piso es invalido \n";
-//
-//
-//		if(costo == null || costo.equals(""))
-//			mensaje += "El costo es invalido \n";
-//
-//		if(horario1 == null && horario2==null){
-//			mensaje += "Debe ingresar almenos un horario \n";
-//		}else{
-//			if(horario1!=null && horario2!=null)
-//			{
-//				if(horario1==horario2)
-//					mensaje+="Los dos horarios no pueden ser iguales\n";
-//			}
-//		}
-//
-//
-//		if(dia1 == null && dia2==null){
-//			mensaje += "Debe ingresar almenos un dia \n";
-//		}else{
-//			if(dia1!=null && dia2!=null)
-//			{
-//				if(dia1==dia2)
-//					mensaje+="Los dos dias no pueden ser iguales\n";
-//			}
-//		}
-//
-//		if(mensaje.isEmpty())
-//		{
-//			return true;
-//		}else
-//		{
-//			throw new DatosInvalidosException(mensaje);
-//		}
-//}
-//private ObservableList<Credito> getListaCreditosData() {
-//	listaCreditosData.clear();
-//	listaCreditosData.addAll(main.obtenerCreditos());
-//
-//	return listaCreditosData;
-//}
-//
-//private ObservableList<Estudiante> getListaEstudiantesData() {
-//	listaEstudiantesData.clear();
-//	listaEstudiantesData.addAll(main.obtenerEstudiantes());
-//
-//	return listaEstudiantesData;
-//}
-//
-//	private ObservableList<Instructor> getListaInstructoresData() {
-//		listaInstructoresData.clear();
-//		listaInstructoresData.addAll(main.obtenerInstructores());
-//		return listaInstructoresData;
-//	}
-//
+	private void crearEstudiante() {
+
+		String nombre=txtNombreEstudiante.getText();
+		String iD=txtIdEstudiante.getText();
+		String correo=txtCorreoEstudiante.getText();
+		String contrasenia=txtContraseniaEstudiante.getText();
+		try {
+			if(validarDatosEstudiante(nombre,iD,correo,contrasenia)){
+
+				Estudiante estudianteAux=null;
+
+				estudianteAux=crearEstudiante(nombre, iD, correo, contrasenia);
+				if(estudianteAux==null)
+					throw new EstudianteNoCreadoException("ocurrió un error al crear el estudiante");
+				listaEstudiantesData.add(estudianteAux);
+
+				tableEstudiantes.refresh();
+				mostrarMensaje("Notificacion Estudiante","Estudiante registrado","El estudiante se registró con éxito",AlertType.INFORMATION);
+			}
+		} catch (DatosInvalidosException | PaqueteNoReconocidoException | ClassNotFoundException | IOException | EstudianteNoCreadoException e) {
+	    	registrarAccion("Error al crear estudiante "+admin.getName()+" "+e.getMessage()+" "+e.getCause(),Level.SEVERE );
+			mostrarMensaje("Notificación Estudiante", "Estudiante no registrado",e.getMessage(), AlertType.ERROR);		}
+	}
+
+	private void crearInstructor() {
+		String nombre=txtNombreInstructor.getText();
+		String iD=txtIdInstructor.getText();
+		String correo=txtCorreoInstructor.getText();
+		String contrasenia=txtContraseniaInstructor.getText();
+		try {
+			if(validarDatosInstructor(nombre,iD,correo,contrasenia)){
+
+				Instructor instructorAux=null;
+
+				instructorAux= crearInstructor(nombre, iD, correo, contrasenia);
+				if(instructorAux==null)
+					throw new InstructorNoCreadoException("ocurrió un error al crear el instructor");
+				listaInstructoresData.add(instructorAux);
+				tableInstructor.refresh();
+				limpiarCamposInstructor();
+				mostrarMensaje("Notificacion Instructor","Instructor registrado","El instructor se registró con éxito",AlertType.INFORMATION);
+			}
+		} catch (DatosInvalidosException |  InstructorNoCreadoException | ClassNotFoundException | IOException | PaqueteNoReconocidoException e) {
+			registrarAccion("Error al crear el instructor\n"+admin.getName()+"\n"+"DatosInvalidosException ó  InstructorNoCreadoException",Level.SEVERE );
+			mostrarMensaje("Notificación instructor", "Instructor no registrado",e.getMessage(), AlertType.ERROR);		}
+	}
+
+  private void crearCurso() {
+		 String nombre=txtNombreCredito.getText();
+		 String cuposDisponibles=txtCuposDisponiblesCredito.getText();
+		 String bloque=txtBloqueCurso.getText();
+		 String piso=txtPisoCredito.getText();
+		 String numSalon=txtNumSalonCurso.getText();
+		 String costo=txtCostoCurso.getText();
+		 EHorario horario1=comboBoxHorario1.getValue();
+		 EHorario horario2=comboBoxHorario2.getValue();
+		 EDia     dia1=comboBoxDia1.getValue();
+		 EDia     dia2=comboBoxDia2.getValue();
+		 try {
+			if(rBtnAcademico.isSelected())
+			 crearCreditoAcademico(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
+					 			   horario1, horario2, dia1, dia2);
+		 if(rBtnCultural.isSelected())
+			 crearCreditoCultural(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
+					 horario1, horario2, dia1, dia2);
+		 if(rBtnDeportivo.isSelected())
+			 crearCreditoDeportivo(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
+					 horario1, horario2, dia1, dia2);
+
+
+		} catch (NumberFormatException | DatosInvalidosException | ClassNotFoundException | IOException | PaqueteNoReconocidoException e) {
+			registrarAccion("Error al crear el curso\n"+admin.getName()+"\n"+e.getMessage()+" cause:"+e.getCause(),Level.SEVERE );
+			mostrarMensaje("Notificación credito", "Credito no creado", e.getMessage(), AlertType.ERROR);
+
+		}
+
+  }
+
+/**
+ * método que 
+ * @param nombre
+ * @param cuposDisponibles
+ * @param bloque
+ * @param piso
+ * @param numSalon
+ * @param costo
+ * @param horario1
+ * @param horario2
+ * @param dia1
+ * @param dia2
+ * @throws DatosInvalidosException
+ * @throws NumberFormatException
+ * @throws UnknownHostException
+ * @throws ClassNotFoundException
+ * @throws IOException
+ * @throws PaqueteNoReconocidoException
+ */
+private void crearCreditoDeportivo(String nombre, String cuposDisponibles, String bloque, String piso, String numSalon,
+		  String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) throws DatosInvalidosException,NumberFormatException, UnknownHostException, 
+  																					    ClassNotFoundException, IOException, PaqueteNoReconocidoException {
+
+	  String asistenciaMin=comboBoxAuxCurso.getValue();
+	  String tipoCredito="Deportivo";
+
+	  if(validarDatosCredito(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
+			  horario1, horario2, dia1, dia2)==true ){
+
+
+		  if(asistenciaMin==null || asistenciaMin.equalsIgnoreCase(""))
+			  throw new DatosInvalidosException("Asistencia invalida");
+
+		  int pisoInt=Integer.parseInt(piso);
+		  int salonInt=Integer.parseInt(numSalon);
+		  int cuposDisponiblesInt=Integer.parseInt(cuposDisponibles);
+		  EAsistenciaMinima asistenciaMinAux=obtenerAsistencia(asistenciaMin);
+		  double costoDouble=Double.parseDouble(costo);
+
+		  Horario horarioAux=crearHorario(horario1,horario2,dia1,dia2);
+		  Lugar   lugarAux= new Lugar(bloque, pisoInt, salonInt);
+		  Deportivo deportivo=crearDeportivo(nombre, cuposDisponiblesInt, costoDouble,horarioAux,lugarAux,asistenciaMinAux,tipoCredito);
+		  listaCreditosData.add(deportivo);
+		  tableCreditos.refresh();
+		  mostrarMensaje("Notificacion Credito Deportivo","Credito Deportivo registrado","El Credito Deportivo se registró con éxito",AlertType.INFORMATION);
+		  registrarAccion("Credito Deportivo con nombre : "+deportivo.getNombre()+"creado por el admin:"+admin.getName(),Level.INFO );
+
+
+
+	  }
+  }
+
+
+
+	private Horario crearHorario(EHorario horario1, EHorario horario2, EDia dia1, EDia dia2)  {
+		Horario horarioAux;
+		ArrayList<EHorario> listaHorariosAux= new ArrayList<EHorario>();
+		ArrayList<EDia> listaDiasAux= new ArrayList<EDia>();
+
+		if(horario1!=null){listaHorariosAux.add(horario1);}
+		if(horario2!=null){listaHorariosAux.add(horario2);}
+		if(dia1!=null){listaDiasAux.add(dia1);}
+		if(dia2!=null){listaDiasAux.add(dia2);}
+
+		horarioAux=new Horario(listaDiasAux,listaHorariosAux);
+
+		return horarioAux;
+	}
+
+	private void crearCreditoCultural(String nombre, String cuposDisponibles, String bloque, String piso, String numSalon,
+		String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) throws NumberFormatException, DatosInvalidosException,
+																					UnknownHostException, ClassNotFoundException, IOException,
+																					PaqueteNoReconocidoException {
+
+		String tipoCredito="Cultural";
+
+		if(validarDatosCredito(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
+				 horario1, horario2, dia1, dia2)==true){
+
+		int pisoInt=Integer.parseInt(piso);
+		int salonInt=Integer.parseInt(numSalon);
+		int cuposDisponiblesInt=Integer.parseInt(cuposDisponibles);
+		double costoDouble=Double.parseDouble(costo);
+		if(costoDouble<50000 || costoDouble>100000)
+			throw new DatosInvalidosException("El costo debe estar entre 50.000 y 100.000");
+
+		Horario horarioAux=crearHorario(horario1,horario2,dia1,dia2);
+		Lugar   lugarAux= new Lugar(bloque, pisoInt, salonInt);
+		Cultural cultural=crearCultural(nombre, cuposDisponiblesInt, costoDouble,horarioAux,lugarAux,tipoCredito);
+		listaCreditosData.add(cultural);
+		tableCreditos.refresh();
+		mostrarMensaje("Notificacion Credito Cultural","Credito Cultural registrado","El Credito Cultural se registró con éxito",AlertType.INFORMATION);
+	}
+}
+
+	private void crearCreditoAcademico(String nombre, String cuposDisponibles, String bloque, String piso, String numSalon,
+		String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) throws NumberFormatException, DatosInvalidosException,
+																					UnknownHostException, ClassNotFoundException, IOException, 
+																					PaqueteNoReconocidoException {
+
+
+		EArea area= comboBoxAuxCredito2.getValue();
+		String notaMinima=comboBoxAuxCurso.getValue();
+
+		String tipoCredito="Academico";
+
+		if(validarDatosCredito(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
+					 horario1, horario2, dia1, dia2)==true ){
+
+
+			if(area==null || notaMinima==null || notaMinima.equals(""))
+				throw new DatosInvalidosException("La nota o el area son invalidas");
+
+			double notaDouble=Double.parseDouble(notaMinima);
+			int pisoInt=Integer.parseInt(piso);
+			int salonInt=Integer.parseInt(numSalon);
+			int cuposDisponiblesInt=Integer.parseInt(cuposDisponibles);
+			double costoDouble=Double.parseDouble(costo);
+
+			Horario horarioAux=crearHorario(horario1,horario2,dia1,dia2);
+			Lugar   lugarAux= new Lugar(bloque, pisoInt, salonInt);
+
+			Academico academico=crearAcademico(nombre, cuposDisponiblesInt, costoDouble, horarioAux, lugarAux, tipoCredito, notaDouble, area);
+			listaCreditosData.add(academico);
+			tableCreditos.refresh();
+			mostrarMensaje("Notificacion Credito Academico","Credito Academico registrado","El Credito Academico se registró con éxito",AlertType.INFORMATION);
+
+
+		}
+}
+
+
+
+
+
+
+
+	private void actualizarEstudiante() {
+		if(estudianteSeleccionado!=null){
+
+			String nombre=txtNombreEstudiante.getText();
+			String iD=txtIdEstudiante.getText();
+			String correo=txtCorreoEstudiante.getText();
+			String contrasenia=txtContraseniaEstudiante.getText();
+
+			try {
+				if(validarDatosEstudiante(nombre,iD,correo,contrasenia)){
+
+					Estudiante estudianteAux=new Estudiante(nombre, iD, correo, contrasenia);
+
+					if(actualizarEstudiante(estudianteAux,estudianteSeleccionado)){
+						refrescarTablas();
+						mostrarMensaje("Notificacion Estudiante","Estudiante actualizado","El estudiante se actualizó con éxito",AlertType.INFORMATION);
+
+					}else
+					{
+						mostrarMensaje("Notificación Estudiante", "Estudiante no actualizado","el estudiante no se actualizó", AlertType.WARNING);
+
+					}
+				}
+			}catch (DatosInvalidosException | ClassNotFoundException | PaqueteNoReconocidoException | IOException e) {
+				registrarAccion("Error al actualizar el estudiante admin="+admin.getName()+"\n"+e.getMessage()+" cause:"+e.getCause(),Level.SEVERE );
+				mostrarMensaje("Notificación Estudiante", "Estudiante no actualizado",e.getMessage(), AlertType.ERROR);
+			}
+		}else{
+			mostrarMensaje("Notificación Estudiante", "Estudiante no seleccionado","Seleccione un estudiante", AlertType.WARNING);
+		}
+	}
+
+
+
+	private void actualizarInstructor() {
+		if(instructorSeleccionado!=null){
+
+			String nombre=txtNombreInstructor.getText();
+			String iD=txtIdInstructor.getText();
+			String correo=txtCorreoInstructor.getText();
+			String contrasenia=txtContraseniaInstructor.getText();
+
+			try {
+				if(validarDatosInstructor(nombre,iD,correo,contrasenia)){
+
+					Instructor instructorAux=new Instructor(nombre, iD, correo, contrasenia);
+
+					if(actualizarInstructor(instructorAux,instructorSeleccionado)){
+						refrescarTablas();
+						limpiarCamposInstructor();
+						mostrarMensaje("Notificacion Instructor","Instructor actualizado","El Instructor se actualizó con éxito",AlertType.INFORMATION);
+					}else
+					{
+						mostrarMensaje("Notificación Instructor", "Instructor no actualizado","el Instructor no se actualizó", AlertType.WARNING);
+
+					}
+				}
+			}catch (DatosInvalidosException | ClassNotFoundException | IOException | PaqueteNoReconocidoException e) {
+				registrarAccion("Error al actualizar el instructor admin="+admin.getName()+"\n"+e.getMessage()+" cause:"+e.getCause(),Level.SEVERE );
+				mostrarMensaje("Notificación Instructor", "Instructor no actualizado",e.getMessage(), AlertType.ERROR);
+			}
+		}else{
+			mostrarMensaje("Notificación Instructor", "Instructor no seleccionado","Seleccione un Instructor", AlertType.WARNING);
+		}
+	}
+
+	 private void actualizarCreditoAction() {
+			if(creditoSeleccionado!=null)
+			{
+				 String nombreCredito=creditoSeleccionado.getNombre();
+				 String nombre=txtNombreCredito.getText();
+				 String cuposDisponibles=txtCuposDisponiblesCredito.getText();
+				 String bloque=txtBloqueCurso.getText();
+				 String piso=txtPisoCredito.getText();
+				 String numSalon=txtNumSalonCurso.getText();
+				 String costo=txtCostoCurso.getText();
+				 EHorario horario1=comboBoxHorario1.getValue();
+				 EHorario horario2=comboBoxHorario2.getValue();
+				 EDia     dia1=comboBoxDia1.getValue();
+				 EDia     dia2=comboBoxDia2.getValue();
+
+				 try {
+					if(rBtnAcademico.isSelected())
+					 actualizarCreditoAcademico(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
+							 			   horario1, horario2, dia1, dia2,nombreCredito);
+				 if(rBtnCultural.isSelected())
+					 actualizarCreditoCultural(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
+							 horario1, horario2, dia1, dia2,nombreCredito);
+				 if(rBtnDeportivo.isSelected())
+					 ActualizarCreditoDeportivo(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
+							 horario1, horario2, dia1, dia2,nombreCredito);
+
+
+				} catch (NumberFormatException | DatosInvalidosException | ClassNotFoundException | IOException | PaqueteNoReconocidoException e) {
+					registrarAccion("Error al actualizar el credito admin="+admin.getName()+"\n"+e.getMessage()+"cause"+e.getCause(),Level.SEVERE );
+					mostrarMensaje("Notificación credito", "Credito no actualizado", e.getMessage(), AlertType.ERROR);
+
+				}
+
+			}else{
+				mostrarMensaje("Notificación Credito", "Credito no seleccionado","Seleccione un Credito", AlertType.WARNING);
+
+			}
+
+		}
+
+	private void ActualizarCreditoDeportivo(String nombre, String cuposDisponibles, String bloque, String piso,
+			String numSalon, String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2, String nombreCredito) throws NumberFormatException, 
+																										DatosInvalidosException, UnknownHostException,
+																										ClassNotFoundException, IOException, PaqueteNoReconocidoException {
+
+		String asistenciaMin=comboBoxAuxCurso.getValue();
+		String tipoCredito="Deportivo";
+
+		if(validarDatosCredito(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
+					 horario1, horario2, dia1, dia2)==true ){
+
+
+			if(asistenciaMin==null || asistenciaMin.equalsIgnoreCase(""))
+				throw new DatosInvalidosException("Asistencia invalida");
+
+			int pisoInt=Integer.parseInt(piso);
+			int salonInt=Integer.parseInt(numSalon);
+			int cuposDisponiblesInt=Integer.parseInt(cuposDisponibles);
+			EAsistenciaMinima asistenciaMinAux=obtenerAsistencia(asistenciaMin);
+			double costoDouble=Double.parseDouble(costo);
+
+			Horario horarioAux=crearHorario(horario1,horario2,dia1,dia2);
+			Lugar   lugarAux= new Lugar(bloque, pisoInt, salonInt);
+
+			Deportivo deportivoAux= new Deportivo(costoDouble,cuposDisponiblesInt,horarioAux,lugarAux,asistenciaMinAux,tipoCredito,nombre);
+
+			if(actualizarCreditoDeportivoSocket(deportivoAux,nombreCredito)){
+				refrescarTablas();
+				mostrarMensaje("Notificacion Credito deportivo","Credito Deportivo actualizado","El Credito Deportivo se actualizado con éxito",AlertType.INFORMATION);
+			}
+		}
+
+	}
+
+
+
+	private void actualizarCreditoCultural(String nombre, String cuposDisponibles, String bloque, String piso,
+			String numSalon, String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2, String nombreCredito) throws NumberFormatException, DatosInvalidosException,
+																										UnknownHostException, ClassNotFoundException, IOException,
+																										PaqueteNoReconocidoException {
+
+		String tipoCredito="Cultural";
+
+		if(validarDatosCredito(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
+				horario1, horario2, dia1, dia2)==true){
+
+			int pisoInt=Integer.parseInt(piso);
+			int salonInt=Integer.parseInt(numSalon);
+			int cuposDisponiblesInt=Integer.parseInt(cuposDisponibles);
+			double costoDouble=Double.parseDouble(costo);
+			if(costoDouble<50000 || costoDouble>100000)
+				throw new DatosInvalidosException("El costo debe estar entre 50.000 y 100.000");
+
+
+			Horario horarioAux=crearHorario(horario1,horario2,dia1,dia2);
+			Lugar   lugarAux= new Lugar(bloque, pisoInt, salonInt);
+
+			Cultural culturalAux= new Cultural(costoDouble,cuposDisponiblesInt,horarioAux,lugarAux
+					,tipoCredito,nombre);
+
+			if(actualizarCreditoCulturalSocket(culturalAux,nombreCredito)){
+				refrescarTablas();
+				mostrarMensaje("Notificacion Credito Cultural","Credito Cultural actualizado","El Credito Cultural se actualizado con éxito",AlertType.INFORMATION);
+				registrarAccion("Credito Cultural con nombre : "+culturalAux.getNombre()+" actualizado por el admin: "+admin.getName(),Level.INFO );
+			}
+		}
+
+	}
+
+
+	private void actualizarCreditoAcademico(String nombre, String cuposDisponibles, String bloque, String piso,
+			String numSalon, String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2,
+			String nombreCredito) throws NumberFormatException, DatosInvalidosException, UnknownHostException,
+											ClassNotFoundException, IOException, PaqueteNoReconocidoException {
+
+
+		EArea area= comboBoxAuxCredito2.getValue();
+		String notaMinima=comboBoxAuxCurso.getValue();
+
+		String tipoCredito="Academico";
+
+		if(validarDatosCredito(nombre, cuposDisponibles, bloque, piso, numSalon, costo,
+					 horario1, horario2, dia1, dia2)==true ){
+
+
+			if(area==null || notaMinima==null || notaMinima.equals(""))
+				throw new DatosInvalidosException("La nota o el area son invalidas");
+
+			double notaDouble=Double.parseDouble(notaMinima);
+			int pisoInt=Integer.parseInt(piso);
+			int salonInt=Integer.parseInt(numSalon);
+			int cuposDisponiblesInt=Integer.parseInt(cuposDisponibles);
+			double costoDouble=Double.parseDouble(costo);
+
+			Horario horarioAux=crearHorario(horario1,horario2,dia1,dia2);
+			Lugar   lugarAux= new Lugar(bloque, pisoInt, salonInt);
+
+			Academico academicoAux= new Academico(costoDouble,cuposDisponiblesInt,horarioAux,lugarAux,notaDouble
+											     ,area,tipoCredito,nombre);
+
+			if(actualizarCreditoAcademicoSocket(academicoAux,nombreCredito)){
+				refrescarTablas();
+				mostrarMensaje("Notificacion Credito Academico","Credito Academico actualizado","El Credito Academico se actualizado con éxito",AlertType.INFORMATION);
+			}
+		}
+
+	}
+	private void borrarEstudiante() {
+
+		if(estudianteSeleccionado!=null)
+		{
+			String iDEstudiante=estudianteSeleccionado.getName();
+			if(mostrarMensajeConfirmacion("¿Estas seguro de eliminar al estudiante?") == true)
+			{
+				try {
+					if(borrarEstudiante(iDEstudiante)){
+
+						listaEstudiantesData.remove(estudianteSeleccionado);
+						estudianteSeleccionado=null;
+						tableEstudiantes.getSelectionModel().clearSelection();
+						limpiarCamposEstudiante();
+						tableEstudiantes.refresh();
+
+						mostrarMensaje("Notificacion Estudiante","Estudiante borrado","El estudiante se borró con éxito",AlertType.INFORMATION);
+
+				}else{
+					mostrarMensaje("Notificación Estudiante", "Estudiante no borrado","El estudiante no se borró con éxito", AlertType.ERROR);
+				}
+				} catch (Exception e) {
+				}
+
+			}
+		}else{
+			mostrarMensaje("Notificación Estudiante", "Estudiante no seleccionado","Seleccione un estudiante", AlertType.WARNING);
+		}
+	}
+
+
+
+	private void borrarInstructor() {
+		if(instructorSeleccionado!=null)
+		{
+			String iDInstructor=instructorSeleccionado.getiD();
+			try {
+				if(mostrarMensajeConfirmacion("¿Estas seguro de eliminar al instructor?") == true)
+				{
+					if(borrarInstructorSocket(iDInstructor)){
+
+						listaInstructoresData.remove(instructorSeleccionado);
+						instructorSeleccionado=null;
+						tableInstructor.getSelectionModel().clearSelection();
+						limpiarCamposInstructor();
+						tableInstructor.refresh();
+
+						mostrarMensaje("Notificacion Instructor","Instructor borrado","El Instructor se borró con éxito",AlertType.INFORMATION);
+						registrarAccion("Instructor con ID : "+iDInstructor+" borrado por el admin: "+admin.getName(),Level.WARNING );
+
+					}else{
+						mostrarMensaje("Notificación Instructor", "Instructor no borrado","El Instructor no se borró con éxito", AlertType.ERROR);
+					}
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+
+		}else{
+			mostrarMensaje("Notificación Instructor", "Instructor no seleccionado","Seleccione un Instructor", AlertType.WARNING);
+		}
+	}
+
+
+	private void borrarCreditoAction() {
+		if(creditoSeleccionado!=null)
+		{
+			String nombreCredito=creditoSeleccionado.getNombre();
+			try {
+				if(mostrarMensajeConfirmacion("¿Estas seguro de eliminar el credito "+creditoSeleccionado.getNombre()+" ?") == true)
+				{
+					if(borrarCreditoSocket(nombreCredito)){
+
+						listaCreditosData.remove(creditoSeleccionado);
+						creditoSeleccionado=null;
+						tableCreditos.getSelectionModel().clearSelection();
+						limpiarCreditos();
+						refrescarTablas();
+						mostrarMensaje("Notificacion Credito","Credito borrado","El Credito se borró con éxito",AlertType.INFORMATION);
+
+					}else{
+						mostrarMensaje("Notificación Credito", "Credito no borrado","El Credito no se borró con éxito", AlertType.ERROR);
+					}
+				}	
+			}catch (Exception e) {
+				registrarAccion("Error al borrar el credito nombre : "+nombreCredito+"\nadmin: "+admin.getName()+e.getMessage()+" cause:"+e.getCause(),Level.SEVERE );
+			}
+		}else{
+			mostrarMensaje("Notificación Credito", "Credito no seleccionado","Credito un Instructor", AlertType.WARNING);
+		}
+	}
+
+
+	
+	private boolean validarDatosEstudiante(String nombre, String iD, String correo, String contrasenia) throws DatosInvalidosException,
+																												PaqueteNoReconocidoException, UnknownHostException,
+																												ClassNotFoundException, IOException 
+{
+
+		String mensaje="";
+
+		if(nombre == null || nombre.equals(""))
+			mensaje += "El nombre del estudiante es invalido \n";
+
+		if(iD == null || iD.equals("")){
+			mensaje += "El ID del retiro es invalido \n";
+		}else{
+			if(verificarIDEstudiante(iD))
+			{
+				mensaje+="El ID ya está registrado";
+			}
+		}
+
+		if(correo == null || correo.equals("")){
+			mensaje += "El correo es invalido \n";
+		}else{
+			if(verificarCorreoEstudiante(correo))
+			{
+				mensaje+="El correo ya está registrado";
+			}
+		}
+
+		if(contrasenia == null || contrasenia.equals(""))
+			mensaje += "La contraseña es invalida \n";
+
+
+		if(mensaje.isEmpty())
+		{
+			return true;
+		}else
+		{
+			throw new DatosInvalidosException(mensaje);
+		}
+	}
+
+	private boolean validarDatosInstructor(String nombre, String iD, String correo, String contrasenia) throws DatosInvalidosException, UnknownHostException,
+																											  ClassNotFoundException, IOException,
+																											  PaqueteNoReconocidoException {
+		String mensaje="";
+
+		if(nombre == null || nombre.equals(""))
+			mensaje += "El nombre del instructor es invalido \n";
+
+		if(iD == null || iD.equals("")){
+			mensaje += "El ID del instructor es invalido \n";
+		}else{
+			if(verificarIDInstructor(iD))
+			{
+				mensaje+="El ID ya está registrado";
+			}
+		}
+
+		if(correo == null || correo.equals("")){
+			mensaje += "El correo es invalido \n";
+		}else{
+			if(verificarCorreoInstructor(correo))
+			{
+				mensaje+="El correo ya está registrado";
+			}
+		}
+
+		if(contrasenia == null || contrasenia.equals(""))
+			mensaje += "La contraseña es invalida \n";
+
+
+		if(mensaje.isEmpty())
+		{
+			return true;
+		}else
+		{
+			throw new DatosInvalidosException(mensaje);
+		}
+	}
+
+
+
+private boolean validarDatosCredito(String nombre, String cuposDisponibles, String bloque, String piso, String numSalon,
+			String costo, EHorario horario1, EHorario horario2, EDia dia1, EDia dia2) throws DatosInvalidosException, UnknownHostException,
+																						ClassNotFoundException, IOException, PaqueteNoReconocidoException {
+	
+		String mensaje="";
+
+		if(nombre == null || nombre.equals("")){
+			mensaje += "El nombre del credito del instructor es invalido \n";
+		}else{
+				if(validarNombreCredito(nombre))
+					mensaje += "Ya existe un credito academico con ese nombre \n";
+		}
+
+
+		if(cuposDisponibles == null || cuposDisponibles.equals("")){
+			mensaje += "Los cupos disponibles del curso son invalidos \n";
+		}
+
+		if(bloque == null || bloque.equals("")){
+			mensaje += "El bloque es invalido \n";
+		}
+
+		if(piso == null || piso.equals(""))
+			mensaje += "El piso es invalido \n";
+
+		if(numSalon == null || numSalon.equals(""))
+			mensaje += "El número de piso es invalido \n";
+
+
+		if(costo == null || costo.equals(""))
+			mensaje += "El costo es invalido \n";
+
+		if(horario1 == null && horario2==null){
+			mensaje += "Debe ingresar almenos un horario \n";
+		}else{
+			if(horario1!=null && horario2!=null)
+			{
+				if(horario1==horario2)
+					mensaje+="Los dos horarios no pueden ser iguales\n";
+			}
+		}
+
+
+		if(dia1 == null && dia2==null){
+			mensaje += "Debe ingresar almenos un dia \n";
+		}else{
+			if(dia1!=null && dia2!=null)
+			{
+				if(dia1==dia2)
+					mensaje+="Los dos dias no pueden ser iguales\n";
+			}
+		}
+
+		if(mensaje.isEmpty())
+		{
+			return true;
+		}else
+		{
+			throw new DatosInvalidosException(mensaje);
+		}
+}
+
+
+private ObservableList<Credito> getListaCreditosData() throws UnknownHostException, ClassNotFoundException,
+															IOException, PaqueteNoReconocidoException {
+	listaCreditosData.clear();
+	listaCreditosData.addAll(obtenerCreditos());
+	return listaCreditosData;
+}
+
+private ObservableList<Estudiante> getListaEstudiantesData() throws UnknownHostException, ClassNotFoundException,
+																	IOException, PaqueteNoReconocidoException {
+	listaEstudiantesData.clear();
+	listaEstudiantesData.addAll(obtenerEstudiantes());
+
+	return listaEstudiantesData;
+}
+
+
+
+private ObservableList<Instructor> getListaInstructoresData() throws UnknownHostException, ClassNotFoundException,
+																	IOException, PaqueteNoReconocidoException {
+	listaInstructoresData.clear();
+	listaInstructoresData.addAll(obtenerInstructores());
+	return listaInstructoresData;
+}
+
+
+
+
+	
+
+	/**
+	 * método que envia un id al servidor
+	 * para que el servidor valide si ya existe un estudiantes
+	 * registrado con ese ID
+	 * @param iD
+	 * @return
+	 * @throws IOException 
+	 * @throws UnknownHostException 
+	 * @throws ClassNotFoundException 
+	 */
+	private boolean verificarIDEstudiante(String iD)throws  PaqueteNoReconocidoException, UnknownHostException, IOException, ClassNotFoundException {
+			boolean  respuesta;
+			PaqueteDatos paqueteAux;
+			paqueteDatos= new PaqueteDatos(AccionEnum.VERIFICAR_ID_ESTUDIANTE,iD );
+
+			socket= new Socket("localhost",8081);
+			flujoSalida= new ObjectOutputStream(socket.getOutputStream());
+
+			flujoSalida.writeObject(paqueteDatos);
+
+			flujoEntrada= new ObjectInputStream(socket.getInputStream());
+
+			paqueteAux=(PaqueteDatos) flujoEntrada.readObject();
+
+			if(paqueteAux.getAccion()!=AccionEnum.VERIFICAR_ID_ESTUDIANTE)
+				throw new PaqueteNoReconocidoException("El paquete posee una "
+						+ " accion incorrecta...");
+			
+			respuesta=(boolean) paqueteAux.getContenido();
+			
+			return respuesta;
+	}
+	private boolean verificarCorreoInstructor(String correo) throws UnknownHostException, IOException,
+																	ClassNotFoundException, PaqueteNoReconocidoException {
+		
+		boolean  respuesta;
+		PaqueteDatos paqueteAux;
+		paqueteDatos= new PaqueteDatos(AccionEnum.VERIFICAR_CORREO_INSTRUCTOR,correo );
+
+		socket= new Socket("localhost",8081);
+		flujoSalida= new ObjectOutputStream(socket.getOutputStream());
+
+		flujoSalida.writeObject(paqueteDatos);
+
+		flujoEntrada= new ObjectInputStream(socket.getInputStream());
+
+		paqueteAux=(PaqueteDatos) flujoEntrada.readObject();
+
+		if(paqueteAux.getAccion()!=AccionEnum.VERIFICAR_CORREO_INSTRUCTOR)
+			throw new PaqueteNoReconocidoException("El paquete posee una "
+					+ " accion incorrecta...");
+
+		respuesta=(boolean) paqueteAux.getContenido();
+
+		return respuesta;
+	}
+	private boolean validarNombreCredito(String nombre) throws UnknownHostException, IOException,
+													     ClassNotFoundException, PaqueteNoReconocidoException {
+
+		boolean  respuesta;
+		PaqueteDatos paqueteAux;
+		paqueteDatos= new PaqueteDatos(AccionEnum.VERIFICAR_NOMBRE_CREDITO,nombre );
+
+		socket= new Socket("localhost",8081);
+		flujoSalida= new ObjectOutputStream(socket.getOutputStream());
+
+		flujoSalida.writeObject(paqueteDatos);
+
+		flujoEntrada= new ObjectInputStream(socket.getInputStream());
+
+		paqueteAux=(PaqueteDatos) flujoEntrada.readObject();
+
+		if(paqueteAux.getAccion()!=AccionEnum.VERIFICAR_NOMBRE_CREDITO)
+			throw new PaqueteNoReconocidoException("El paquete posee una "
+					+ " accion incorrecta...");
+
+		respuesta=(boolean) paqueteAux.getContenido();
+
+		return respuesta;
+	}
+	private boolean verificarIDInstructor(String iD) throws UnknownHostException, IOException,
+															ClassNotFoundException, PaqueteNoReconocidoException {
+		boolean  respuesta;
+		PaqueteDatos paqueteAux;
+		paqueteDatos= new PaqueteDatos(AccionEnum.VERIFICAR_ID_INSTRUCTOR,iD );
+
+		socket= new Socket("localhost",8081);
+		flujoSalida= new ObjectOutputStream(socket.getOutputStream());
+
+		flujoSalida.writeObject(paqueteDatos);
+
+		flujoEntrada= new ObjectInputStream(socket.getInputStream());
+
+		paqueteAux=(PaqueteDatos) flujoEntrada.readObject();
+
+		if(paqueteAux.getAccion()!=AccionEnum.VERIFICAR_ID_INSTRUCTOR)
+			throw new PaqueteNoReconocidoException("El paquete posee una "
+					+ " accion incorrecta...");
+
+		respuesta=(boolean) paqueteAux.getContenido();
+
+		return respuesta;
+	}
+	/**
+	 * método que envia  el correo al servidor
+	 * para que el servidor valide si ya existe un estudiantes
+	 * registrado con ese correo 
+	 * @param correo
+	 * @return boolean respuesta
+	 * @throws UnknownHostException
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 * @throws PaqueteNoReconocidoException
+	 */
+	private boolean verificarCorreoEstudiante(String correo) throws UnknownHostException, IOException,
+																	ClassNotFoundException, PaqueteNoReconocidoException {
+
+		boolean  respuesta;
+		PaqueteDatos paqueteAux;
+		paqueteDatos= new PaqueteDatos(AccionEnum.VERIFICAR_CORREO_ESTUDIANTE,correo );
+
+		socket= new Socket("localhost",8081);
+		flujoSalida= new ObjectOutputStream(socket.getOutputStream());
+
+		flujoSalida.writeObject(paqueteDatos);
+
+		flujoEntrada= new ObjectInputStream(socket.getInputStream());
+
+		paqueteAux=(PaqueteDatos) flujoEntrada.readObject();
+
+		if(paqueteAux.getAccion()!=AccionEnum.VERIFICAR_CORREO_ESTUDIANTE)
+			throw new PaqueteNoReconocidoException("El paquete posee una "
+					+ " accion incorrecta...");
+
+		respuesta=(boolean) paqueteAux.getContenido();
+
+		return respuesta;
+	}
+
+	/**
+	 * método que envia una petición al servidor de crear un estudiante
+	 * esta peticion se envía junto al correo del administrador y los
+	 * atributos del estudiante, si el servidor crea al estudiante, lo
+	 * retorna al método
+	 * @param nombre
+	 * @param iD
+	 * @param correo
+	 * @param contrasenia
+	 * @return
+	 * @throws UnknownHostException
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 * @throws PaqueteNoReconocidoException
+	 */
+	private Estudiante crearEstudiante(String nombre, String iD, String correo, String contrasenia) throws UnknownHostException, IOException,
+																										   ClassNotFoundException, PaqueteNoReconocidoException {
+		
+
+		Estudiante  estudianteAux;
+		PaqueteDatos paqueteAux;
+		ArrayList<String> listaDatos=new ArrayList<String>();
+		listaDatos.add(admin.getEmail());
+		listaDatos.add(nombre);
+		listaDatos.add(iD);
+		listaDatos.add(correo);
+		listaDatos.add(contrasenia);
+		paqueteDatos= new PaqueteDatos(AccionEnum.REGISTRAR_ESTUDIANTE,listaDatos );
+
+		socket= new Socket("localhost",8081);
+		flujoSalida= new ObjectOutputStream(socket.getOutputStream());
+
+		flujoSalida.writeObject(paqueteDatos);
+
+		flujoEntrada= new ObjectInputStream(socket.getInputStream());
+
+		paqueteAux=(PaqueteDatos) flujoEntrada.readObject();
+
+		if(paqueteAux.getAccion()!=AccionEnum.REGISTRAR_ESTUDIANTE)
+			throw new PaqueteNoReconocidoException("El paquete posee una "
+					+ " accion incorrecta...");
+
+		estudianteAux=(Estudiante) paqueteAux.getContenido();
+
+		return estudianteAux;
+	}
+	/**
+	 * método que envia una petición al servidor de crear un instructor 
+	 * esta peticion se envía junto al correo del administrador y los
+	 * atributos del instructor, si el servidor crea al instructor, lo
+	 * retorna al método
+	 * @param nombre
+	 * @param iD
+	 * @param correo
+	 * @param contrasenia
+	 * @return
+	 * @throws UnknownHostException
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 * @throws PaqueteNoReconocidoException
+	 */
+	private Instructor crearInstructor(String nombre, String iD, String correo, String contrasenia) throws UnknownHostException, IOException,
+																										   ClassNotFoundException, PaqueteNoReconocidoException {
+		Instructor  instructorAux;
+		PaqueteDatos paqueteAux;
+		ArrayList<String> listaDatos=new ArrayList<String>();
+		listaDatos.add(admin.getEmail());
+		listaDatos.add(nombre);
+		listaDatos.add(iD);
+		listaDatos.add(correo);
+		listaDatos.add(contrasenia);
+		paqueteDatos= new PaqueteDatos(AccionEnum.REGISTRAR_INSTRUCTOR,listaDatos );
+
+		socket= new Socket("localhost",8081);
+		flujoSalida= new ObjectOutputStream(socket.getOutputStream());
+
+		flujoSalida.writeObject(paqueteDatos);
+
+		flujoEntrada= new ObjectInputStream(socket.getInputStream());
+
+		paqueteAux=(PaqueteDatos) flujoEntrada.readObject();
+
+		if(paqueteAux.getAccion()!=AccionEnum.REGISTRAR_INSTRUCTOR)
+			throw new PaqueteNoReconocidoException("El paquete posee una "
+					+ " accion incorrecta...");
+
+		instructorAux=(Instructor) paqueteAux.getContenido();
+
+		return instructorAux;
+	}
+	/**
+	 * método que envia una petición al servidor de crear un credito deportivo 
+	 * esta peticion se envía junto al correo del administrador y los
+	 * atributos del credito deportivo, si el servidor crea el credito deportivo, lo
+	 * retorna al método
+	 * @param nombre
+	 * @param cuposDisponiblesInt
+	 * @param costoDouble
+	 * @param horarioAux
+	 * @param lugarAux
+	 * @param asistenciaMinAux
+	 * @param tipoCredito
+	 * @return
+	 * @throws IOException 
+	 * @throws UnknownHostException 
+	 * @throws ClassNotFoundException 
+	 * @throws PaqueteNoReconocidoException 
+	 */
+	private Deportivo crearDeportivo(String nombre, int cuposDisponiblesInt, double costoDouble, Horario horarioAux,
+			Lugar lugarAux, EAsistenciaMinima asistenciaMinAux, String tipoCredito) throws UnknownHostException, IOException, ClassNotFoundException, PaqueteNoReconocidoException {
+
+		Deportivo  deportivoAux;
+		PaqueteDatos paqueteAux;
+		ArrayList<Object> listaDatos=new ArrayList<Object>();
+		listaDatos.add(admin.getEmail());
+		listaDatos.add(nombre);
+		listaDatos.add(cuposDisponiblesInt);
+		listaDatos.add(costoDouble);
+		listaDatos.add(horarioAux);
+		listaDatos.add(lugarAux);
+		listaDatos.add(asistenciaMinAux);
+		listaDatos.add(tipoCredito);
+		paqueteDatos= new PaqueteDatos(AccionEnum.REGISTRAR_CREDITO_DEPORTIVO,listaDatos );
+
+		socket= new Socket("localhost",8081);
+		flujoSalida= new ObjectOutputStream(socket.getOutputStream());
+
+		flujoSalida.writeObject(paqueteDatos);
+
+		flujoEntrada= new ObjectInputStream(socket.getInputStream());
+
+		paqueteAux=(PaqueteDatos) flujoEntrada.readObject();
+
+		if(paqueteAux.getAccion()!=AccionEnum.REGISTRAR_CREDITO_DEPORTIVO)
+			throw new PaqueteNoReconocidoException("El paquete posee una "
+					+ " accion incorrecta...");
+
+		deportivoAux=(Deportivo) paqueteAux.getContenido();
+
+		return deportivoAux;
+	}
+	/**
+	 * método que envia una petición al servidor de crear un credito academico 
+	 * esta peticion se envía junto al correo del administrador y los
+	 * atributos del credito academico, si el servidor crea el credito deportivo, lo
+	 * retorna al método
+	 * @param nombre
+	 * @param cuposDisponiblesInt
+	 * @param costoDouble
+	 * @param horarioAux
+	 * @param lugarAux
+	 * @param tipoCredito
+	 * @param notaDouble
+	 * @param area
+	 * @return
+	 * @throws UnknownHostException
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 * @throws PaqueteNoReconocidoException
+	 */
+	private Academico crearAcademico(String nombre, int cuposDisponiblesInt, double costoDouble, Horario horarioAux,
+			Lugar lugarAux, String tipoCredito, double notaDouble, EArea area) throws UnknownHostException, IOException, 
+																					ClassNotFoundException, PaqueteNoReconocidoException {
+
+		Academico  academicoAux;
+		PaqueteDatos paqueteAux;
+		ArrayList<Object> listaDatos=new ArrayList<Object>();
+		listaDatos.add(admin.getEmail());
+		listaDatos.add(nombre);
+		listaDatos.add(cuposDisponiblesInt);
+		listaDatos.add(costoDouble);
+		listaDatos.add(horarioAux);
+		listaDatos.add(lugarAux);
+		listaDatos.add(tipoCredito);
+		listaDatos.add(notaDouble);
+		listaDatos.add(area);
+		paqueteDatos= new PaqueteDatos(AccionEnum.REGISTRAR_CREDITO_ACADEMICO,listaDatos );
+
+		socket= new Socket("localhost",8081);
+		flujoSalida= new ObjectOutputStream(socket.getOutputStream());
+
+		flujoSalida.writeObject(paqueteDatos);
+
+		flujoEntrada= new ObjectInputStream(socket.getInputStream());
+
+		paqueteAux=(PaqueteDatos) flujoEntrada.readObject();
+
+		if(paqueteAux.getAccion()!=AccionEnum.REGISTRAR_CREDITO_ACADEMICO)
+			throw new PaqueteNoReconocidoException("El paquete posee una "
+					+ " accion incorrecta...");
+
+		academicoAux=(Academico) paqueteAux.getContenido();
+
+		return academicoAux;
+	}
+	private Cultural crearCultural(String nombre, int cuposDisponiblesInt, double costoDouble, Horario horarioAux,
+			Lugar lugarAux, String tipoCredito) throws UnknownHostException, IOException, ClassNotFoundException,
+														PaqueteNoReconocidoException {
+		Cultural  culturalAux;
+		PaqueteDatos paqueteAux;
+		ArrayList<Object> listaDatos=new ArrayList<Object>();
+		listaDatos.add(admin.getEmail());
+		listaDatos.add(nombre);
+		listaDatos.add(cuposDisponiblesInt);
+		listaDatos.add(costoDouble);
+		listaDatos.add(horarioAux);
+		listaDatos.add(lugarAux);
+		listaDatos.add(tipoCredito);
+		paqueteDatos= new PaqueteDatos(AccionEnum.REGISTRAR_CREDITO_CULTURAL,listaDatos );
+
+		socket= new Socket("localhost",8081);
+		flujoSalida= new ObjectOutputStream(socket.getOutputStream());
+
+		flujoSalida.writeObject(paqueteDatos);
+
+		flujoEntrada= new ObjectInputStream(socket.getInputStream());
+
+		paqueteAux=(PaqueteDatos) flujoEntrada.readObject();
+
+		if(paqueteAux.getAccion()!=AccionEnum.REGISTRAR_CREDITO_CULTURAL)
+			throw new PaqueteNoReconocidoException("El paquete posee una "
+					+ " accion incorrecta...");
+
+		culturalAux=(Cultural) paqueteAux.getContenido();
+
+		return culturalAux;
+	}
 
 	private EAsistenciaMinima obtenerAsistencia(String asistenciaMin) {
 
@@ -1507,14 +1971,240 @@ public class AdminController implements Initializable{
 			}
 		}
 	}
-//	private void guardarDatosTXT(String nombreArchivo) {
-//		administradorHilos.startHiloGuardarDatosObtejos(nombreArchivo);
-//
-//	}
-//	 private void cargarDatosTXT(String nombreArchivo) {
-//		 administradorHilos.startHiloCargarDatosObtejos(nombreArchivo);
-//
-//		}
+private boolean actualizarEstudiante(Estudiante estudiante, Estudiante estudianteSeleccionado2) throws UnknownHostException, IOException,
+																									ClassNotFoundException, PaqueteNoReconocidoException {
+		boolean  respuesta;
+		PaqueteDatos paqueteAux;
+		ArrayList<Object> listaDatos=new ArrayList<Object>();
+		listaDatos.add(admin.getEmail());
+		listaDatos.add(estudiante);
+		listaDatos.add(estudianteSeleccionado2.getiD());
+		paqueteDatos= new PaqueteDatos(AccionEnum.ACTUALIZAR_ESTUDIANTE,listaDatos );
+
+		socket= new Socket("localhost",8081);
+		flujoSalida= new ObjectOutputStream(socket.getOutputStream());
+
+		flujoSalida.writeObject(paqueteDatos);
+
+		flujoEntrada= new ObjectInputStream(socket.getInputStream());
+
+		paqueteAux=(PaqueteDatos) flujoEntrada.readObject();
+
+		if(paqueteAux.getAccion()!=AccionEnum.ACTUALIZAR_ESTUDIANTE)
+			throw new PaqueteNoReconocidoException("El paquete posee una "
+					+ " accion incorrecta...");
+
+		respuesta=(boolean) paqueteAux.getContenido();
+
+		return respuesta;
+	}
+private boolean actualizarInstructor(Instructor instructorAux, Instructor instructorSeleccionado2) throws UnknownHostException, IOException,
+																									ClassNotFoundException, PaqueteNoReconocidoException {
+
+		boolean  respuesta;
+		PaqueteDatos paqueteAux;
+		ArrayList<Object> listaDatos=new ArrayList<Object>();
+		listaDatos.add(admin.getEmail());
+		listaDatos.add(instructorAux);
+		listaDatos.add(instructorSeleccionado2.getiD());
+		paqueteDatos= new PaqueteDatos(AccionEnum.ACTUALIZAR_INSTRUCTOR,listaDatos );
+
+		socket= new Socket("localhost",8081);
+		flujoSalida= new ObjectOutputStream(socket.getOutputStream());
+
+		flujoSalida.writeObject(paqueteDatos);
+
+		flujoEntrada= new ObjectInputStream(socket.getInputStream());
+
+		paqueteAux=(PaqueteDatos) flujoEntrada.readObject();
+
+		if(paqueteAux.getAccion()!=AccionEnum.ACTUALIZAR_INSTRUCTOR)
+			throw new PaqueteNoReconocidoException("El paquete posee una "
+					+ " accion incorrecta...");
+
+		respuesta=(boolean) paqueteAux.getContenido();
+
+		return respuesta;
+	}
+private boolean actualizarCreditoDeportivoSocket(Deportivo deportivoAux, String nombreCredito) throws UnknownHostException, IOException,
+																						ClassNotFoundException, PaqueteNoReconocidoException {
+
+		boolean  respuesta;
+		PaqueteDatos paqueteAux;
+		ArrayList<Object> listaDatos=new ArrayList<Object>();
+		listaDatos.add(admin.getEmail());
+		listaDatos.add(deportivoAux);
+		listaDatos.add(nombreCredito);
+		paqueteDatos= new PaqueteDatos(AccionEnum.ACTUALIZAR_CREDITO,listaDatos );
+
+		socket= new Socket("localhost",8081);
+		flujoSalida= new ObjectOutputStream(socket.getOutputStream());
+
+		flujoSalida.writeObject(paqueteDatos);
+
+		flujoEntrada= new ObjectInputStream(socket.getInputStream());
+
+		paqueteAux=(PaqueteDatos) flujoEntrada.readObject();
+
+		if(paqueteAux.getAccion()!=AccionEnum.ACTUALIZAR_CREDITO)
+			throw new PaqueteNoReconocidoException("El paquete posee una "
+					+ " accion incorrecta...");
+
+		respuesta=(boolean) paqueteAux.getContenido();
+
+		return respuesta;
+	}
+	private boolean actualizarCreditoCulturalSocket(Cultural culturalAux, String nombreCredito) throws UnknownHostException, IOException,
+																										PaqueteNoReconocidoException, ClassNotFoundException {
+
+		boolean  respuesta;
+		PaqueteDatos paqueteAux;
+		ArrayList<Object> listaDatos=new ArrayList<Object>();
+		listaDatos.add(admin.getEmail());
+		listaDatos.add(culturalAux);
+		listaDatos.add(nombreCredito);
+		paqueteDatos= new PaqueteDatos(AccionEnum.ACTUALIZAR_CREDITO,listaDatos );
+
+		socket= new Socket("localhost",8081);
+		flujoSalida= new ObjectOutputStream(socket.getOutputStream());
+
+		flujoSalida.writeObject(paqueteDatos);
+
+		flujoEntrada= new ObjectInputStream(socket.getInputStream());
+
+		paqueteAux=(PaqueteDatos) flujoEntrada.readObject();
+
+		if(paqueteAux.getAccion()!=AccionEnum.ACTUALIZAR_CREDITO)
+			throw new PaqueteNoReconocidoException("El paquete posee una "
+					+ " accion incorrecta...");
+
+		respuesta=(boolean) paqueteAux.getContenido();
+
+		return respuesta;
+	}
+
+private boolean actualizarCreditoAcademicoSocket(Academico academicoAux, String nombreCredito) throws UnknownHostException, IOException,
+																										ClassNotFoundException, PaqueteNoReconocidoException {
+		boolean  respuesta;
+		PaqueteDatos paqueteAux;
+		ArrayList<Object> listaDatos=new ArrayList<Object>();
+		listaDatos.add(admin.getEmail());
+		listaDatos.add(academicoAux);
+		listaDatos.add(nombreCredito);
+		paqueteDatos= new PaqueteDatos(AccionEnum.ACTUALIZAR_CREDITO,listaDatos );
+
+		socket= new Socket("localhost",8081);
+		flujoSalida= new ObjectOutputStream(socket.getOutputStream());
+
+		flujoSalida.writeObject(paqueteDatos);
+
+		flujoEntrada= new ObjectInputStream(socket.getInputStream());
+
+		paqueteAux=(PaqueteDatos) flujoEntrada.readObject();
+
+		if(paqueteAux.getAccion()!=AccionEnum.ACTUALIZAR_CREDITO)
+			throw new PaqueteNoReconocidoException("El paquete posee una "
+					+ " accion incorrecta...");
+
+		respuesta=(boolean) paqueteAux.getContenido();
+
+		return respuesta;
+	}
+
+	private boolean borrarEstudiante(String iDEstudiante) throws UnknownHostException, IOException,
+															ClassNotFoundException, PaqueteNoReconocidoException {
+		boolean  respuesta;
+		PaqueteDatos paqueteAux;
+		ArrayList<String> listaDatos=new ArrayList<String>();
+		listaDatos.add(admin.getEmail());
+		listaDatos.add(iDEstudiante);
+		paqueteDatos= new PaqueteDatos(AccionEnum.BORRAR_ESTUDIANTE,listaDatos );
+
+		socket= new Socket("localhost",8081);
+		flujoSalida= new ObjectOutputStream(socket.getOutputStream());
+
+		flujoSalida.writeObject(paqueteDatos);
+
+		flujoEntrada= new ObjectInputStream(socket.getInputStream());
+
+		paqueteAux=(PaqueteDatos) flujoEntrada.readObject();
+
+		if(paqueteAux.getAccion()!=AccionEnum.BORRAR_ESTUDIANTE)
+			throw new PaqueteNoReconocidoException("El paquete posee una "
+					+ " accion incorrecta...");
+
+		respuesta=(boolean) paqueteAux.getContenido();
+
+		return respuesta;
+	}
+	private boolean borrarInstructorSocket(String iDInstructor) throws UnknownHostException, IOException, ClassNotFoundException, PaqueteNoReconocidoException {
+		boolean  respuesta;
+		PaqueteDatos paqueteAux;
+		ArrayList<Object> listaDatos=new ArrayList<Object>();
+		listaDatos.add(admin.getEmail());
+		listaDatos.add(iDInstructor);
+		paqueteDatos= new PaqueteDatos(AccionEnum.BORRAR_INSTRUCTOR,listaDatos );
+
+		socket= new Socket("localhost",8081);
+		flujoSalida= new ObjectOutputStream(socket.getOutputStream());
+
+		flujoSalida.writeObject(paqueteDatos);
+
+		flujoEntrada= new ObjectInputStream(socket.getInputStream());
+
+		paqueteAux=(PaqueteDatos) flujoEntrada.readObject();
+
+		if(paqueteAux.getAccion()!=AccionEnum.BORRAR_INSTRUCTOR)
+			throw new PaqueteNoReconocidoException("El paquete posee una "
+					+ " accion incorrecta...");
+
+		respuesta=(boolean) paqueteAux.getContenido();
+
+		return respuesta;
+	}
+private boolean borrarCreditoSocket(String nombreCredito) throws UnknownHostException, IOException,
+																ClassNotFoundException, PaqueteNoReconocidoException {
+	boolean  respuesta;
+		PaqueteDatos paqueteAux;
+		ArrayList<Object> listaDatos=new ArrayList<Object>();
+		listaDatos.add(admin.getEmail());
+		listaDatos.add(nombreCredito);
+		paqueteDatos= new PaqueteDatos(AccionEnum.BORRAR_CREDITO,listaDatos );
+
+		socket= new Socket("localhost",8081);
+		flujoSalida= new ObjectOutputStream(socket.getOutputStream());
+
+		flujoSalida.writeObject(paqueteDatos);
+
+		flujoEntrada= new ObjectInputStream(socket.getInputStream());
+
+		paqueteAux=(PaqueteDatos) flujoEntrada.readObject();
+
+		if(paqueteAux.getAccion()!=AccionEnum.BORRAR_CREDITO)
+			throw new PaqueteNoReconocidoException("El paquete posee una "
+					+ " accion incorrecta...");
+
+		respuesta=(boolean) paqueteAux.getContenido();
+
+		return respuesta;
+	}
+
+	private void guardarDatosTXT(String nombreArchivo) {
+		 ArrayList<String> listaDatos= new ArrayList<String>();
+		 listaDatos.add(admin.getEmail());
+		 listaDatos.add(nombreArchivo);
+		 PaqueteDatos paqueteDatos = new PaqueteDatos(AccionEnum.GUARDAR_DATOS_TXT, listaDatos);
+		 administradorHilos.startHiloEnviarPaqueteServer(paqueteDatos);
+
+	}
+	 private void cargarDatosTXT(String nombreArchivo) {
+		 ArrayList<String> listaDatos= new ArrayList<String>();
+		 listaDatos.add(admin.getEmail());
+		 listaDatos.add(nombreArchivo);
+		 PaqueteDatos paqueteDatos = new PaqueteDatos(AccionEnum.CARGAR_DATOS_TXT, listaDatos);
+		 administradorHilos.startHiloEnviarPaqueteServer(paqueteDatos);
+
+		}
 
 	/**
 	 * Metodo que hace el Backup
@@ -1523,28 +2213,109 @@ public class AdminController implements Initializable{
 		PaqueteDatos paqueteDatos= new PaqueteDatos(AccionEnum.HACER_BACKUP,admin.getName() );
 		administradorHilos.startHiloEnviarPaqueteServer(paqueteDatos);
 	}
-//
-//	public Admin getAdmin() {
-//		return admin;
-//	}
-//
-//	public void setAdmin(Admin admin) {
-//		this.admin = admin;
-//	}
-//
-//	public void refrescarTablas() {
-//
-//
-//		tableCreditos.setItems(getListaCreditosData());
-//		tableEstudiantes.setItems(getListaEstudiantesData());
-//		tableInstructor.setItems(getListaInstructoresData());
-//
-//		tableCreditos.refresh();
-//		tableEstudiantes.refresh();
-//		tableInstructor.refresh();
-//
-//	}
-//
 
+	public Admin getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(Admin admin) {
+		this.admin = admin;
+	}
+
+	public void refrescarTablas() {
+
+
+		try {
+			tableCreditos.setItems(getListaCreditosData());
+			tableEstudiantes.setItems(getListaEstudiantesData());
+			tableInstructor.setItems(getListaInstructoresData());
+		} catch (ClassNotFoundException | IOException | PaqueteNoReconocidoException e) {
+			e.printStackTrace();
+			registrarAccion("Error al refescar tablas admin=["+admin.getEmail()+"] MSG:"+e.getMessage()+" Causa:"+e.getCause(),Level.SEVERE);
+		}
+		
+		tableCreditos.refresh();
+		tableEstudiantes.refresh();
+		tableInstructor.refresh();
+
+	}
+	
+	
+	public ArrayList<Credito> obtenerCreditos() throws UnknownHostException, IOException,
+												       ClassNotFoundException, PaqueteNoReconocidoException {
+		ArrayList<Credito> listaCreditos=new ArrayList<>();
+
+		PaqueteDatos paqueteAux;
+
+		paqueteDatos= new PaqueteDatos(AccionEnum.OBTENER_CREDITOS,null );
+
+		socket= new Socket("localhost",8081);
+		flujoSalida= new ObjectOutputStream(socket.getOutputStream());
+
+		flujoSalida.writeObject(paqueteDatos);
+
+		flujoEntrada= new ObjectInputStream(socket.getInputStream());
+
+		paqueteAux=(PaqueteDatos) flujoEntrada.readObject();
+
+		if(paqueteAux.getAccion()!=AccionEnum.OBTENER_CREDITOS)
+			throw new PaqueteNoReconocidoException("El paquete posee una "
+					+ " accion incorrecta...");
+
+		listaCreditos= (ArrayList<Credito>) paqueteAux.getContenido();
+
+		return listaCreditos;
+
+	}
+	private ArrayList<Estudiante> obtenerEstudiantes() throws UnknownHostException, IOException,
+															  PaqueteNoReconocidoException, ClassNotFoundException {
+		ArrayList<Estudiante> listaEstudiantes=new ArrayList<>();
+
+		PaqueteDatos paqueteAux;
+
+		paqueteDatos= new PaqueteDatos(AccionEnum.OBTENER_ESTUDIANTES,null );
+
+		socket= new Socket("localhost",8081);
+		flujoSalida= new ObjectOutputStream(socket.getOutputStream());
+
+		flujoSalida.writeObject(paqueteDatos);
+
+		flujoEntrada= new ObjectInputStream(socket.getInputStream());
+
+		paqueteAux=(PaqueteDatos) flujoEntrada.readObject();
+
+		if(paqueteAux.getAccion()!=AccionEnum.OBTENER_ESTUDIANTES)
+			throw new PaqueteNoReconocidoException("El paquete posee una "
+					+ " accion incorrecta...");
+
+		listaEstudiantes= (ArrayList<Estudiante>) paqueteAux.getContenido();
+
+		return listaEstudiantes;
+	}
+	
+	private ArrayList<Instructor>  obtenerInstructores() throws UnknownHostException, IOException, ClassNotFoundException, PaqueteNoReconocidoException {
+		ArrayList<Instructor> listaInstructores=new ArrayList<>();
+
+		PaqueteDatos paqueteAux;
+
+		paqueteDatos= new PaqueteDatos(AccionEnum.OBTENER_INSTRUCTORES,null );
+
+		socket= new Socket("localhost",8081);
+		flujoSalida= new ObjectOutputStream(socket.getOutputStream());
+
+		flujoSalida.writeObject(paqueteDatos);
+
+		flujoEntrada= new ObjectInputStream(socket.getInputStream());
+
+		paqueteAux=(PaqueteDatos) flujoEntrada.readObject();
+
+		if(paqueteAux.getAccion()!=AccionEnum.OBTENER_INSTRUCTORES)
+			throw new PaqueteNoReconocidoException("El paquete posee una "
+					+ " accion incorrecta...");
+
+		listaInstructores= (ArrayList<Instructor>) paqueteAux.getContenido();
+
+		return listaInstructores;
+}
 }
 

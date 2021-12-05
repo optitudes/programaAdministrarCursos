@@ -1,5 +1,7 @@
 package co.edu.uniquindio.programaAdministrarCursos.model;
 
+import java.awt.Component;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
@@ -11,7 +13,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
-import javax.swing.JOptionPane;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import co.edu.uniquindio.programaAdministrarCursos.ClienteMain;
 import co.edu.uniquindio.programaAdministrarCursos.Main;
@@ -27,7 +30,7 @@ public class AdminHilos implements Runnable {
 	ClienteMain mainCliente;
 	Server  mainServer;
 	Socket  socket;
-
+	boolean sesion;
 	AdminController adminController;
 	EstudianteController estudianteController;
 
@@ -47,18 +50,22 @@ public class AdminHilos implements Runnable {
 
 	Thread hiloGuardarTXT;
 	Thread hiloCargarTXT;
+	Thread hiloRefrescarTablas;
+	Thread hiloCargarDatosBackup;
 
 
 	boolean runHilo=false;
 	int valorEntrada;
 	int contador=1;
-	public AdminHilos(ClienteMain main, EstudianteController estudianteController) {
+	public AdminHilos(ClienteMain main, EstudianteController estudianteController,boolean sesion) {
 		this.mainCliente=main;
 		this.estudianteController=estudianteController;
+		this.sesion=sesion;
 	}
-	public AdminHilos(ClienteMain main, AdminController adminController) {
+	public AdminHilos(ClienteMain main, AdminController adminController,boolean sesion) {
 		this.mainCliente=main;
 		this.adminController=adminController;
+		this.sesion=sesion;
 	}
 	public AdminHilos(ClienteMain main2) {
 		this.mainCliente=main2;
@@ -72,34 +79,61 @@ public class AdminHilos implements Runnable {
 	public AdminHilos(Server server) {
 		this.mainServer=server;
 	}
+	
+	
+	public boolean isSesion() {
+		return sesion;
+	}
+	public void setSesion(boolean sesion) {
+		this.sesion = sesion;
+	}
 	@Override
 	public void run() {
 		Thread hiloEjecucion= Thread.currentThread();
 
+		if(hiloRefrescarTablas==hiloEjecucion){
+			while(sesion==true){
+				adminController.refrescarTablas();
+				try {
+					Thread.sleep(60000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+					break;
+				}
+			}
+		}
+		if(hiloCargarDatosBackup==hiloEjecucion){
+			PaqueteDatos paqueteDatos;
 
-//		if(hiloGuardarTXT==hiloEjecucion)
-//		{
-//			try {
-////				main.guardarDatosTXT(archivoTXTGuardar);
-//				startHiloLogger("Datos guardados en txt en el registro ["+archivoTXTGuardar+"] por el admin "+adminController.getAdmin().getName(),Level.INFO);
-//
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//				startHiloLogger("Error al guardar datos ["+archivoTXTGuardar+"] "+adminController.getAdmin().getName(), Level.SEVERE);
-//			}
-//		}
-//		if(hiloCargarTXT==hiloEjecucion)
-//		{
-//			try {
-////				main.CargarDatosTXT(archivoTXTCargar);
-//				adminController.refrescarTablas();
-//				startHiloLogger("Datos Cargados del txt  del registro ["+archivoTXTCargar+"] por el admin "+adminController.getAdmin().getName(),Level.INFO);
-//
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//				startHiloLogger("Error al cargar datos ["+archivoTXTGuardar+"] "+adminController.getAdmin().getName(), Level.SEVERE);
-//			}
-//		}
+			String mensaje="";
+			int seleccion=JFileChooser.APPROVE_OPTION;
+			boolean procesoExitoso=false;
+			while(!procesoExitoso ){
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				fileChooser.setFileFilter(new FileNameExtensionFilter("Backup", "dat"));
+				//Abrimos la ventana, guardamos la opcion seleccionada por el usuario
+				seleccion=fileChooser.showOpenDialog(new Component() {
+				});
+				if(seleccion==JFileChooser.CANCEL_OPTION){
+					break;
+				}			//Si el usuario, pincha en aceptar
+				if(seleccion==JFileChooser.APPROVE_OPTION){
+
+					//Seleccionamos el fichero
+					File file=fileChooser.getSelectedFile();
+					if(file!=null)
+					{
+						if(file.isFile())
+						{
+							paqueteDatos= new PaqueteDatos(AccionEnum.CARGAR_BACKUP,file.getAbsolutePath());
+							startHiloEnviarPaqueteServer(paqueteDatos);
+						}
+					}
+				}
+
+			}
+		}
 
 	}
 	private void validarEstudiante() throws UnknownHostException, IOException {
@@ -108,9 +142,6 @@ public class AdminHilos implements Runnable {
 		flujoSalidaObjeto= new ObjectOutputStream(socket.getOutputStream());
 		flujoSalidaObjeto.writeObject(datosLoggin);
 		flujoSalidaObjeto.close();
-		JOptionPane.showInputDialog("objeto enviado");
-
-
 	}
 	public void startHiloLogger(String mensaje, Level tipo){
 		hiloLog=new HiloLog(mensaje, tipo);
@@ -118,12 +149,7 @@ public class AdminHilos implements Runnable {
 		hiloLog.start();
 
 	}
-//	public void startHiloMostrarCredito(Credito creditoSeleccionado){
-//		creditoAux=creditoSeleccionado;
-//		mostrarCredito= new Thread(this);
-//		mostrarCredito.start();
-//
-//	}
+
 	public HiloLog getHiloLog() {
 		return hiloLog;
 	}
@@ -150,6 +176,16 @@ public class AdminHilos implements Runnable {
 
 	public void startHiloEnviarPaqueteServer(PaqueteDatos paqueteAux) {
 		hiloEnviarPaqueteServer= new HiloEnviarPaqueteServer(paqueteAux,"localhost",8081);
-
+	}
+	public void starHiloRefrescarTablas() {
+		hiloRefrescarTablas=new Thread(this);
+		hiloRefrescarTablas.start();
+		
+		
+	}
+	public void starHiloCargarDatosBackup() {
+		hiloCargarDatosBackup=new Thread(this);
+		hiloCargarDatosBackup.start();
+		
 	}
 }

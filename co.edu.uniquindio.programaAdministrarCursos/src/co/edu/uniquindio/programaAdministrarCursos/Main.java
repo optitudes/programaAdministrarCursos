@@ -381,40 +381,7 @@ public void mostrarVentanaLogging() {
 		
 	}
 
-	public String cargarDatosBackup() throws Exception  {
-		
-		String mensaje="";
-		int seleccion=JFileChooser.APPROVE_OPTION;
-		boolean procesoExitoso=false;
-		while(!procesoExitoso ){
-			JFileChooser fileChooser = new JFileChooser();
-			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			fileChooser.setFileFilter(new FileNameExtensionFilter("Backup", "dat"));
-			//Abrimos la ventana, guardamos la opcion seleccionada por el usuario
-			seleccion=fileChooser.showOpenDialog(new Component() {
-			});
-			if(seleccion==JFileChooser.CANCEL_OPTION){
-				mensaje="cancelado";
-				return mensaje;
-			}			//Si el usuario, pincha en aceptar
-			if(seleccion==JFileChooser.APPROVE_OPTION){
-
-				//Seleccionamos el fichero
-				File file=fileChooser.getSelectedFile();
-				if(file!=null)
-				{
-					if(file.isFile())
-					{
-							bienestar=(Bienestar) Persistencia.deseRializarObjeto(file.getAbsolutePath());
-							mensaje="cargado con éxito ";
-							return mensaje;
-					}
-				}
-			}
-
-		}
-		return mensaje;
-	}
+	
 
 	public Estudiante validarEstudiante(String correo, String clave) throws UsuarioNoEncontradoException {
 		return bienestar.validarEstudiante(correo,clave);

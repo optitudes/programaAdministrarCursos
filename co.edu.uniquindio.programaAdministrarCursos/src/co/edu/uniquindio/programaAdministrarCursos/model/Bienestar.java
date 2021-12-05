@@ -196,66 +196,83 @@ public class Bienestar implements Serializable {
 		listaInstructores.add(instructorAux);
 		return instructorAux;
 	}
-	public boolean borrarEstudiante(Estudiante estudianteSeleccionado) {
-		if(listaEstudiantes.remove(estudianteSeleccionado))
-			return true;
-		return false;
-	}
-	public boolean borrarInstructor(Instructor instructorSeleccionado) {
-		if(listaInstructores.remove(instructorSeleccionado))
-			return true;
-		return false;
-	}
-	public boolean borrarCredito(Credito creditoSeleccionado) {
-		if(listaCreditos.remove(creditoSeleccionado))
-			return true;
-		return false;
-	}
-
-	public boolean actualizarEstudiante(Estudiante estudianteAux, Estudiante estudianteSeleccionado) {
-		int index=listaEstudiantes.indexOf(estudianteSeleccionado);
-		if(listaEstudiantes.get(index).actualizar(estudianteAux))
-			return true;
-		return false;
-	}
-	public boolean actualizarInstructor(Instructor instructorAux, Instructor instructorSeleccionado) {
-		int index=listaInstructores.indexOf(instructorSeleccionado);
-		if(listaInstructores.get(index).actualizar(instructorAux))
-			return true;
-		return false;
-	}
-	public boolean actualizarCredito(Credito creditoAux, Credito creditoSeleccionado) {
-		try {
-			int index=listaCreditos.indexOf(creditoSeleccionado);
-
-			if(listaCreditos.get(index) instanceof Academico){
-				Academico academicoAux=(Academico) listaCreditos.get(index);
-				academicoAux.actualizar(creditoAux);
-				listaCreditos.set(index, academicoAux);
-				if(listaCreditos.get(index).actualizar(creditoAux))
-					return true;
-
+	public boolean borrarEstudiante(String iDEstudiante) {
+		for (int i = 0; i < listaEstudiantes.size(); i++) {
+			if(listaEstudiantes.get(i).verificarID(iDEstudiante))
+			{
+				listaEstudiantes.remove(i);
+				return true;
 			}
-			if(listaCreditos.get(index) instanceof Cultural){
-				Cultural culturalAux=(Cultural) listaCreditos.get(index);
-				culturalAux.actualizar(creditoAux);
-				listaCreditos.set(index, culturalAux);
-				if(listaCreditos.get(index).actualizar(creditoAux))
-					return true;
-
-			}
-			if(listaCreditos.get(index) instanceof Deportivo){
-				Deportivo deportivoAux=(Deportivo) listaCreditos.get(index);
-				deportivoAux.actualizar(creditoAux);
-				listaCreditos.set(index, deportivoAux);
-				if(listaCreditos.get(index).actualizar(creditoAux))
-					return true;
-
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
+		return false;
+	}
+	public boolean borrarInstructor(String iDInstructor) {
+		for (int i = 0; i < listaInstructores.size(); i++) {
+			if(listaInstructores.get(i).verificarID(iDInstructor))
+			{
+				listaInstructores.remove(i);
+				return true;
+			}
+		}
+		return false;
+	}
+	public boolean borrarCredito(String nombreCredito) {
+		for (int i = 0; i < listaCreditos.size(); i++) {
+			if(listaCreditos.get(i).verificarNombre(nombreCredito))
+			{
+				listaCreditos.remove(i);
+				return true;
+			}
+		}
+		return false;
+	}
 
+	public boolean actualizarEstudiante(Estudiante estudianteAux, String iDBuscar) {
+		for (int i = 0; i < listaEstudiantes.size(); i++) {
+			if(listaEstudiantes.get(i).verificarID(iDBuscar))
+			{
+				listaEstudiantes.get(i).actualizar(estudianteAux);
+				return true;
+			}
+
+		}
+		return false;
+	}
+	public boolean actualizarInstructor(Instructor instructorAux, String iDBuscar) {
+		for (int i = 0; i < listaInstructores.size(); i++) {
+			if(listaInstructores.get(i).verificarID(iDBuscar))
+			{
+				listaInstructores.get(i).actualizar(instructorAux);
+				return true;
+			}
+		}
+		return false;
+	}
+	public boolean actualizarCredito(Credito creditoAux, String nombreCredito) {
+			for (int i = 0; i < listaCreditos.size(); i++) {
+				if(listaCreditos.get(i).verificarNombre(nombreCredito)){
+					if(listaCreditos.get(i) instanceof Academico){
+						Academico academicoAux=(Academico) listaCreditos.get(i);
+						academicoAux.actualizar(creditoAux);
+						listaCreditos.set(i, academicoAux);
+						return true;
+
+					}
+					if(listaCreditos.get(i) instanceof Cultural){
+						Cultural culturalAux=(Cultural) listaCreditos.get(i);
+						culturalAux.actualizar(creditoAux);
+						listaCreditos.set(i, culturalAux);
+						return true;
+
+					}
+					if(listaCreditos.get(i) instanceof Deportivo){
+						Deportivo deportivoAux=(Deportivo) listaCreditos.get(i);
+						deportivoAux.actualizar(creditoAux);
+						listaCreditos.set(i, deportivoAux);
+						return true;
+					}
+				}
+			}
 		return false;
 	}
 	public Deportivo crearDeportivo(String nombre, int cuposDisponibles, double costo, Horario horario,

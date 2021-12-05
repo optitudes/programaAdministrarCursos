@@ -12,7 +12,7 @@ public class HiloEnviarPaqueteServer implements Runnable{
 	PaqueteDatos paqueteAux;
 	String       host;
 	int          puerto;
-	Thread       hilo;
+	public Thread       hilo;
 
 	public HiloEnviarPaqueteServer(PaqueteDatos paqueteAux, String host, int puerto) {
 		this.paqueteAux=paqueteAux;

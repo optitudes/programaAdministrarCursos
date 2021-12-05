@@ -7,6 +7,8 @@ import co.edu.uniquindio.programaAdministrarCursos.controller.AdminController;
 import co.edu.uniquindio.programaAdministrarCursos.controller.EstudianteController;
 import co.edu.uniquindio.programaAdministrarCursos.controller.InstructorController;
 import co.edu.uniquindio.programaAdministrarCursos.controller.LoggingController;
+import co.edu.uniquindio.programaAdministrarCursos.model.Academico;
+import co.edu.uniquindio.programaAdministrarCursos.model.Credito;
 import co.edu.uniquindio.programaAdministrarCursos.model.Estudiante;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -113,6 +115,5 @@ try {
 	}
 
 }
-
 
 }
